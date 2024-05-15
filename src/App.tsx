@@ -1,41 +1,21 @@
 import React from 'react'
-import { Container, Flex, Section, Text } from '@radix-ui/themes'
-import NavBar from './components/NavBar'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import ExamRoot from './ExamRoot'
+import Frontcover from './Frontcover'
+import Question from './Question'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <>
-        <NavBar questionCount={3} />
-        <Outlet />
-      </>
-    ),
+    element: <ExamRoot questionCount={3} />,
     children: [
       {
         path: 'frontcover',
-        element: (
-          <Section>
-            <Container size="2">
-              <Flex direction="column" gap="2">
-                <Text>Frontcover</Text>
-              </Flex>
-            </Container>
-          </Section>
-        ),
+        element: <Frontcover />,
       },
       {
         path: 'questions/:questionId',
-        element: (
-          <Section>
-            <Container size="2">
-              <Flex direction="column" gap="2">
-                <Text>Question</Text>
-              </Flex>
-            </Container>
-          </Section>
-        ),
+        element: <Question />,
       },
     ],
   },
