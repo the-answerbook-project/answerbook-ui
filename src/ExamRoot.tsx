@@ -1,13 +1,10 @@
-import { Outlet } from 'react-router-dom'
 import React, { FC } from 'react'
-import NavBar from './components/NavBar'
+import { Outlet } from 'react-router-dom'
+
 import PageFrame from './PageFrame'
+import NavBar from './components/NavBar'
 
-interface ExamRootProps {
-  questionCount: number
-}
-
-const ExamRoot: FC<ExamRootProps> = (props) => {
+const ExamRoot: FC = () => {
   return (
     <>
       <NavBar questionCount={3} />
