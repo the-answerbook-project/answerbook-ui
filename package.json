@@ -27,7 +27,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "prepare": "husky",
-    "format": "lint-staged"
+    "format": "lint-staged",
+    "type-check": "tsc --noEmit",
+    "style-check": "prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
+    "test:ci": "react-scripts test --coverage --watchAll=false --passWithNoTests"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
