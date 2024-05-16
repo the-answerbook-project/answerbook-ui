@@ -8,7 +8,7 @@ import Question from './Question'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <ExamRoot questionCount={3} />,
+    element: <ExamRoot />,
     children: [
       {
         path: 'frontcover',
