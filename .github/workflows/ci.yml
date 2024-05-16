@@ -18,8 +18,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Check TypeScript
-        run: npx tsc --noEmit
+        run: npm run type-check
       - name: Run Prettier
-        run: npx prettier --check 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'
+        run: npm run style-check
       - name: Run tests
-        run: npx react-scripts test --coverage --watchAll=false --passWithNoTests
+        run: npm run test:ci
