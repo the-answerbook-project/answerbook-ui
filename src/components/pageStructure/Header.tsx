@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 interface PageHeaderProps {
   label: string
-  title: string
+  title?: string
 }
 
 const Header: FC<PageHeaderProps> = ({ label, title }) => {
@@ -12,9 +12,11 @@ const Header: FC<PageHeaderProps> = ({ label, title }) => {
       <Container size="4" px="6">
         <Flex gap="2">
           <Heading size="8">{label}</Heading>
-          <Heading size="8" as="h2" color="gray" weight="medium">
-            {title}
-          </Heading>
+          {title && (
+            <Heading size="8" as="h2" color="gray" weight="medium">
+              {title}
+            </Heading>
+          )}
         </Flex>
       </Container>
     </Section>
