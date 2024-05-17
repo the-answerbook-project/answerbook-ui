@@ -13,7 +13,7 @@ const Question: FC = () => {
 
   return (
     <>
-      <Header label={`Question ${pathMatch.params.number}`} title="TDD" />
+      <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText="TDD" />
       <Body>
         <Text>{`Question ${pathMatch.params.number}`}</Text>
       </Body>

@@ -2,19 +2,19 @@ import { Container, Flex, Heading, Section } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
 interface PageHeaderProps {
-  label: string
-  title?: string
+  primaryText: string
+  secondaryText?: string
 }
 
-const Header: FC<PageHeaderProps> = ({ label, title }) => {
+const Header: FC<PageHeaderProps> = ({ primaryText, secondaryText }) => {
   return (
     <Section style={{ backgroundColor: 'var(--gray-a3)' }}>
       <Container size="4" px="6">
         <Flex gap="2">
-          <Heading size="8">{label}</Heading>
-          {title && (
+          <Heading size="8">{primaryText}</Heading>
+          {secondaryText && (
             <Heading size="8" as="h2" color="gray" weight="medium">
-              {title}
+              {secondaryText}
             </Heading>
           )}
         </Flex>

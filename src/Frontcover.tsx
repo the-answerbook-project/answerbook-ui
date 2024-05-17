@@ -7,7 +7,7 @@ import Header from './components/pageStructure/Header'
 const Frontcover: FC = () => {
   return (
     <>
-      <Header label="60005" title="Networks and Web Security" />
+      <Header primaryText="60005" secondaryText="Networks and Web Security" />
       <Body>
         <Text>Frontcover</Text>
       </Body>
