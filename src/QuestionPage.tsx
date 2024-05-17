@@ -5,7 +5,7 @@ import { matchPath, useLocation } from 'react-router-dom'
 import Body from './components/pageStructure/Body'
 import Header from './components/pageStructure/Header'
 
-const Question: FC = () => {
+const QuestionPage: FC = () => {
   const { pathname } = useLocation()
   const pathMatch = matchPath({ path: '/questions/:number' }, pathname)
 
@@ -21,4 +21,4 @@ const Question: FC = () => {
   )
 }
 
-export default Question
+export default QuestionPage

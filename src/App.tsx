@@ -3,7 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ExamRoot from './ExamRoot'
 import Frontcover from './Frontcover'
-import Question from './Question'
+import QuestionPage from './QuestionPage'
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'questions/:questionId',
-        element: <Question />,
+        element: <QuestionPage />,
       },
     ],
   },
