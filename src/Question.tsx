@@ -1,4 +1,4 @@
-import { Flex, Text } from '@radix-ui/themes'
+import { Text } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
@@ -8,11 +8,7 @@ const Question: FC = () => {
 
   if (!pathMatch) return <div>Placeholder</div>
 
-  return (
-    <Flex direction="column" gap="2" style={{ backgroundColor: 'blue' }}>
-      <Text>{`Question ${pathMatch.params.number}`}</Text>
-    </Flex>
-  )
+  return <Text>{`Question ${pathMatch.params.number}`}</Text>
 }
 
 export default Question

@@ -1,4 +1,4 @@
-import { Container, Section } from '@radix-ui/themes'
+import { Container, Flex, Section } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
 interface PageFrameProps {
@@ -8,7 +8,11 @@ interface PageFrameProps {
 const PageFrame: FC<PageFrameProps> = ({ children }) => {
   return (
     <Section>
-      <Container size="3">{children}</Container>
+      <Container size="3">
+        <Flex direction="column" gap="2" px="4">
+          {children}
+        </Flex>
+      </Container>
     </Section>
   )
 }
