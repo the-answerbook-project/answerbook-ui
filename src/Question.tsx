@@ -2,13 +2,23 @@ import { Text } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
+import Body from './components/pageStructure/Body'
+import Header from './components/pageStructure/Header'
+
 const Question: FC = () => {
   const { pathname } = useLocation()
   const pathMatch = matchPath({ path: '/questions/:number' }, pathname)
 
   if (!pathMatch) return <div>Placeholder</div>
 
-  return <Text>{`Question ${pathMatch.params.number}`}</Text>
+  return (
+    <>
+      <Header label={`Question ${pathMatch.params.number}`} title="TDD" />
+      <Body>
+        <Text>{`Question ${pathMatch.params.number}`}</Text>
+      </Body>
+    </>
+  )
 }
 
 export default Question

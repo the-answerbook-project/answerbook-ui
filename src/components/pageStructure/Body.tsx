@@ -1,15 +1,15 @@
 import { Container, Flex, Section } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
-interface PageFrameProps {
+interface PageBodyProps {
   children: ReactNode
 }
 
-const PageFrame: FC<PageFrameProps> = ({ children }) => {
+const Body: FC<PageBodyProps> = ({ children }) => {
   return (
     <Section>
-      <Container size="3">
-        <Flex direction="column" gap="2" px="4">
+      <Container size="4" px="6">
+        <Flex direction="column" gap="2" align="center">
           {children}
         </Flex>
       </Container>
@@ -17,4 +17,4 @@ const PageFrame: FC<PageFrameProps> = ({ children }) => {
   )
 }
 
-export default PageFrame
+export default Body
