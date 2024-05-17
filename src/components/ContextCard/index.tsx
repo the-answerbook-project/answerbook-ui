@@ -1,4 +1,4 @@
-import { Box, Card, Flex, Heading, Separator, Text } from '@radix-ui/themes'
+import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
 interface ContextCardProps {
@@ -11,7 +11,6 @@ const ContextCard: FC<ContextCardProps> = ({ text }) => {
       <Card size="3">
         <Flex gap="4" direction="column">
           <Heading>Context</Heading>
-          <Separator size="4" />
           <Text>{text}</Text>
         </Flex>
       </Card>
