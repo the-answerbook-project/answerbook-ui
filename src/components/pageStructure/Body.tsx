@@ -9,7 +9,7 @@ const Body: FC<PageBodyProps> = ({ children }) => {
   return (
     <Section>
       <Container size="4" px="6">
-        <Flex direction="column" gap="2" align="center">
+        <Flex direction="column" gap="4" align="center">
           {children}
         </Flex>
       </Container>
