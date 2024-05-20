@@ -1,3 +1,4 @@
+import { Section } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { Outlet } from 'react-router-dom'
 
@@ -7,7 +8,9 @@ const ExamRoot: FC = () => {
   return (
     <>
       <NavBar questionCount={3} />
-      <Outlet />
+      <Section pt="9">
+        <Outlet />
+      </Section>
     </>
   )
 }
