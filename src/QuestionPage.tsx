@@ -59,6 +59,7 @@ const QuestionPage: FC = () => {
             partId={partId}
             description={part.description}
             marksContribution={part.marksContribution}
+            onSave={console.log}
           >
             {Object.entries(part.sections).map(([sectionId, section], i) => (
               <Section key={sectionId} sectionId={sectionId} description={section.description}>
