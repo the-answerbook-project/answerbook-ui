@@ -11,7 +11,7 @@ const ContextCard: FC<ContextCardProps> = ({ text }) => {
       <Card size="3">
         <Flex gap="4" direction="column">
           <Heading>Context</Heading>
-          <Text>{text}</Text>
+          <Text as="p">{text}</Text>
         </Flex>
       </Card>
     </Box>
