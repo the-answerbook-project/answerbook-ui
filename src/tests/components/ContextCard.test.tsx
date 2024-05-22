@@ -5,7 +5,7 @@ import React from 'react'
 import ContextCard from '../../components/ContextCard'
 
 describe('ContextCard', () => {
-  test('renders the ContextCard component correctly with its heading', () => {
+  test('renders correctly with its heading', () => {
     render(<ContextCard text="Test Context" />)
 
     const headingElement = screen.getByRole('heading', { name: /context/i })
