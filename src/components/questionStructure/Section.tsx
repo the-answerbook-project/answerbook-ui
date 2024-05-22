@@ -14,7 +14,7 @@ const Section: FC<SectionProps> = ({ sectionId, description, children }) => {
         <Strong>{sectionId})</Strong>
       </Text>
       <Flex gap="3" direction="column">
-        <Text>{description}</Text>
+        <Text as="p">{description}</Text>
         {children}
       </Flex>
     </Grid>
