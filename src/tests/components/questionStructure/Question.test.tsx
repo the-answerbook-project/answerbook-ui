@@ -9,7 +9,7 @@ jest.mock('../../../components/ContextCard', () => ({ text }: { text: string }) 
 ))
 
 describe('Question', () => {
-  test('renders correctly with its instructions', () => {
+  it('renders correctly with its instructions', () => {
     const instructions = 'Question instructions'
     render(<Question description={instructions}>Child Content</Question>)
 
@@ -17,7 +17,7 @@ describe('Question', () => {
     expect(instructionsElement).toBeInTheDocument()
   })
 
-  test('renders the children prop correctly', () => {
+  it('renders the children prop correctly', () => {
     const childrenContent = <div data-testid={'children'}></div>
     render(<Question description="some instructions">{childrenContent}</Question>)
 
