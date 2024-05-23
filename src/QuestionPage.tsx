@@ -65,6 +65,8 @@ const QuestionPage: FC = () => {
     },
   }
 
+  const handler = () => {}
+
   return (
     <>
       <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText="TDD" />
@@ -76,32 +78,33 @@ const QuestionPage: FC = () => {
             partId={partId}
             description={part.description}
             marksContribution={part.marksContribution}
-            onSave={console.log}
+            onSave={handler}
           >
             {Object.entries(part.sections).map(([sectionId, section], i) => (
               <Section key={sectionId} sectionId={sectionId} description={section.description}>
                 <Box>
                   <Task
                     answer={'My current answer'}
-                    onAnswerUpdate={console.log}
+                    onAnswerUpdate={handler}
                     type={TaskType.ESSAY}
                   />
                 </Box>
                 <Box>
                   <Task
+                    description="This is the description of a task"
                     type={TaskType.FLAG}
                     answer={'qazwsxedcrfvtgbyhnujmikolp123456'}
-                    onAnswerUpdate={console.log}
+                    onAnswerUpdate={handler}
                   />
                 </Box>
                 <Box>
-                  <Task type={TaskType.NUMBER} answer={12} onAnswerUpdate={console.log} />
+                  <Task type={TaskType.NUMBER} answer={12} onAnswerUpdate={handler} />
                 </Box>
                 <Box>
                   <Task
                     type={TaskType.MCQONE}
                     answer="Option A"
-                    onAnswerUpdate={console.log}
+                    onAnswerUpdate={handler}
                     options={[
                       { value: 'Option A', label: 'Level 1' },
                       { value: 'Option B', label: 'Level 2' },
@@ -111,8 +114,9 @@ const QuestionPage: FC = () => {
                 <Box>
                   <Task
                     type={TaskType.CODE}
+                    lines={1}
                     answer={'My current answer'}
-                    onAnswerUpdate={console.log}
+                    onAnswerUpdate={handler}
                   />
                 </Box>
                 <Box>
