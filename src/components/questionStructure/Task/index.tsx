@@ -1,7 +1,7 @@
 import { CheckboxGroup, Flex, RadioGroup, TextArea, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
 import { map } from 'lodash'
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import './index.css'
 
@@ -155,13 +155,13 @@ export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
   options,
   disabled = false,
 }) => {
+  const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
+
   const handleOnClick = (e) => {
-    const newValue = e.target.value
-    if (value.includes(newValue)) {
-      onChange(value.filter((val) => val !== newValue))
-    } else {
-      onChange([...value, newValue])
-    }
+    const input = e.target.value
+    if (value.includes(input)) setInputValue((vs) => vs.filter((val) => val !== input))
+    else setInputValue((vs) => [...vs, input])
   }
 
   return (
@@ -169,7 +169,7 @@ export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
       disabled={disabled}
       variant="soft"
       defaultValue={value}
-      onChange={defaultOnChangeHandler(onChange)}
+      onClick={handleOnClick}
     >
       {map(options, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value}>
