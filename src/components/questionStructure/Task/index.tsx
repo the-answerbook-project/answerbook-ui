@@ -49,12 +49,11 @@ export const FlagTask: FC<FlagTaskProps> = ({
 }) => {
   const FLAG_LENGTH = 32
   const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
 
   function handleChange(e) {
-    // Get the input value and remove spaces
     const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
-    // Update the state with the value without spaces
-    onChange(valueWithoutSpaces)
+    setInputValue(valueWithoutSpaces)
   }
 
   return (
@@ -89,8 +88,11 @@ export const NumberTask: FC<TaskComponentProps<number>> = ({
   onChange,
   disabled = false,
 }) => {
+  const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
+
   function handleChange(e) {
-    onChange(parseInt(e.target.value))
+    setInputValue(parseInt(e.target.value))
   }
 
   return (
@@ -106,10 +108,13 @@ export const NumberTask: FC<TaskComponentProps<number>> = ({
 }
 
 export const EssayTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
+  const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
+
   return (
     <TextArea
-      value={value}
-      onChange={defaultOnChangeHandler(onChange)}
+      value={inputValue}
+      onChange={defaultOnChangeHandler(setInputValue)}
       variant="soft"
       placeholder="Your answer here…"
       rows={lines}
@@ -119,10 +124,13 @@ export const EssayTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disab
 }
 
 export const CodeTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
+  const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
+
   return (
     <TextArea
-      value={value}
-      onChange={defaultOnChangeHandler(onChange)}
+      value={inputValue}
+      onChange={defaultOnChangeHandler(setInputValue)}
       className="monospaced"
       variant="soft"
       placeholder="Your answer here…"
@@ -138,10 +146,16 @@ export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
   options,
   disabled = false,
 }) => {
+  const [inputValue, setInputValue] = useState(value)
+  useEffect(() => onChange(inputValue), [inputValue, onChange])
   return (
-    <RadioGroup.Root variant="soft" disabled={disabled} onClick={defaultOnChangeHandler(onChange)}>
+    <RadioGroup.Root
+      variant="soft"
+      disabled={disabled}
+      onClick={defaultOnChangeHandler(setInputValue)}
+    >
       {map(options, (o) => (
-        <RadioGroup.Item key={o.value} value={o.value} checked={o.value === value}>
+        <RadioGroup.Item key={o.value} value={o.value} checked={o.value === inputValue}>
           {o.label}
         </RadioGroup.Item>
       ))}
