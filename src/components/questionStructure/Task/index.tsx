@@ -1,7 +1,7 @@
 import { CheckboxGroup, Flex, RadioGroup, TextArea, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
 import { map } from 'lodash'
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 
 import './index.css'
 
@@ -37,6 +37,14 @@ interface MCQTaskProps extends TaskComponentProps {
 
 export const FlagTask: FC<FlagTaskProps> = ({ showOrnament = true, disabled = false }) => {
   const FLAG_LENGTH = 32
+  const [inputValue, setInputValue] = useState('')
+
+  function handleChange(e) {
+    // Get the input value and remove spaces
+    const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
+    // Update the state with the value without spaces
+    setInputValue(valueWithoutSpaces)
+  }
 
   return (
     <Flex align="stretch">
@@ -46,6 +54,8 @@ export const FlagTask: FC<FlagTaskProps> = ({ showOrnament = true, disabled = fa
         </Flex>
       )}
       <TextField.Root
+        value={inputValue}
+        onChange={handleChange}
         radius="none"
         type="text"
         maxLength={FLAG_LENGTH}
