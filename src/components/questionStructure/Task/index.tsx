@@ -15,8 +15,8 @@ export enum TaskType {
 }
 
 interface TaskComponentProps<V> {
-  value: V
-  onChange: (value: V) => void
+  answer: V
+  onAnswerUpdate: (value: V) => void
   disabled?: boolean
 }
 
@@ -42,14 +42,14 @@ function defaultOnChangeHandler(onChange: (v: any) => void) {
 }
 
 export const FlagTask: FC<FlagTaskProps> = ({
-  value,
-  onChange,
+  answer,
+  onAnswerUpdate,
   showOrnament = true,
   disabled = false,
 }) => {
   const FLAG_LENGTH = 32
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
   function handleChange(e) {
     const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
@@ -84,12 +84,12 @@ export const FlagTask: FC<FlagTaskProps> = ({
 }
 
 export const NumberTask: FC<TaskComponentProps<number>> = ({
-  value,
-  onChange,
+  answer,
+  onAnswerUpdate,
   disabled = false,
 }) => {
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
   function handleChange(e) {
     setInputValue(parseInt(e.target.value))
@@ -97,7 +97,7 @@ export const NumberTask: FC<TaskComponentProps<number>> = ({
 
   return (
     <TextField.Root
-      value={value}
+      value={answer}
       onChange={handleChange}
       type="number"
       variant="soft"
@@ -107,9 +107,14 @@ export const NumberTask: FC<TaskComponentProps<number>> = ({
   )
 }
 
-export const EssayTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+export const EssayTask: FC<TextTaskProps> = ({
+  answer,
+  onAnswerUpdate,
+  lines = 5,
+  disabled = false,
+}) => {
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
   return (
     <TextArea
@@ -123,9 +128,14 @@ export const EssayTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disab
   )
 }
 
-export const CodeTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+export const CodeTask: FC<TextTaskProps> = ({
+  answer,
+  onAnswerUpdate,
+  lines = 5,
+  disabled = false,
+}) => {
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
   return (
     <TextArea
@@ -141,21 +151,22 @@ export const CodeTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabl
 }
 
 export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
-  value,
-  onChange,
+  answer,
+  onAnswerUpdate,
   options,
   disabled = false,
 }) => {
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
   return (
     <RadioGroup.Root
       variant="soft"
       disabled={disabled}
+      value={inputValue}
       onClick={defaultOnChangeHandler(setInputValue)}
     >
       {map(options, (o) => (
-        <RadioGroup.Item key={o.value} value={o.value} checked={o.value === inputValue}>
+        <RadioGroup.Item key={o.value} value={o.value}>
           {o.label}
         </RadioGroup.Item>
       ))}
@@ -164,25 +175,25 @@ export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
 }
 
 export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
-  value,
-  onChange,
+  answer,
+  onAnswerUpdate,
   options,
   disabled = false,
 }) => {
-  const [inputValue, setInputValue] = useState(value)
-  useEffect(() => onChange(inputValue), [inputValue, onChange])
+  const [inputValue, setInputValue] = useState(answer)
+  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
   const handleOnClick = (e) => {
-    const input = e.target.value
-    if (value.includes(input)) setInputValue((vs) => vs.filter((val) => val !== input))
-    else setInputValue((vs) => [...vs, input])
+    const newAnswer = e.target.value
+    if (inputValue.includes(newAnswer)) setInputValue((vs) => vs.filter((v) => v !== newAnswer))
+    else setInputValue((vs) => [...vs, newAnswer])
   }
 
   return (
     <CheckboxGroup.Root
       disabled={disabled}
       variant="soft"
-      defaultValue={value}
+      defaultValue={inputValue}
       onClick={handleOnClick}
     >
       {map(options, (o) => (
