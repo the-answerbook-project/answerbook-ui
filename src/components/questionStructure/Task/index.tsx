@@ -14,15 +14,17 @@ export enum TaskType {
   MCQMULTI,
 }
 
-interface TaskComponentProps {
+interface TaskComponentProps<V> {
+  value: V
+  onChange: (value: V) => void
   disabled?: boolean
 }
 
-interface FlagTaskProps extends TaskComponentProps {
+interface FlagTaskProps extends TaskComponentProps<string> {
   showOrnament?: boolean
 }
 
-interface TextTaskProps extends TaskComponentProps {
+interface TextTaskProps extends TaskComponentProps<string> {
   lines?: number
 }
 
@@ -31,19 +33,28 @@ type MCQOption = {
   label: string
 }
 
-interface MCQTaskProps extends TaskComponentProps {
+interface MCQTaskProps {
   options: MCQOption[]
 }
 
-export const FlagTask: FC<FlagTaskProps> = ({ showOrnament = true, disabled = false }) => {
+function defaultOnChangeHandler(onChange: (v: any) => void) {
+  return (e) => onChange(e.target.value)
+}
+
+export const FlagTask: FC<FlagTaskProps> = ({
+  value,
+  onChange,
+  showOrnament = true,
+  disabled = false,
+}) => {
   const FLAG_LENGTH = 32
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(value)
 
   function handleChange(e) {
     // Get the input value and remove spaces
     const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
     // Update the state with the value without spaces
-    setInputValue(valueWithoutSpaces)
+    onChange(valueWithoutSpaces)
   }
 
   return (
@@ -54,6 +65,7 @@ export const FlagTask: FC<FlagTaskProps> = ({ showOrnament = true, disabled = fa
         </Flex>
       )}
       <TextField.Root
+        disabled={disabled}
         value={inputValue}
         onChange={handleChange}
         radius="none"
@@ -72,9 +84,15 @@ export const FlagTask: FC<FlagTaskProps> = ({ showOrnament = true, disabled = fa
   )
 }
 
-export const NumberTask: FC<TaskComponentProps> = ({ disabled = false }) => {
+export const NumberTask: FC<TaskComponentProps<number>> = ({
+  value,
+  onChange,
+  disabled = false,
+}) => {
   return (
     <TextField.Root
+      value={value}
+      onChange={defaultOnChangeHandler(onChange)}
       type="number"
       variant="soft"
       disabled={disabled}
@@ -83,15 +101,24 @@ export const NumberTask: FC<TaskComponentProps> = ({ disabled = false }) => {
   )
 }
 
-export const EssayTask: FC<TextTaskProps> = ({ lines = 5, disabled = false }) => {
+export const EssayTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
   return (
-    <TextArea variant="soft" placeholder="Your answer here…" rows={lines} disabled={disabled} />
+    <TextArea
+      value={value}
+      onChange={defaultOnChangeHandler(onChange)}
+      variant="soft"
+      placeholder="Your answer here…"
+      rows={lines}
+      disabled={disabled}
+    />
   )
 }
 
-export const CodeTask: FC<TextTaskProps> = ({ lines = 5, disabled = false }) => {
+export const CodeTask: FC<TextTaskProps> = ({ value, onChange, lines = 5, disabled = false }) => {
   return (
     <TextArea
+      value={value}
+      onChange={defaultOnChangeHandler(onChange)}
       className="monospaced"
       variant="soft"
       placeholder="Your answer here…"
@@ -101,11 +128,16 @@ export const CodeTask: FC<TextTaskProps> = ({ lines = 5, disabled = false }) => 
   )
 }
 
-export const MCQOneTask: FC<MCQTaskProps> = ({ options, disabled = false }) => {
+export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
+  value,
+  onChange,
+  options,
+  disabled = false,
+}) => {
   return (
-    <RadioGroup.Root variant="soft" disabled={disabled}>
+    <RadioGroup.Root variant="soft" disabled={disabled} onChange={defaultOnChangeHandler(onChange)}>
       {map(options, (o) => (
-        <RadioGroup.Item key={o.value} value={o.value}>
+        <RadioGroup.Item key={o.value} value={o.value} checked={o.value === value}>
           {o.label}
         </RadioGroup.Item>
       ))}
@@ -113,9 +145,19 @@ export const MCQOneTask: FC<MCQTaskProps> = ({ options, disabled = false }) => {
   )
 }
 
-export const MCQMultiTask: FC<MCQTaskProps> = ({ options, disabled = false }) => {
+export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
+  value,
+  onChange,
+  options,
+  disabled = false,
+}) => {
   return (
-    <CheckboxGroup.Root variant="soft">
+    <CheckboxGroup.Root
+      disabled={disabled}
+      variant="soft"
+      defaultValue={value}
+      onChange={defaultOnChangeHandler(onChange)}
+    >
       {map(options, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value}>
           {o.label}
