@@ -89,10 +89,14 @@ export const NumberTask: FC<TaskComponentProps<number>> = ({
   onChange,
   disabled = false,
 }) => {
+  function handleChange(e) {
+    onChange(parseInt(e.target.value))
+  }
+
   return (
     <TextField.Root
       value={value}
-      onChange={defaultOnChangeHandler(onChange)}
+      onChange={handleChange}
       type="number"
       variant="soft"
       disabled={disabled}
@@ -135,7 +139,7 @@ export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
   disabled = false,
 }) => {
   return (
-    <RadioGroup.Root variant="soft" disabled={disabled} onChange={defaultOnChangeHandler(onChange)}>
+    <RadioGroup.Root variant="soft" disabled={disabled} onClick={defaultOnChangeHandler(onChange)}>
       {map(options, (o) => (
         <RadioGroup.Item key={o.value} value={o.value} checked={o.value === value}>
           {o.label}
@@ -151,6 +155,15 @@ export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
   options,
   disabled = false,
 }) => {
+  const handleOnClick = (e) => {
+    const newValue = e.target.value
+    if (value.includes(newValue)) {
+      onChange(value.filter((val) => val !== newValue))
+    } else {
+      onChange([...value, newValue])
+    }
+  }
+
   return (
     <CheckboxGroup.Root
       disabled={disabled}
