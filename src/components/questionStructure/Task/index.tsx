@@ -1,3 +1,4 @@
+import { Flex, Text } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
 import { TaskType } from './constants'
@@ -29,9 +30,14 @@ const taskComponentMap = {
   [TaskType.MCQMULTI]: MCQMultiTask,
 } as const
 
-type TaskComponent = FC<TaskProps>
+type TaskComponent = FC<TaskProps & { description?: string }>
 
-export const Task: TaskComponent = (props) => {
-  const Component = taskComponentMap[props.type] as TaskComponent
-  return <Component {...props} />
+export const Task: TaskComponent = ({ description, ...taskProps }) => {
+  const Component = taskComponentMap[taskProps.type] as TaskComponent
+  return (
+    <Flex gap="3" direction="column">
+      {description && <Text>{description}</Text>}
+      <Component {...taskProps} />
+    </Flex>
+  )
 }
