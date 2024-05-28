@@ -1,224 +1,23 @@
-import { CheckboxGroup, Flex, RadioGroup, TextArea, TextField } from '@radix-ui/themes'
-import classnames from 'classnames'
-import { map } from 'lodash'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 
+import { TaskType } from './constants'
 import './index.css'
-
-export enum TaskType {
-  ESSAY,
-  CODE,
-  NUMBER,
-  FLAG,
-  MCQONE,
-  MCQMULTI,
-}
-
-type MCQOption = {
-  value: string
-  label: string
-}
-
-interface TaskBaseProps<V> {
-  type: TaskType
-  answer: V
-  onAnswerUpdate: (value: V) => void
-  disabled?: boolean
-}
-
-interface FlagTaskProps extends TaskBaseProps<string> {
-  type: TaskType.FLAG
-  showOrnament?: boolean
-}
-
-interface NumberTaskProps extends TaskBaseProps<number> {
-  type: TaskType.NUMBER
-}
-
-interface TextTaskProps extends TaskBaseProps<string> {
-  type: TaskType.ESSAY | TaskType.CODE
-  lines?: number
-}
-
-interface MCQOneTaskProps extends TaskBaseProps<string> {
-  type: TaskType.MCQONE
-  options: MCQOption[]
-}
-
-interface MCQMultiTaskProps extends TaskBaseProps<string[]> {
-  type: TaskType.MCQMULTI
-  options: MCQOption[]
-}
+import { CodeTask, CodeTaskProps } from './variants/CodeTask'
+import { EssayTask, EssayTaskProps } from './variants/EssayTask'
+import { FlagTask, FlagTaskProps } from './variants/FlagTask'
+import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
+import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 
 type TaskProps =
   | FlagTaskProps
   | NumberTaskProps
-  | TextTaskProps
+  | EssayTaskProps
+  | CodeTaskProps
   | MCQOneTaskProps
   | MCQMultiTaskProps
 
-function defaultOnChangeHandler(onChange: (v: any) => void) {
+export function defaultOnChangeHandler(onChange: (v: any) => void) {
   return (e) => onChange(e.target.value)
-}
-
-export const FlagTask: FC<FlagTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  showOrnament = true,
-  disabled = false,
-}) => {
-  const FLAG_LENGTH = 32
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  function handleChange(e) {
-    const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
-    setInputValue(valueWithoutSpaces)
-  }
-
-  return (
-    <Flex align="stretch">
-      {showOrnament && (
-        <Flex pl="2" align="center" className={classnames('ornament', 'left-flag-ornament')}>
-          <span className="monospaced">{'FLAG {'}</span>
-        </Flex>
-      )}
-      <TextField.Root
-        disabled={disabled}
-        value={inputValue}
-        onChange={handleChange}
-        radius="none"
-        type="text"
-        maxLength={FLAG_LENGTH}
-        variant="soft"
-        placeholder={'x'.repeat(FLAG_LENGTH)}
-        className={classnames('flag', 'monospaced')}
-      />
-      {showOrnament && (
-        <Flex pr="2" align="center" className={classnames('ornament', 'right-flag-ornament')}>
-          <span className="monospaced">{'}'}</span>
-        </Flex>
-      )}
-    </Flex>
-  )
-}
-
-export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  function handleChange(e) {
-    setInputValue(parseInt(e.target.value))
-  }
-
-  return (
-    <TextField.Root
-      value={answer}
-      onChange={handleChange}
-      type="number"
-      variant="soft"
-      disabled={disabled}
-      placeholder="Your answer here…"
-    />
-  )
-}
-
-export const EssayTask: FC<TextTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  lines = 5,
-  disabled = false,
-}) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  return (
-    <TextArea
-      value={inputValue}
-      onChange={defaultOnChangeHandler(setInputValue)}
-      variant="soft"
-      placeholder="Your answer here…"
-      rows={lines}
-      disabled={disabled}
-    />
-  )
-}
-
-export const CodeTask: FC<TextTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  lines = 5,
-  disabled = false,
-}) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  return (
-    <TextArea
-      value={inputValue}
-      onChange={defaultOnChangeHandler(setInputValue)}
-      className="monospaced"
-      variant="soft"
-      placeholder="Your answer here…"
-      rows={lines}
-      disabled={disabled}
-    />
-  )
-}
-
-export const MCQOneTask: FC<MCQOneTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  options,
-  disabled = false,
-}) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-  return (
-    <RadioGroup.Root
-      variant="soft"
-      disabled={disabled}
-      value={inputValue}
-      onClick={defaultOnChangeHandler(setInputValue)}
-    >
-      {map(options, (o) => (
-        <RadioGroup.Item key={o.value} value={o.value}>
-          {o.label}
-        </RadioGroup.Item>
-      ))}
-    </RadioGroup.Root>
-  )
-}
-
-export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  options,
-  disabled = false,
-}) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  const handleOnClick = (e) => {
-    const newAnswer = e.target.value
-    if (inputValue.includes(newAnswer)) setInputValue((vs) => vs.filter((v) => v !== newAnswer))
-    else setInputValue((vs) => [...vs, newAnswer])
-  }
-
-  return (
-    <CheckboxGroup.Root
-      disabled={disabled}
-      variant="soft"
-      defaultValue={inputValue}
-      onClick={handleOnClick}
-    >
-      {map(options, (o) => (
-        <CheckboxGroup.Item key={o.value} value={o.value}>
-          {o.label}
-        </CheckboxGroup.Item>
-      ))}
-    </CheckboxGroup.Root>
-  )
 }
 
 const taskComponentMap = {

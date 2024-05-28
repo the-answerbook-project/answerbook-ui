@@ -1,5 +1,5 @@
-import { Separator, Text } from '@radix-ui/themes'
-import React, { FC } from 'react'
+import { Box, Separator } from '@radix-ui/themes'
+import React, { FC, useEffect, useState } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
 import ContextCard from './components/ContextCard'
@@ -7,10 +7,19 @@ import Body from './components/pageStructure/Body'
 import Header from './components/pageStructure/Header'
 import Part from './components/questionStructure/Part'
 import Section from './components/questionStructure/Section'
+import { Task } from './components/questionStructure/Task'
+import { TaskType } from './components/questionStructure/Task/constants'
 
 const QuestionPage: FC = () => {
   const { pathname } = useLocation()
   const pathMatch = matchPath({ path: '/questions/:number' }, pathname)
+  const [multiState, setMultiState] = useState(['Option A'])
+  const defaultAnswers = {
+    '1_1_1_1': 'This is my current text',
+  }
+
+  useEffect(() => console.log({ multiState }), [multiState])
+  const [answers, setAnswers] = useState(defaultAnswers)
 
   if (!pathMatch) return <div>Placeholder</div>
 
@@ -24,9 +33,15 @@ const QuestionPage: FC = () => {
         sections: {
           i: {
             description: 'This is section i description',
+            tasks: [
+              {
+                type: TaskType.ESSAY,
+              },
+            ],
           },
           ii: {
             description: 'This is section ii description',
+            tasks: [],
           },
         },
       },
@@ -38,10 +53,12 @@ const QuestionPage: FC = () => {
           i: {
             description:
               'For this question, look at the code in the Q1 directory, related to streaming services. You have a class Subscription which can be constructed with different options (for example, the number of users, the video stream quality, whether the subscription includes movies, comedy, sports, etc).',
+            tasks: [],
           },
           ii: {
             description:
               'For this question, look at the code in the Q1 directory, related to streaming services. You have a class Subscription which can be constructed with different options (for example, the number of users, the video stream quality, whether the subscription includes movies, comedy, sports, etc).',
+            tasks: [],
           },
         },
       },
@@ -63,7 +80,52 @@ const QuestionPage: FC = () => {
           >
             {Object.entries(part.sections).map(([sectionId, section], i) => (
               <Section key={sectionId} sectionId={sectionId} description={section.description}>
-                <Text>Here goes the tasks</Text>
+                <Box>
+                  <Task
+                    answer={'My current answer'}
+                    onAnswerUpdate={console.log}
+                    type={TaskType.ESSAY}
+                  />
+                </Box>
+                <Box>
+                  <Task
+                    type={TaskType.FLAG}
+                    answer={'qazwsxedcrfvtgbyhnujmikolp123456'}
+                    onAnswerUpdate={console.log}
+                  />
+                </Box>
+                <Box>
+                  <Task type={TaskType.NUMBER} answer={12} onAnswerUpdate={console.log} />
+                </Box>
+                <Box>
+                  <Task
+                    type={TaskType.MCQONE}
+                    answer="Option A"
+                    onAnswerUpdate={console.log}
+                    options={[
+                      { value: 'Option A', label: 'Level 1' },
+                      { value: 'Option B', label: 'Level 2' },
+                    ]}
+                  />
+                </Box>
+                <Box>
+                  <Task
+                    type={TaskType.CODE}
+                    answer={'My current answer'}
+                    onAnswerUpdate={console.log}
+                  />
+                </Box>
+                <Box>
+                  <Task
+                    type={TaskType.MCQMULTI}
+                    answer={multiState}
+                    onAnswerUpdate={setMultiState}
+                    options={[
+                      { value: 'Option A', label: 'Level 1' },
+                      { value: 'Option B', label: 'Level 2' },
+                    ]}
+                  />
+                </Box>
                 {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
               </Section>
             ))}
