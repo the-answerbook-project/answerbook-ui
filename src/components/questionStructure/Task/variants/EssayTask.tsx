@@ -1,4 +1,4 @@
-import { TextArea } from '@radix-ui/themes'
+import { TextArea, TextField } from '@radix-ui/themes'
 import React, { FC, useEffect, useState } from 'react'
 
 import { TaskType } from '../constants'
@@ -18,15 +18,13 @@ export const EssayTask: FC<EssayTaskProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState(answer)
   useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
-  return (
-    <TextArea
-      value={inputValue}
-      onChange={defaultOnChangeHandler(setInputValue)}
-      variant="soft"
-      placeholder="Your answer here…"
-      rows={lines}
-      disabled={disabled}
-    />
-  )
+  const commonProps = {
+    value: inputValue,
+    onChange: defaultOnChangeHandler(setInputValue),
+    placeholder: 'Your answer here…',
+    disabled: disabled,
+    variant: 'soft' as 'soft',
+  }
+  if (lines === 1) return <TextField.Root {...commonProps} />
+  return <TextArea {...commonProps} rows={lines} />
 }
