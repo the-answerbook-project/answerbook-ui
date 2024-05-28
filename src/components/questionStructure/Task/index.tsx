@@ -14,28 +14,48 @@ export enum TaskType {
   MCQMULTI,
 }
 
-interface TaskComponentProps<V> {
-  answer: V
-  onAnswerUpdate: (value: V) => void
-  disabled?: boolean
-}
-
-interface FlagTaskProps extends TaskComponentProps<string> {
-  showOrnament?: boolean
-}
-
-interface TextTaskProps extends TaskComponentProps<string> {
-  lines?: number
-}
-
 type MCQOption = {
   value: string
   label: string
 }
 
-interface MCQTaskProps {
+interface TaskBaseProps<V> {
+  type: TaskType
+  answer: V
+  onAnswerUpdate: (value: V) => void
+  disabled?: boolean
+}
+
+interface FlagTaskProps extends TaskBaseProps<string> {
+  type: TaskType.FLAG
+  showOrnament?: boolean
+}
+
+interface NumberTaskProps extends TaskBaseProps<number> {
+  type: TaskType.NUMBER
+}
+
+interface TextTaskProps extends TaskBaseProps<string> {
+  type: TaskType.ESSAY | TaskType.CODE
+  lines?: number
+}
+
+interface MCQOneTaskProps extends TaskBaseProps<string> {
+  type: TaskType.MCQONE
   options: MCQOption[]
 }
+
+interface MCQMultiTaskProps extends TaskBaseProps<string[]> {
+  type: TaskType.MCQMULTI
+  options: MCQOption[]
+}
+
+type TaskProps =
+  | FlagTaskProps
+  | NumberTaskProps
+  | TextTaskProps
+  | MCQOneTaskProps
+  | MCQMultiTaskProps
 
 function defaultOnChangeHandler(onChange: (v: any) => void) {
   return (e) => onChange(e.target.value)
@@ -83,11 +103,7 @@ export const FlagTask: FC<FlagTaskProps> = ({
   )
 }
 
-export const NumberTask: FC<TaskComponentProps<number>> = ({
-  answer,
-  onAnswerUpdate,
-  disabled = false,
-}) => {
+export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
   const [inputValue, setInputValue] = useState(answer)
   useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
 
@@ -150,7 +166,7 @@ export const CodeTask: FC<TextTaskProps> = ({
   )
 }
 
-export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
+export const MCQOneTask: FC<MCQOneTaskProps> = ({
   answer,
   onAnswerUpdate,
   options,
@@ -174,7 +190,7 @@ export const MCQOneTask: FC<MCQTaskProps & TaskComponentProps<string>> = ({
   )
 }
 
-export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
+export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   answer,
   onAnswerUpdate,
   options,
@@ -205,29 +221,18 @@ export const MCQMultiTask: FC<MCQTaskProps & TaskComponentProps<string[]>> = ({
   )
 }
 
-type TaskComponent =
-  | typeof EssayTask
-  | typeof CodeTask
-  | typeof MCQMultiTask
-  | typeof MCQOneTask
-  | typeof NumberTask
-  | typeof FlagTask
+const taskComponentMap = {
+  [TaskType.ESSAY]: EssayTask,
+  [TaskType.CODE]: CodeTask,
+  [TaskType.NUMBER]: NumberTask,
+  [TaskType.FLAG]: FlagTask,
+  [TaskType.MCQONE]: MCQOneTask,
+  [TaskType.MCQMULTI]: MCQMultiTask,
+} as const
 
-export default function toComponent(task: TaskType): TaskComponent {
-  switch (task) {
-    case TaskType.FLAG:
-      return FlagTask
-    case TaskType.NUMBER:
-      return NumberTask
-    case TaskType.ESSAY:
-      return EssayTask
-    case TaskType.CODE:
-      return CodeTask
-    case TaskType.MCQMULTI:
-      return MCQMultiTask
-    case TaskType.MCQONE:
-      return MCQOneTask
-    default:
-      throw new Error(`Unknown task type: ${task}`)
-  }
+type TaskComponent = FC<TaskProps>
+
+export const Task: TaskComponent = (props) => {
+  const Component = taskComponentMap[props.type] as TaskComponent
+  return <Component {...props} />
 }
