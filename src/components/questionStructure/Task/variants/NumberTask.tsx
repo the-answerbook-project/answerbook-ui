@@ -9,16 +9,16 @@ export interface NumberTaskProps extends TaskBaseProps<number> {
 }
 
 export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
+  const [inputValue, setInputValue] = useState<number | ''>(answer !== undefined ? answer : '')
+  useEffect(() => {
+    if (inputValue !== '') onAnswerUpdate(inputValue)
+  }, [inputValue, onAnswerUpdate])
 
-  function handleChange(e) {
-    setInputValue(parseInt(e.target.value))
-  }
+  const handleChange = (e) => setInputValue(e.target.value ? Number(e.target.value) : '')
 
   return (
     <TextField.Root
-      value={answer}
+      value={inputValue}
       onChange={handleChange}
       type="number"
       variant="soft"
