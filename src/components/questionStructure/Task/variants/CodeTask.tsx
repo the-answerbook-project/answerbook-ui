@@ -29,5 +29,5 @@ export const CodeTask: FC<CodeTaskProps> = ({
     className: 'monospaced',
   }
   if (lines === 1) return <TextField.Root {...commonProps} />
-  return <TextArea {...commonProps} rows={lines} />
+  return <TextArea {...commonProps} resize="vertical" rows={lines} />
 }

@@ -26,5 +26,5 @@ export const EssayTask: FC<EssayTaskProps> = ({
     variant: 'soft' as 'soft',
   }
   if (lines === 1) return <TextField.Root {...commonProps} />
-  return <TextArea {...commonProps} rows={lines} />
+  return <TextArea {...commonProps} resize="vertical" rows={lines} />
 }
