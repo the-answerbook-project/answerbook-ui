@@ -1,6 +1,8 @@
 import { Flex, Grid, Strong, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
+import Markdown from '../Markdown'
+
 interface SectionProps {
   sectionId: string
   description?: string
@@ -14,7 +16,7 @@ const Section: FC<SectionProps> = ({ sectionId, description, children }) => {
         <Strong>{sectionId})</Strong>
       </Text>
       <Flex gap="3" direction="column">
-        <Text as="p">{description}</Text>
+        {description && <Markdown>{description}</Markdown>}
         {children}
       </Flex>
     </Grid>

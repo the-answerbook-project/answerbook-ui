@@ -1,6 +1,8 @@
 import { Box, Button, Card, Em, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
+import Markdown from '../Markdown'
+
 interface PartProps {
   partId: string
   description?: string
@@ -35,7 +37,7 @@ const Part: FC<PartProps> = ({ partId, description, children, marksContribution,
       <Card size="3">
         <Flex gap="4" direction="column">
           <Header />
-          {description && <Text>{description}</Text>}
+          {description && <Markdown>{description}</Markdown>}
           <Flex gap="4" direction="column">
             {children}
           </Flex>

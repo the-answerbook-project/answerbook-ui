@@ -1,6 +1,7 @@
-import { Flex, Text } from '@radix-ui/themes'
+import { Flex } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
+import Markdown from '../../Markdown'
 import { TaskType } from './constants'
 import './index.css'
 import { CodeTask, CodeTaskProps } from './variants/CodeTask'
@@ -36,7 +37,7 @@ export const Task: TaskComponent = ({ description, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
   return (
     <Flex gap="3" direction="column">
-      {description && <Text>{description}</Text>}
+      {description && <Markdown>{description}</Markdown>}
       <Component {...taskProps} />
     </Flex>
   )
