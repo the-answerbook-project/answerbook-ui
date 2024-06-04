@@ -24,8 +24,12 @@ const QuestionPage: FC = () => {
   if (!pathMatch) return <div>Placeholder</div>
 
   const question = {
-    instructions:
-      'For this question, look at the code in the Q1 directory, related to streaming services. You have a class Subscription which can be constructed with different options (for example, the number of users, the video stream quality, whether the subscription includes movies, comedy, sports, etc).',
+    instructions: `A paragraph with *emphasis* and **strong importance**. \`code\` URL: https://reactjs.org.
+
+* Lists
+* item a
+* item b
+`,
     parts: {
       a: {
         description: 'This is part a description',
@@ -57,7 +61,7 @@ const QuestionPage: FC = () => {
           },
           ii: {
             description:
-              'For this question, look at the code in the Q1 directory, related to streaming services. You have a class Subscription which can be constructed with different options (for example, the number of users, the video stream quality, whether the subscription includes movies, comedy, sports, etc).',
+              'For this question, look at the **code** in the **Q1** directory, related to streaming services. You have a class Subscription which can be constructed with different options (for example, the number of users, the video stream quality, whether the subscription includes movies, comedy, sports, etc).',
             tasks: [],
           },
         },
