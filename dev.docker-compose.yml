@@ -1,0 +1,24 @@
+services:
+  backend:
+    image: api
+    build:
+      context: ../answerbook-api
+      dockerfile: dev.Dockerfile
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 5004
+    volumes:
+      - ../answerbook-api:/api
+    ports:
+      - 5004:5004
+
+  frontend:
+    image: node:20.13
+    ports:
+      - 3000:3000
+    working_dir: /ui
+    volumes:
+      - ./:/ui
+    command: npm start
+    environment:
+      - REACT_APP_API_ENTRYPOINT=http://backend:5004
+    depends_on:
+      - backend
