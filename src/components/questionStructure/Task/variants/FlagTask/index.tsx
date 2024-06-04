@@ -19,7 +19,9 @@ export const FlagTask: FC<FlagTaskProps> = ({
 }) => {
   const FLAG_LENGTH = 32
   const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
+  useEffect(() => {
+    if (inputValue !== undefined) onAnswerUpdate(inputValue)
+  }, [inputValue, onAnswerUpdate])
 
   function handleChange(e) {
     const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')

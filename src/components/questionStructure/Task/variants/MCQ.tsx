@@ -28,7 +28,9 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
+  useEffect(() => {
+    if (inputValue !== undefined) onAnswerUpdate(inputValue)
+  }, [inputValue, onAnswerUpdate])
   return (
     <RadioGroup.Root
       variant="soft"
@@ -50,9 +52,10 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   options,
   disabled = false,
 }) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => onAnswerUpdate(inputValue), [inputValue, onAnswerUpdate])
-
+  const [inputValue, setInputValue] = useState(answer ?? [])
+  useEffect(() => {
+    if (inputValue !== undefined) onAnswerUpdate(inputValue)
+  }, [inputValue, onAnswerUpdate])
   const handleOnClick = (e) => {
     const newAnswer = e.target.value
     if (inputValue.includes(newAnswer)) setInputValue((vs) => vs.filter((v) => v !== newAnswer))
