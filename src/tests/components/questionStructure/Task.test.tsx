@@ -34,7 +34,7 @@ describe('Task Component', () => {
         onAnswerUpdate={updateHandler}
       />
     )
-    const descriptionElement = screen.getByText('Test description')
+    const descriptionElement = screen.getByTestId('markdown')
     expect(descriptionElement).toBeInTheDocument()
   })
 })

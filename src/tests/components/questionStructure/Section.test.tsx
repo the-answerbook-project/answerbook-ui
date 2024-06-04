@@ -17,7 +17,7 @@ describe('Section', () => {
     )
 
     const sectionIdElement = screen.getByText(`${sectionId})`)
-    const descriptionElement = screen.getByRole('paragraph')
+    const descriptionElement = screen.getByTestId('markdown')
     const childrenElement = screen.getByTestId('children')
 
     expect(sectionIdElement).toBeInTheDocument()

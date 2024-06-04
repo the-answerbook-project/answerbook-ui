@@ -26,7 +26,7 @@ describe('Part', () => {
 
     const headingElement = screen.getByRole('heading')
     const saveButton = screen.getByRole('button', { name: /save/i })
-    const descriptionElement = screen.getByRole('paragraph')
+    const descriptionElement = screen.getByTestId('markdown')
     const childContent = screen.getByTestId('children')
     const marksText = screen.getByText(/this part carries 20% of the marks/i)
 
