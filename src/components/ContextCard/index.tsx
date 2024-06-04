@@ -1,5 +1,7 @@
-import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Card, Flex, Heading } from '@radix-ui/themes'
 import React, { FC } from 'react'
+
+import Markdown from '../Markdown'
 
 interface ContextCardProps {
   text: string
@@ -11,7 +13,7 @@ const ContextCard: FC<ContextCardProps> = ({ text }) => {
       <Card size="3">
         <Flex gap="4" direction="column">
           <Heading>Context</Heading>
-          <Text as="p">{text}</Text>
+          <Markdown>{text}</Markdown>
         </Flex>
       </Card>
     </Box>
