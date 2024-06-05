@@ -1,4 +1,5 @@
 const routes = {
+  summary: '/summary',
   question: (number: number) => `/questions/${number}`,
 }
 

@@ -2,11 +2,11 @@ import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import ContextCard from '../../components/ContextCard'
+import FormattedCard from '../../components/FormattedCard'
 
-describe('ContextCard', () => {
-  it('renders correctly with its heading', () => {
-    render(<ContextCard text="Test Context" />)
+describe('FormattedCard', () => {
+  it('renders correctly with its title', () => {
+    render(<FormattedCard title="Context">...</FormattedCard>)
 
     const headingElement = screen.getByRole('heading', { name: /context/i })
     expect(headingElement).toBeInTheDocument()
@@ -14,7 +14,11 @@ describe('ContextCard', () => {
 
   it('renders the correct text passed as a prop', () => {
     const testText = 'Some text'
-    render(<ContextCard text={testText} />)
+    render(
+      <FormattedCard title="Context">
+        <p>{testText}</p>
+      </FormattedCard>
+    )
 
     const textElement = screen.getByRole('paragraph')
 

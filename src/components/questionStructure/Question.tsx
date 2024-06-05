@@ -1,18 +1,23 @@
 import { Flex } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
-import ContextCard from '../ContextCard'
+import FormattedCard from '../FormattedCard'
+import Markdown from '../Markdown'
 
 interface QuestionProps {
-  description: string
+  instructions?: string
   children: ReactNode
 }
 
-const Question: FC<QuestionProps> = ({ description, children }) => {
+const Question: FC<QuestionProps> = ({ instructions, children }) => {
   return (
     <>
-      <ContextCard text={description} />
-      <Flex gap="3" direction="column">
+      {instructions && (
+        <FormattedCard title="Instructions">
+          <Markdown>{instructions}</Markdown>
+        </FormattedCard>
+      )}
+      <Flex gap="3" direction="column" width="100%">
         {children}
       </Flex>
     </>
