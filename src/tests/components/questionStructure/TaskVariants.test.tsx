@@ -49,13 +49,13 @@ describe('FlagTask', () => {
 
 describe('NumberTask', () => {
   it('renders correctly', () => {
-    render(<NumberTask type={TaskType.NUMBER} answer={0} onAnswerUpdate={() => {}} />)
+    render(<NumberTask type={TaskType.INTEGER} answer={0} onAnswerUpdate={() => {}} />)
     expect(screen.getByRole('spinbutton')).toBeInTheDocument()
   })
 
   it('handles input changes', () => {
     const handleChange = jest.fn()
-    render(<NumberTask type={TaskType.NUMBER} answer={0} onAnswerUpdate={handleChange} />)
+    render(<NumberTask type={TaskType.INTEGER} answer={0} onAnswerUpdate={handleChange} />)
     const input = screen.getByRole('spinbutton')
     fireEvent.change(input, { target: { value: 5 } })
     expect(handleChange).toHaveBeenCalledWith(5)
@@ -63,7 +63,7 @@ describe('NumberTask', () => {
 
   it('renders as disabled', () => {
     render(
-      <NumberTask type={TaskType.NUMBER} answer={0} onAnswerUpdate={() => {}} disabled={true} />
+      <NumberTask type={TaskType.INTEGER} answer={0} onAnswerUpdate={() => {}} disabled={true} />
     )
     expect(screen.getByRole('spinbutton')).toBeDisabled()
   })
@@ -112,7 +112,12 @@ describe('CodeTask', () => {
 describe('MCQOneTask', () => {
   it('renders options correctly', () => {
     render(
-      <MCQOneTask type={TaskType.MCQONE} answer="" onAnswerUpdate={() => {}} options={options} />
+      <MCQOneTask
+        type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
+        answer=""
+        onAnswerUpdate={() => {}}
+        choices={options}
+      />
     )
     expect(screen.getByLabelText('Option 1')).toBeInTheDocument()
     expect(screen.getByLabelText('Option 2')).toBeInTheDocument()
@@ -122,10 +127,10 @@ describe('MCQOneTask', () => {
     const handleChange = jest.fn()
     render(
       <MCQOneTask
-        type={TaskType.MCQONE}
+        type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
         answer=""
         onAnswerUpdate={handleChange}
-        options={options}
+        choices={options}
       />
     )
     const option1 = screen.getByLabelText('Option 1')
@@ -136,10 +141,10 @@ describe('MCQOneTask', () => {
   it('renders as disabled', () => {
     render(
       <MCQOneTask
-        type={TaskType.MCQONE}
+        type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
         answer=""
         onAnswerUpdate={() => {}}
-        options={options}
+        choices={options}
         disabled={true}
       />
     )
@@ -152,10 +157,10 @@ describe('MCQMultiTask', () => {
   it('renders options correctly', () => {
     render(
       <MCQMultiTask
-        type={TaskType.MCQMULTI}
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
         answer={[]}
         onAnswerUpdate={() => {}}
-        options={options}
+        choices={options}
       />
     )
     expect(screen.getByLabelText('Option 1')).toBeInTheDocument()
@@ -166,10 +171,10 @@ describe('MCQMultiTask', () => {
     const handleChange = jest.fn()
     render(
       <MCQMultiTask
-        type={TaskType.MCQMULTI}
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
         answer={[]}
         onAnswerUpdate={handleChange}
-        options={options}
+        choices={options}
       />
     )
     const option1 = screen.getByLabelText('Option 1')
@@ -183,10 +188,10 @@ describe('MCQMultiTask', () => {
   it('renders as disabled', () => {
     render(
       <MCQMultiTask
-        type={TaskType.MCQMULTI}
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
         answer={[]}
         onAnswerUpdate={() => {}}
-        options={options}
+        choices={options}
         disabled={true}
       />
     )

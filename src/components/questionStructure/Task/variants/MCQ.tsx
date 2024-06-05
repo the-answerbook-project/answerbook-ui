@@ -12,19 +12,19 @@ type MCQOption = {
 }
 
 export interface MCQOneTaskProps extends TaskBaseProps<string> {
-  type: TaskType.MCQONE
-  options: MCQOption[]
+  type: TaskType.MULTIPLE_CHOICE_SELECT_ONE
+  choices: MCQOption[]
 }
 
 export interface MCQMultiTaskProps extends TaskBaseProps<string[]> {
-  type: TaskType.MCQMULTI
-  options: MCQOption[]
+  type: TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL
+  choices: MCQOption[]
 }
 
 export const MCQOneTask: FC<MCQOneTaskProps> = ({
   answer,
   onAnswerUpdate,
-  options,
+  choices,
   disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState(answer)
@@ -38,7 +38,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
       value={inputValue}
       onClick={defaultOnChangeHandler(setInputValue)}
     >
-      {map(options, (o) => (
+      {map(choices, (o) => (
         <RadioGroup.Item key={o.value} value={o.value}>
           {o.label}
         </RadioGroup.Item>
@@ -49,7 +49,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
 export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   answer,
   onAnswerUpdate,
-  options,
+  choices,
   disabled = false,
 }) => {
   const [inputValue, setInputValue] = useState(answer ?? [])
@@ -69,7 +69,7 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
       defaultValue={inputValue}
       onClick={handleOnClick}
     >
-      {map(options, (o) => (
+      {map(choices, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value}>
           {o.label}
         </CheckboxGroup.Item>

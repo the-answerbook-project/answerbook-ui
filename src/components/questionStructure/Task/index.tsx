@@ -10,7 +10,7 @@ import { FlagTask, FlagTaskProps } from './variants/FlagTask'
 import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
 import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 
-type TaskProps =
+export type TaskProps =
   | FlagTaskProps
   | NumberTaskProps
   | EssayTaskProps
@@ -25,19 +25,19 @@ export function defaultOnChangeHandler(onChange: (v: any) => void) {
 const taskComponentMap = {
   [TaskType.ESSAY]: EssayTask,
   [TaskType.CODE]: CodeTask,
-  [TaskType.NUMBER]: NumberTask,
+  [TaskType.INTEGER]: NumberTask,
   [TaskType.FLAG]: FlagTask,
-  [TaskType.MCQONE]: MCQOneTask,
-  [TaskType.MCQMULTI]: MCQMultiTask,
+  [TaskType.MULTIPLE_CHOICE_SELECT_ONE]: MCQOneTask,
+  [TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL]: MCQMultiTask,
 } as const
 
-type TaskComponent = FC<TaskProps & { description?: string }>
+type TaskComponent = FC<TaskProps & { instructions?: string }>
 
-export const Task: TaskComponent = ({ description, ...taskProps }) => {
+export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
   return (
     <Flex gap="3" direction="column">
-      {description && <Markdown>{description}</Markdown>}
+      {instructions && <Markdown>{instructions}</Markdown>}
       <Component {...taskProps} />
     </Flex>
   )

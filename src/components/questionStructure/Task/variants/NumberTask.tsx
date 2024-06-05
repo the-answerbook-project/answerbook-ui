@@ -5,7 +5,7 @@ import { TaskType } from '../constants'
 import { TaskBaseProps } from '../types'
 
 export interface NumberTaskProps extends TaskBaseProps<number> {
-  type: TaskType.NUMBER
+  type: TaskType.INTEGER
 }
 
 export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
