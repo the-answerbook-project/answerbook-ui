@@ -38,3 +38,20 @@ export class Question {
   showPartWeights: boolean
   parts: Record<number, Part>
 }
+
+export class Rubric {
+  instructions: string
+  questionsToAnswer: number
+}
+
+export class Summary {
+  courseCode: string
+  courseName: string
+  duration: number
+
+  @Type(() => Date)
+  begins: Date
+
+  @Type(() => Rubric)
+  rubric: Rubric
+}

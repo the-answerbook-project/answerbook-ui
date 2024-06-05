@@ -2,7 +2,7 @@ import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ExamRoot from './ExamRoot'
-import Frontcover from './Frontcover'
+import FrontCover from './FrontCover'
 import QuestionPage from './QuestionPage'
 
 const router = createBrowserRouter([
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: 'frontcover',
-        element: <Frontcover />,
+        element: <FrontCover />,
       },
       {
         path: 'questions/:questionId',
