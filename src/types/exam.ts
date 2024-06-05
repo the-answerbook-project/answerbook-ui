@@ -1,8 +1,22 @@
-import { Type } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
+
+import { TaskType } from '../components/questionStructure/Task/constants'
+import { stringToEnumValue } from './utils'
+
+export class MCQOption {
+  value: string
+  label: string
+}
 
 export class Task {
-  task: string
-  type: string
+  instructions?: string
+
+  @Transform(({ value }) => stringToEnumValue(TaskType, value), { toClassOnly: true })
+  type: TaskType
+  lines?: string
+
+  @Type(() => MCQOption)
+  choices?: MCQOption[]
 }
 
 export class Section {
