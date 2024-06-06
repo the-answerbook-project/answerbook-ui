@@ -30,9 +30,16 @@ const Markdown: FC<MarkdownProps> = ({ children }) => {
       const { children, ...rest } = props
       return <Link {...rest}>{children}</Link>
     },
+    img(props) {
+      return <img alt="" style={{ width: '100%', height: 'auto' }} {...props} />
+    },
   }
   return (
-    <MarkdownRoot components={componentMapping} remarkPlugins={[remarkGfm]}>
+    <MarkdownRoot
+      components={componentMapping}
+      urlTransform={(value: string) => value}
+      remarkPlugins={[remarkGfm]}
+    >
       {children}
     </MarkdownRoot>
   )
