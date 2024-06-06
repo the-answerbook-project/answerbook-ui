@@ -1,4 +1,5 @@
 import { Transform, Type } from 'class-transformer'
+import { addMinutes } from 'date-fns'
 
 import { TaskType } from '../components/questionStructure/Task/constants'
 import { stringToEnumValue } from './utils'
@@ -54,4 +55,8 @@ export class Summary {
 
   @Type(() => Rubric)
   rubric: Rubric
+
+  get ends(): Date {
+    return addMinutes(this.begins, this.duration)
+  }
 }
