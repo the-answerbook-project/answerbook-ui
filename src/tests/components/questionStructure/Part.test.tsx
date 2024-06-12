@@ -5,7 +5,6 @@ import React from 'react'
 import Part from '../../../components/questionStructure/Part'
 
 describe('Part', () => {
-  const partId = 'a'
   const description = 'This is a description'
   const marksContribution = 20
   const onSaveMock = jest.fn()
@@ -15,7 +14,7 @@ describe('Part', () => {
   it('renders correctly with all props', () => {
     render(
       <Part
-        partId={partId}
+        partId={1}
         description={description}
         marksContribution={marksContribution}
         onSave={onSaveMock}
@@ -39,7 +38,7 @@ describe('Part', () => {
 
   it('renders without description and marksContribution', () => {
     render(
-      <Part partId={partId} onSave={onSaveMock}>
+      <Part partId={1} onSave={onSaveMock}>
         <div data-testid="children">Child Content</div>
       </Part>
     )
@@ -57,7 +56,7 @@ describe('Part', () => {
 
   it('calls onSave when save button is clicked', () => {
     render(
-      <Part partId={partId} onSave={onSaveMock}>
+      <Part partId={1} onSave={onSaveMock}>
         <div>Child Content</div>
       </Part>
     )
@@ -66,6 +65,6 @@ describe('Part', () => {
     fireEvent.click(saveButton)
 
     expect(onSaveMock).toHaveBeenCalledTimes(1)
-    expect(onSaveMock).toHaveBeenCalledWith(partId)
+    expect(onSaveMock).toHaveBeenCalledWith(1)
   })
 })

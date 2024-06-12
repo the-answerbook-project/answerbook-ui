@@ -10,7 +10,7 @@ describe('Section', () => {
 
   it('renders correctly with all props', () => {
     render(
-      <Section sectionId="1" description={description}>
+      <Section sectionId={1} description={description}>
         <div data-testid="children">{childrenContent}</div>
       </Section>
     )
@@ -27,7 +27,7 @@ describe('Section', () => {
 
   it('renders without description', () => {
     render(
-      <Section sectionId="1">
+      <Section sectionId={1}>
         <div data-testid="children">{childrenContent}</div>
       </Section>
     )

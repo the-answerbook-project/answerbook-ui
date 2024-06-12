@@ -5,10 +5,10 @@ import { numberToLetter } from '../../utils'
 import Markdown from '../Markdown'
 
 interface PartProps {
-  partId: string
+  partId: number
   description?: string
   marksContribution?: number
-  onSave: (partId: string) => void
+  onSave: (partId: number) => void
   children: ReactNode
 }
 
@@ -16,7 +16,7 @@ const Part: FC<PartProps> = ({ partId, description, children, marksContribution,
   const Header = () => {
     return (
       <Flex justify="between">
-        <Heading>Part {numberToLetter(Number(partId))}</Heading>
+        <Heading>Part {numberToLetter(partId)}</Heading>
         <Button onClick={() => onSave(partId)}>Save</Button>
       </Flex>
     )
