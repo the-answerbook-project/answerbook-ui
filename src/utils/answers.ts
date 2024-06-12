@@ -1,5 +1,6 @@
 import { reduce, set } from 'lodash'
 
+import { TaskType } from '../components/questionStructure/Task/constants'
 import { Answer } from '../types/exam'
 
 export function buildAnswerLookupTable(answers: Answer[]) {
@@ -11,4 +12,15 @@ export function buildAnswerLookupTable(answers: Answer[]) {
     },
     {}
   )
+}
+
+export function parseAnswer(answer: string, targetTaskType: TaskType) {
+  switch (targetTaskType) {
+    case TaskType.INTEGER:
+      return Number(answer)
+    case TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL:
+      return answer.split(',')
+    default:
+      return answer
+  }
 }

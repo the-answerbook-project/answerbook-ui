@@ -1,4 +1,4 @@
-import { numberToLetter, numberToRoman } from '../utils/common'
+import { numberToLetter, numberToRoman } from '../../utils/common'
 
 describe('numberToLetter', () => {
   test.each([

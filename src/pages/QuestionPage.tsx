@@ -11,6 +11,7 @@ import Question from '../components/questionStructure/Question'
 import Section from '../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
 import { useQuestion, useQuestionAnswers } from '../hooks/exam'
+import { parseAnswer } from '../utils/answers'
 
 const QuestionPage: FC = () => {
   const { pathname } = useLocation()
@@ -50,13 +51,14 @@ const QuestionPage: FC = () => {
                     >
                       {section.tasks.map((task, i) => {
                         const taskID = i + 1
+                        const answer = lookupAnswer(questionID, partID, sectionID, taskID)
                         return (
                           <TaskFactory
                             key={i}
                             {...({
                               onAnswerUpdate: handler,
                               ...instanceToPlain(task),
-                              answer: lookupAnswer(questionID, partID, sectionID, taskID),
+                              answer: parseAnswer(answer, task.type),
                             } as TaskProps)}
                           />
                         )
