@@ -5,18 +5,17 @@ import React from 'react'
 import Section from '../../../components/questionStructure/Section'
 
 describe('Section', () => {
-  const sectionId = 'i'
   const description = 'This is a section description'
   const childrenContent = 'Child Content'
 
   it('renders correctly with all props', () => {
     render(
-      <Section sectionId={sectionId} description={description}>
+      <Section sectionId="1" description={description}>
         <div data-testid="children">{childrenContent}</div>
       </Section>
     )
 
-    const sectionIdElement = screen.getByText(`${sectionId})`)
+    const sectionIdElement = screen.getByText(`i)`)
     const descriptionElement = screen.getByTestId('markdown')
     const childrenElement = screen.getByTestId('children')
 
@@ -28,12 +27,12 @@ describe('Section', () => {
 
   it('renders without description', () => {
     render(
-      <Section sectionId={sectionId}>
+      <Section sectionId="1">
         <div data-testid="children">{childrenContent}</div>
       </Section>
     )
 
-    const sectionIdElement = screen.getByText(`${sectionId})`)
+    const sectionIdElement = screen.getByText(`i)`)
     const childrenElement = screen.getByTestId('children')
 
     expect(sectionIdElement).toBeInTheDocument()

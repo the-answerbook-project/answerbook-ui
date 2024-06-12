@@ -1,6 +1,7 @@
 import { Box, Button, Card, Em, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
+import { numberToLetter } from '../../utils'
 import Markdown from '../Markdown'
 
 interface PartProps {
@@ -15,7 +16,7 @@ const Part: FC<PartProps> = ({ partId, description, children, marksContribution,
   const Header = () => {
     return (
       <Flex justify="between">
-        <Heading>Part {partId}</Heading>
+        <Heading>Part {numberToLetter(Number(partId))}</Heading>
         <Button onClick={() => onSave(partId)}>Save</Button>
       </Flex>
     )
