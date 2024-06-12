@@ -2,7 +2,7 @@ import { Section } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import NavBar from './components/NavBar'
+import NavBar from '../components/NavBar'
 
 const ExamRoot: FC = () => {
   return (

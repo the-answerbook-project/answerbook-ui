@@ -4,13 +4,13 @@ import { map, sum } from 'lodash'
 import React, { FC, useEffect } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
-import Body from './components/pageStructure/Body'
-import Header from './components/pageStructure/Header'
-import Part from './components/questionStructure/Part'
-import Question from './components/questionStructure/Question'
-import Section from './components/questionStructure/Section'
-import { TaskFactory, TaskProps } from './components/questionStructure/Task'
-import { useQuestion } from './hooks/question'
+import Body from '../components/pageStructure/Body'
+import Header from '../components/pageStructure/Header'
+import Part from '../components/questionStructure/Part'
+import Question from '../components/questionStructure/Question'
+import Section from '../components/questionStructure/Section'
+import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
+import { useQuestion } from '../hooks/question'
 
 const QuestionPage: FC = () => {
   const { pathname } = useLocation()

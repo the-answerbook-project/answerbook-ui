@@ -1,9 +1,9 @@
 import React from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-import ExamRoot from './ExamRoot'
-import FrontCover from './FrontCover'
-import QuestionPage from './QuestionPage'
+import ExamRoot from './pages/ExamRoot'
+import FrontCover from './pages/FrontCover'
+import QuestionPage from './pages/QuestionPage'
 
 const router = createBrowserRouter([
   {

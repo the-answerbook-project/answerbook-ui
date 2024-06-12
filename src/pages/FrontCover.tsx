@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 
-import FormattedCard from './components/FormattedCard'
-import LogisticsBanner from './components/LogisticsBanner'
-import Markdown from './components/Markdown'
-import Body from './components/pageStructure/Body'
-import Header from './components/pageStructure/Header'
-import { useAssessmentSummary } from './hooks/assessmentSummary'
+import FormattedCard from '../components/FormattedCard'
+import LogisticsBanner from '../components/LogisticsBanner'
+import Markdown from '../components/Markdown'
+import Body from '../components/pageStructure/Body'
+import Header from '../components/pageStructure/Header'
+import { useAssessmentSummary } from '../hooks/assessmentSummary'
 
 const FrontCover: FC = () => {
   const { summary, summaryIsLoaded } = useAssessmentSummary()
