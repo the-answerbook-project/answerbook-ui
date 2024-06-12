@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
 import { Answer, Question, QuestionAnswersLookup } from '../types/exam'
-import { buildAnswerLookupTable } from '../utils'
+import { buildAnswerLookupTable } from '../utils/answers'
 
 export const useQuestion = (number: number | undefined) => {
   const [question, setQuestion] = useState<Question>()

@@ -1,7 +1,7 @@
 import { Box, Button, Card, Em, Flex, Heading, Separator, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
-import { numberToLetter } from '../../utils'
+import { numberToLetter } from '../../utils/common'
 import Markdown from '../Markdown'
 
 interface PartProps {

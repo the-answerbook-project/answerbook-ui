@@ -1,7 +1,7 @@
 import { Flex, Grid, Strong, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
-import { numberToRoman } from '../../utils'
+import { numberToRoman } from '../../utils/common'
 import Markdown from '../Markdown'
 
 interface SectionProps {

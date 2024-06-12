@@ -2,7 +2,7 @@ import { Transform, Type } from 'class-transformer'
 import { addMinutes } from 'date-fns'
 
 import { TaskType } from '../components/questionStructure/Task/constants'
-import { stringToEnumValue } from './utils'
+import { stringToEnumValue } from '../utils/types'
 
 export class MCQOption {
   value: string
