@@ -60,3 +60,16 @@ export class Summary {
     return addMinutes(this.begins, this.duration)
   }
 }
+
+export class Answer {
+  question: number
+  part: number
+  section: number
+  task: number
+  answer: string
+}
+
+export type TaskMap = Record<number, string>
+export type SectionMap = Record<number, TaskMap>
+export type PartMap = Record<number, SectionMap>
+export type QuestionAnswersLookup = Record<number, PartMap>

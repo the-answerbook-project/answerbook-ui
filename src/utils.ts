@@ -1,3 +1,7 @@
+import { reduce, set } from 'lodash'
+
+import { Answer } from './types/exam'
+
 const ASCII_LOWERCASE_OFFSET = 96
 
 export function numberToLetter(num: number): string {
@@ -33,4 +37,15 @@ export function numberToRoman(num: number): string {
     num -= repeatCount * value
     return result + numeral.repeat(repeatCount)
   }, '')
+}
+
+export function buildAnswerLookupTable(answers: Answer[]) {
+  return reduce(
+    answers,
+    (res, { question, part, section, task, answer }) => {
+      set(res, [question, part, section, task], answer)
+      return res
+    },
+    {}
+  )
 }
