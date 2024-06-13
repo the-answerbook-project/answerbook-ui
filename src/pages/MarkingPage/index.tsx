@@ -1,4 +1,4 @@
-import { Separator } from '@radix-ui/themes'
+import { Box, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useEffect } from 'react'
@@ -25,7 +25,7 @@ const MarkingPage: FC = () => {
     <>
       {Object.entries(questions).map(([questionIDString, question]) => {
         return (
-          <>
+          <Box key={questionIDString}>
             <QuestionHeader number={questionIDString} title={question.title} />
             <Body>
               <Question instructions={question.instructions}>
@@ -67,7 +67,7 @@ const MarkingPage: FC = () => {
                 })}
               </Question>
             </Body>
-          </>
+          </Box>
         )
       })}
     </>
