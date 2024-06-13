@@ -28,7 +28,7 @@ const QuestionPage: FC = () => {
 
   return (
     <>
-      <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText="TDD" />
+      <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText={question.title} />
       <Body>
         <Question instructions={question.instructions}>
           {Object.entries(question.parts).map(([partIDString, part]) => {
