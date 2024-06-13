@@ -1,14 +1,15 @@
-import { Container, Flex, Heading, Section as LayoutSection, Separator } from '@radix-ui/themes'
+import { Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useEffect } from 'react'
 
-import Body from '../components/pageStructure/Body'
-import Part from '../components/questionStructure/Part'
-import Question from '../components/questionStructure/Question'
-import Section from '../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
-import { useQuestions } from '../hooks/exam'
+import Body from '../../components/pageStructure/Body'
+import Part from '../../components/questionStructure/Part'
+import Question from '../../components/questionStructure/Question'
+import Section from '../../components/questionStructure/Section'
+import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
+import { useQuestions } from '../../hooks/exam'
+import QuestionHeader from './QuestionHeader'
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
@@ -25,21 +26,7 @@ const MarkingPage: FC = () => {
       {Object.entries(questions).map(([questionIDString, question]) => {
         return (
           <>
-            <LayoutSection pb="0" mb="-6">
-              <Container size="4" px="6">
-                <Flex direction="column" gap="4">
-                  <Flex gap="2">
-                    <Heading size="8">{`Question ${questionIDString}`}</Heading>
-                    {question.title && (
-                      <Heading size="8" as="h2" color="gray" weight="medium">
-                        {question.title}
-                      </Heading>
-                    )}
-                  </Flex>
-                  <Separator size="4" />
-                </Flex>
-              </Container>
-            </LayoutSection>
+            <QuestionHeader number={questionIDString} title={question.title} />
             <Body>
               <Question instructions={question.instructions}>
                 {Object.entries(question.parts).map(([partIDString, part]) => {
