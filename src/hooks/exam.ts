@@ -1,9 +1,10 @@
 import { plainToInstance } from 'class-transformer'
+import { mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
-import { Answer, Question, QuestionAnswersLookup } from '../types/exam'
+import { Answer, Question, QuestionAnswersLookup, Summary } from '../types/exam'
 import { buildAnswerLookupTable } from '../utils/answers'
 
 export const useQuestion = (number: number | undefined) => {
@@ -42,4 +43,28 @@ export const useQuestionAnswers = (number: number | undefined) => {
   )
 
   return { lookupAnswer, answersAreLoaded }
+}
+
+export const useAssessmentSummary = () => {
+  const [summary, setSummary] = useState<Summary>()
+  const [summaryIsLoaded, setSummaryIsLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.summary)
+      .then(({ data }) => setSummary(plainToInstance(Summary, data)))
+      .finally(() => setSummaryIsLoaded(true))
+  }, [])
+  return { summary, summaryIsLoaded }
+}
+
+export const useQuestions = () => {
+  const [questions, setQuestions] = useState<Record<number, Question>>()
+  const [questionsAreLoaded, setQuestionsAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.questions)
+      .then(({ data }) => setQuestions(mapValues(data, (q) => plainToInstance(Question, q))))
+      .finally(() => setQuestionsAreLoaded(true))
+  }, [])
+  return { questions, questionsAreLoaded }
 }

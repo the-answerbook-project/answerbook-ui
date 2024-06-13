@@ -5,7 +5,7 @@ import LogisticsBanner from '../components/LogisticsBanner'
 import Markdown from '../components/Markdown'
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
-import { useAssessmentSummary } from '../hooks/assessmentSummary'
+import { useAssessmentSummary } from '../hooks/exam'
 
 const FrontCover: FC = () => {
   const { summary, summaryIsLoaded } = useAssessmentSummary()
