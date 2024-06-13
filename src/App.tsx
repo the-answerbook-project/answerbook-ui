@@ -1,5 +1,5 @@
 import React from 'react'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ExamRoot from './pages/ExamRoot'
 import FrontCover from './pages/FrontCover'
@@ -10,6 +10,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <ExamRoot />,
     children: [
+      {
+        index: true,
+        element: <Navigate to="frontcover" replace />,
+      },
       {
         path: 'frontcover',
         element: <FrontCover />,
