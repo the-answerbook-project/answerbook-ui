@@ -1,8 +1,11 @@
-import { Box, Button, Card, Em, Flex, Heading, Separator, Text } from '@radix-ui/themes'
+import { Box, Card, Em, Flex, Heading, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
 import { numberToLetter } from '../../utils/common'
 import Markdown from '../Markdown'
+import CardBody from '../cardLayout/CardBody'
+import CardFooter from '../cardLayout/CardFooter'
+import CardHeader from '../cardLayout/CardHeader'
 
 interface PartProps {
   partId: number
@@ -13,37 +16,27 @@ interface PartProps {
 }
 
 const Part: FC<PartProps> = ({ partId, description, children, marksContribution, onSave }) => {
-  const Header = () => {
-    return (
-      <Flex justify="between">
-        <Heading>Part {numberToLetter(partId)}</Heading>
-        <Button onClick={() => onSave(partId)}>Save</Button>
-      </Flex>
-    )
-  }
-
-  const Footer = () => {
-    return (
-      <>
-        <Separator size="4" />
-        <Text as="p">
-          <Em>This part carries {marksContribution}% of the marks.</Em>
-        </Text>
-      </>
-    )
-  }
-
   return (
     <Box width="100%">
       <Card size="3">
-        <Flex gap="4" direction="column">
-          <Header />
-          {description && <Markdown>{description}</Markdown>}
+        <CardHeader>
+          <Heading>Part {numberToLetter(partId)}</Heading>
+        </CardHeader>
+        <CardBody>
           <Flex gap="4" direction="column">
-            {children}
+            {description && <Markdown>{description}</Markdown>}
+            <Flex gap="4" direction="column">
+              {children}
+            </Flex>
           </Flex>
-          {marksContribution && <Footer />}
-        </Flex>
+        </CardBody>
+        {marksContribution && (
+          <CardFooter>
+            <Text as="p">
+              <Em>This part carries {marksContribution}% of the marks.</Em>
+            </Text>
+          </CardFooter>
+        )}
       </Card>
     </Box>
   )
