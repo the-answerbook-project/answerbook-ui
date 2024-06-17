@@ -1,4 +1,4 @@
-import { Box, Separator } from '@radix-ui/themes'
+import { Box, Callout, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useEffect } from 'react'
@@ -10,6 +10,12 @@ import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import { useQuestions } from '../../hooks/exam'
 import QuestionHeader from './QuestionHeader'
+
+const NoAnswerBanner = () => (
+  <Callout.Root color="blue">
+    <Callout.Text>No answer was submitted for this task.</Callout.Text>
+  </Callout.Root>
+)
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
@@ -48,10 +54,13 @@ const MarkingPage: FC = () => {
                             description={section.instructions}
                           >
                             {section.tasks.map((task, i) => {
+                              const answer = false
+                              if (!answer) return <NoAnswerBanner />
                               return (
                                 <TaskFactory
                                   key={i}
                                   {...({
+                                    disabled: true,
                                     onAnswerUpdate: handler,
                                     ...instanceToPlain(task),
                                   } as TaskProps)}
