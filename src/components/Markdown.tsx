@@ -1,4 +1,4 @@
-import { Blockquote, Code, Em, Link, Strong, Text } from '@radix-ui/themes'
+import { Blockquote, Code, Em, Flex, Link, Strong, Text } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { default as MarkdownRoot } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -35,13 +35,15 @@ const Markdown: FC<MarkdownProps> = ({ children }) => {
     },
   }
   return (
-    <MarkdownRoot
-      components={componentMapping}
-      urlTransform={(value: string) => value}
-      remarkPlugins={[remarkGfm]}
-    >
-      {children}
-    </MarkdownRoot>
+    <Flex direction="column" gap="4">
+      <MarkdownRoot
+        components={componentMapping}
+        urlTransform={(value: string) => value}
+        remarkPlugins={[remarkGfm]}
+      >
+        {children}
+      </MarkdownRoot>
+    </Flex>
   )
 }
 
