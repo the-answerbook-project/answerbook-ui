@@ -72,4 +72,4 @@ export class Answer {
 export type TaskMap = Record<number, string>
 export type SectionMap = Record<number, TaskMap>
 export type PartMap = Record<number, SectionMap>
-export type QuestionAnswersLookup = Record<number, PartMap>
+export type QuestionMap = Record<number, PartMap>

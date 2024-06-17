@@ -1,14 +1,15 @@
 import { Box, Callout, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
-import { useQuestions } from '../../hooks/exam'
+import { useQuestions, useStudentAnswers } from '../../hooks/marking'
+import { parseAnswer } from '../../utils/answers'
 import QuestionHeader from './QuestionHeader'
 
 const NoAnswerBanner = () => (
@@ -19,8 +20,7 @@ const NoAnswerBanner = () => (
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
-
-  useEffect(() => console.log({ questions }), [questions])
+  const { lookupAnswer, answersAreLoaded } = useStudentAnswers('hpotter')
 
   const handler = (v) => {}
 
@@ -30,6 +30,7 @@ const MarkingPage: FC = () => {
   return (
     <>
       {Object.entries(questions).map(([questionIDString, question]) => {
+        const questionID = Number(questionIDString)
         return (
           <Box key={questionIDString}>
             <QuestionHeader number={questionIDString} title={question.title} />
@@ -53,14 +54,16 @@ const MarkingPage: FC = () => {
                             sectionId={sectionID}
                             description={section.instructions}
                           >
-                            {section.tasks.map((task, i) => {
-                              const answer = false
-                              if (!answer) return <NoAnswerBanner />
+                            {section.tasks.map((task, t) => {
+                              const taskID = t + 1
+                              const answer = lookupAnswer(questionID, partID, sectionID, taskID)
+                              if (!answer) return <NoAnswerBanner key={t} />
                               return (
                                 <TaskFactory
-                                  key={i}
+                                  key={t}
                                   {...({
                                     disabled: true,
+                                    answer: parseAnswer(answer, task.type),
                                     onAnswerUpdate: handler,
                                     ...instanceToPlain(task),
                                   } as TaskProps)}
