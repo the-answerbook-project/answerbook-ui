@@ -1,0 +1,26 @@
+.card-header-success {
+  color: var(--green-11);
+  background-color: var(--green-4);
+}
+
+.card-header-danger {
+  color: var(--red-11);
+  background-color: var(--red-4);
+}
+
+.card-header-default {
+  background-color: var(--gray-4);
+}
+
+.card-success {
+  border: solid 1px var(--green-10);
+}
+
+.card-danger {
+  border: solid 1px var(--red-10);
+}
+
+.card-footer {
+  border-top: solid 1px var(--gray-7);
+  background-color: var(--gray-3);
+}
