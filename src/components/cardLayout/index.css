@@ -14,10 +14,12 @@
 
 .card-success {
   border: solid 1px var(--green-10);
+  --base-card-surface-box-shadow: none;
 }
 
 .card-danger {
   border: solid 1px var(--red-10);
+  --base-card-surface-box-shadow: none;
 }
 
 .card-footer {
