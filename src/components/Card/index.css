@@ -26,3 +26,7 @@
   border-top: solid 1px var(--gray-7);
   background-color: var(--gray-3);
 }
+
+.card-base {
+  --card-padding: 0;
+}

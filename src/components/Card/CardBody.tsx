@@ -5,6 +5,6 @@ interface CardBodyProps {
   children?: React.ReactNode
 }
 
-const CardBody: FC<CardBodyProps> = ({ children }) => <Box py="4">{children}</Box>
+const CardBody: FC<CardBodyProps> = ({ children }) => <Box p="4">{children}</Box>
 
 export default CardBody

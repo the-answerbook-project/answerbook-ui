@@ -1,11 +1,12 @@
-import { Box, Card, Em, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Em, Flex, Heading, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
 import { numberToLetter } from '../../utils/common'
+import Card from '../Card'
+import CardBody from '../Card/CardBody'
+import CardFooter from '../Card/CardFooter'
+import CardHeader from '../Card/CardHeader'
 import Markdown from '../Markdown'
-import CardBody from '../cardLayout/CardBody'
-import CardFooter from '../cardLayout/CardFooter'
-import CardHeader from '../cardLayout/CardHeader'
 
 interface PartProps {
   partId: number
@@ -18,7 +19,7 @@ interface PartProps {
 const Part: FC<PartProps> = ({ partId, description, children, marksContribution, onSave }) => {
   return (
     <Box width="100%">
-      <Card size="3">
+      <Card>
         <CardHeader>
           <Heading>Part {numberToLetter(partId)}</Heading>
         </CardHeader>
