@@ -1,7 +1,6 @@
-import { Box, Heading } from '@radix-ui/themes'
+import { Box, Card, Heading } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
-import Card from '../Card'
 import CardBody from '../Card/CardBody'
 import CardHeader from '../Card/CardHeader'
 

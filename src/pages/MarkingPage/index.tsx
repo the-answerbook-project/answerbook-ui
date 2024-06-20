@@ -1,7 +1,7 @@
 import { Box, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
-import React, { FC } from 'react'
+import React, { FC, Fragment } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
@@ -10,6 +10,7 @@ import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import { useQuestions, useStudentAnswers } from '../../hooks/marking'
 import { parseAnswer } from '../../utils/answers'
+import MarkBox from './MarkBox'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
 
@@ -55,7 +56,6 @@ const MarkingPage: FC = () => {
                               if (!answer) return <NoAnswerBanner key={t} />
                               return (
                                 <TaskFactory
-                                  key={t}
                                   {...({
                                     disabled: true,
                                     answer: parseAnswer(answer, task.type),
@@ -65,6 +65,7 @@ const MarkingPage: FC = () => {
                                 />
                               )
                             })}
+                            <MarkBox />
                             {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
                           </Section>
                         )

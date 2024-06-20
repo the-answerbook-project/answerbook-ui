@@ -5,3 +5,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Global RadixUI Themes override */
+.rt-Card {
+  --card-padding: 0;
+  --card-border-radius: var(--radius-3);
+}

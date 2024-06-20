@@ -1,8 +1,7 @@
-import { Box, Em, Flex, Heading, Text } from '@radix-ui/themes'
+import { Box, Card, Em, Flex, Heading, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
 import { numberToLetter } from '../../utils/common'
-import Card from '../Card'
 import CardBody from '../Card/CardBody'
 import CardFooter from '../Card/CardFooter'
 import CardHeader from '../Card/CardHeader'
