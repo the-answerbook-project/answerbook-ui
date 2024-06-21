@@ -1,22 +1,23 @@
 import { Box, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import { map, sum } from 'lodash'
-import React, { FC, Fragment } from 'react'
+import { map, orderBy, sum } from 'lodash'
+import React, { FC } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
-import { useQuestions, useStudentAnswers } from '../../hooks/marking'
+import { useQuestions, useStudentAnswers, useStudentMarks } from '../../hooks/marking'
 import { parseAnswer } from '../../utils/answers'
-import MarkBox from './MarkBox'
+import MarkInputPanel from './MarkInputPanel'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
   const { lookupAnswer, answersAreLoaded } = useStudentAnswers('hpotter')
+  const { lookupMark, marksAreLoaded } = useStudentMarks('hpotter')
 
   const handler = (v) => {}
 
@@ -44,6 +45,7 @@ const MarkingPage: FC = () => {
                     >
                       {Object.entries(part.sections).map(([sectionIDString, section], i) => {
                         const sectionID = Number(sectionIDString)
+                        const mark = lookupMark(questionID, partID, sectionID)
                         return (
                           <Section
                             key={sectionID}
@@ -56,6 +58,7 @@ const MarkingPage: FC = () => {
                               if (!answer) return <NoAnswerBanner key={t} />
                               return (
                                 <TaskFactory
+                                  key={`${sectionID}-${taskID}`}
                                   {...({
                                     disabled: true,
                                     answer: parseAnswer(answer, task.type),
@@ -65,7 +68,11 @@ const MarkingPage: FC = () => {
                                 />
                               )
                             })}
-                            <MarkBox />
+                            <MarkInputPanel
+                              marks={orderBy(mark?.history, 'timestamp', 'desc') ?? []}
+                              maximumMark={section.maximumMark}
+                              onSave={() => {}}
+                            />
                             {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
                           </Section>
                         )

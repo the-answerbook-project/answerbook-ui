@@ -1,0 +1,21 @@
+.mark-input-area {
+  border: 1px solid var(--gray-8);
+  border-radius: var(--radius-2);
+}
+
+.feedback-field {
+  box-shadow: none;
+  border: 1px 0 1px 1px solid var(--gray-8);
+  border-radius: var(--radius-2) 0 0 var(--radius-2);
+  flex-grow: 1;
+}
+
+.mark-field {
+  box-shadow: none;
+  border: 0 1px solid var(--gray-8);
+  border-radius: 0 var(--radius-2) var(--radius-2) 0;
+}
+
+.mark-button {
+  box-shadow: none;
+}

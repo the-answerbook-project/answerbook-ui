@@ -6,6 +6,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+ul.list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+
+  > li:not(:last-child) {
+    border-bottom: 1px solid var(--gray-6);
+  }
+}
+
 /* Global RadixUI Themes override */
 .rt-Card {
   --card-padding: 0;

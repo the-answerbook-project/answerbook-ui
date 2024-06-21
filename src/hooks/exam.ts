@@ -3,8 +3,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
-import { Answer, Question, QuestionMap, Summary } from '../types/exam'
-import { buildAnswerLookupTable } from '../utils/answers'
+import { Answer, AnswerMap, Question, Summary } from '../types/exam'
+import { buildResourceLookupTable } from '../utils/answers'
 
 export const useQuestion = (number: number | undefined) => {
   const [question, setQuestion] = useState<Question>()
@@ -30,7 +30,10 @@ export const useQuestionAnswers = (number: number | undefined) => {
       .finally(() => setAnswersAreLoaded(true))
   }, [number])
 
-  const answersLookup: QuestionMap = useMemo(() => buildAnswerLookupTable(answers), [answers])
+  const answersLookup: AnswerMap = useMemo(
+    () => buildResourceLookupTable(answers, 'answer'),
+    [answers]
+  )
 
   const lookupAnswer = useCallback(
     (question: number, part: number, section: number, task: number) =>

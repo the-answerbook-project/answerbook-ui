@@ -69,7 +69,4 @@ export class Answer {
   answer: string
 }
 
-export type TaskMap = Record<number, string>
-export type SectionMap = Record<number, TaskMap>
-export type PartMap = Record<number, SectionMap>
-export type QuestionMap = Record<number, PartMap>
+export type AnswerMap = Record<number, Record<number, Record<number, Record<number, string>>>>

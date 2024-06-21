@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
-import { Answer, Question, QuestionMap } from '../types/exam'
-import { buildAnswerLookupTable } from '../utils/answers'
+import { Answer, AnswerMap, Question } from '../types/exam'
+import { MarkMap, MarkRoot } from '../types/marking'
+import { buildResourceLookupTable } from '../utils/answers'
 
 export const useStudentAnswers = (studentID: string) => {
   const [answers, setAnswers] = useState<Answer[]>([])
@@ -17,7 +18,10 @@ export const useStudentAnswers = (studentID: string) => {
       .finally(() => setAnswersAreLoaded(true))
   }, [studentID])
 
-  const answersLookup: QuestionMap = useMemo(() => buildAnswerLookupTable(answers), [answers])
+  const answersLookup: AnswerMap = useMemo(
+    () => buildResourceLookupTable(answers, 'answer'),
+    [answers]
+  )
 
   const lookupAnswer = useCallback(
     (question: number, part: number, section: number, task: number) =>
@@ -38,4 +42,23 @@ export const useQuestions = () => {
       .finally(() => setQuestionsAreLoaded(true))
   }, [])
   return { questions, questionsAreLoaded }
+}
+
+export const useStudentMarks = (studentID: string) => {
+  const [marks, setMarks] = useState<MarkRoot[]>([])
+  const [marksAreLoaded, setMarksAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.studentMarks(studentID))
+      .then(({ data }) => setMarks(data.map((d) => plainToInstance(MarkRoot, d))))
+      .finally(() => setMarksAreLoaded(true))
+  }, [studentID])
+
+  const marksLookup: MarkMap = useMemo(() => buildResourceLookupTable(marks), [marks])
+
+  const lookupMark = useCallback(
+    (question: number, part: number, section: number) => marksLookup[question]?.[part]?.[section],
+    [marksLookup]
+  )
+  return { lookupMark, marksAreLoaded }
 }

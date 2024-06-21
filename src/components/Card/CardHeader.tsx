@@ -5,11 +5,11 @@ import './index.css'
 
 interface CardHeaderProps {
   children?: React.ReactNode
-  variant?: 'success' | 'danger' | 'default'
+  colour?: 'green' | 'red'
 }
 
-const CardHeader: FC<CardHeaderProps> = ({ children, variant }) => (
-  <Inset clip="padding-box" side="top" className={`card-header-${variant ?? 'default'}`}>
+const CardHeader: FC<CardHeaderProps> = ({ children, colour }) => (
+  <Inset clip="padding-box" side="top" className={`card-header-${colour ?? 'default'}`}>
     <Box px="4" py="2">
       {children}
     </Box>

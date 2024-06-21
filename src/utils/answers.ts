@@ -1,13 +1,19 @@
 import { reduce, set } from 'lodash'
 
 import { TaskType } from '../components/questionStructure/Task/constants'
-import { Answer } from '../types/exam'
+import AnswerBookRootResource from '../types/common'
 
-export function buildAnswerLookupTable(answers: Answer[]) {
+export function buildResourceLookupTable<T extends AnswerBookRootResource>(
+  resources: T[],
+  valueAttribute?: keyof T
+) {
   return reduce(
-    answers,
-    (res, { question, part, section, task, answer }) => {
-      set(res, [question, part, section, task], answer)
+    resources,
+    (res, current) => {
+      const { question, part, section } = current
+      let subKeys = [question, part, section]
+      if (current['task'] !== undefined) subKeys = [...subKeys, current['task']]
+      set(res, subKeys, valueAttribute ? current[valueAttribute] : current)
       return res
     },
     {}
