@@ -1,4 +1,4 @@
-import { plainToInstance } from 'class-transformer'
+import { instanceToPlain, plainToInstance } from 'class-transformer'
 import { mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -60,5 +60,15 @@ export const useStudentMarks = (studentID: string) => {
     (question: number, part: number, section: number) => marksLookup[question]?.[part]?.[section],
     [marksLookup]
   )
-  return { lookupMark, marksAreLoaded }
+
+  function saveMark(newMark: MarkRoot) {
+    axiosInstance
+      .post(routes.studentMarks(studentID), instanceToPlain(newMark))
+      .then(({ data }) => {
+        const newMark = plainToInstance(MarkRoot, data)
+        setMarks((marks) => marks.map((m) => (m.id === newMark.id ? newMark : m)))
+      })
+  }
+
+  return { lookupMark, marksAreLoaded, saveMark }
 }

@@ -1,6 +1,6 @@
 import { Box, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import { map, orderBy, sum } from 'lodash'
+import { map, sum } from 'lodash'
 import React, { FC } from 'react'
 
 import Body from '../../components/pageStructure/Body'
@@ -17,7 +17,7 @@ import QuestionHeader from './QuestionHeader'
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
   const { lookupAnswer, answersAreLoaded } = useStudentAnswers('hpotter')
-  const { lookupMark, marksAreLoaded } = useStudentMarks('hpotter')
+  const { lookupMark, saveMark, marksAreLoaded } = useStudentMarks('hpotter')
 
   const handler = (v) => {}
 
@@ -68,11 +68,16 @@ const MarkingPage: FC = () => {
                                 />
                               )
                             })}
-                            <MarkInputPanel
-                              marks={orderBy(mark?.history, 'timestamp', 'desc') ?? []}
-                              maximumMark={section.maximumMark}
-                              onSave={() => {}}
-                            />
+                            {mark && (
+                              <MarkInputPanel
+                                question={questionID}
+                                part={partID}
+                                section={sectionID}
+                                currentMark={mark}
+                                maximumMark={section.maximumMark}
+                                onSave={saveMark}
+                              />
+                            )}
                             {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
                           </Section>
                         )

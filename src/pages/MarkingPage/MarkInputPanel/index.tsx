@@ -1,31 +1,59 @@
 import { Badge, Box, Button, Card, Flex, Grid, Separator, Text, TextField } from '@radix-ui/themes'
+import { plainToInstance } from 'class-transformer'
 import { formatDistanceToNow } from 'date-fns'
-import { find, isEmpty } from 'lodash'
-import React, { FC, useMemo } from 'react'
+import { isEmpty, orderBy } from 'lodash'
+import React, { FC, useState } from 'react'
 
 import CardBody from '../../../components/Card/CardBody'
 import CardFooter from '../../../components/Card/CardFooter'
 import CardHeader from '../../../components/Card/CardHeader'
-import { Mark } from '../../../types/marking'
+import { MarkRoot } from '../../../types/marking'
 import './index.css'
 
 interface MarkInputPanelProps {
-  marks: Mark[]
+  question: number
+  part: number
+  section: number
+  currentMark: MarkRoot
   maximumMark: number
-  onSave: () => void
+  onSave: (_: MarkRoot) => void
 }
 
 const NO_MARK = 'No mark'
 const NO_FEEDBACK = 'No comment'
 
-const MarkInputPanel: FC<MarkInputPanelProps> = ({ marks, maximumMark, onSave }) => {
-  const latestMark = useMemo(() => find(marks, (o) => o.mark !== undefined)?.mark, [marks])
-  const colour = useMemo(() => (latestMark ? 'green' : 'red'), [latestMark])
+const MarkInputPanel: FC<MarkInputPanelProps> = ({
+  question,
+  part,
+  section,
+  currentMark,
+  maximumMark,
+  onSave,
+}) => {
+  const initMark = {
+    question,
+    part,
+    section,
+    mark: '',
+    feedback: '',
+  }
+  const markHistory = orderBy(currentMark?.history, 'timestamp', 'desc') ?? []
+  const colour = currentMark.mark ? 'green' : 'red'
+  const [newMark, setNewMark] = useState(initMark)
+
+  function handleChange(key: keyof MarkRoot, value: any) {
+    setNewMark((prevState) => ({ ...prevState, [key]: value }))
+  }
+
+  function handleSave() {
+    onSave(plainToInstance(MarkRoot, newMark))
+    setNewMark(initMark)
+  }
 
   const MarkHistory = () => {
     return (
       <ul className={'list'}>
-        {marks.map((m, i) => {
+        {markHistory.map((m, i) => {
           const timestamp = formatDistanceToNow(m.timestamp, {
             includeSeconds: true,
             addSuffix: true,
@@ -64,20 +92,30 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({ marks, maximumMark, onSave })
         <Flex justify="between">
           <Text>Mark awarded for this section</Text>
           <Badge radius="full" variant="solid" color={colour}>
-            {latestMark ?? NO_MARK} <Separator orientation="vertical" color="gray" /> {maximumMark}
+            {currentMark.mark ?? NO_MARK} <Separator orientation="vertical" color="gray" />{' '}
+            {maximumMark}
           </Badge>
         </Flex>
       </CardHeader>
-      {isEmpty(marks) ? <NoMarksBody /> : <MarkHistory />}
+      {isEmpty(markHistory) ? <NoMarksBody /> : <MarkHistory />}
       <CardFooter>
         <Grid columns={'7fr 1fr 1fr'} className={'mark-input-area'}>
           <TextField.Root
+            value={newMark.feedback}
+            onChange={(e) => handleChange('feedback', e.target.value)}
             radius="small"
             placeholder="Comment (Optional)"
             className={'feedback-field'}
           />
-          <TextField.Root radius="none" type="number" placeholder="Mark" className={'mark-field'} />
-          <Button color="gray" radius="none" className={'mark-button'}>
+          <TextField.Root
+            value={newMark.mark}
+            onChange={(e) => handleChange('mark', e.target.value)}
+            type="number"
+            radius="none"
+            placeholder="Mark"
+            className={'mark-field'}
+          />
+          <Button color="gray" radius="none" className={'mark-button'} onClick={handleSave}>
             Record
           </Button>
         </Grid>
