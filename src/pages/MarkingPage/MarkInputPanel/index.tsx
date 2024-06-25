@@ -115,7 +115,13 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
             placeholder="Mark"
             className={'mark-field'}
           />
-          <Button color="gray" radius="none" className={'mark-button'} onClick={handleSave}>
+          <Button
+            disabled={isEmpty(newMark.mark) && isEmpty(newMark.feedback)}
+            color="amber"
+            radius="none"
+            className={'mark-button'}
+            onClick={handleSave}
+          >
             Record
           </Button>
         </Grid>
