@@ -68,16 +68,15 @@ const MarkingPage: FC = () => {
                                 />
                               )
                             })}
-                            {mark && (
-                              <MarkInputPanel
-                                question={questionID}
-                                part={partID}
-                                section={sectionID}
-                                currentMark={mark}
-                                maximumMark={section.maximumMark}
-                                onSave={saveMark}
-                              />
-                            )}
+
+                            <MarkInputPanel
+                              question={questionID}
+                              part={partID}
+                              section={sectionID}
+                              currentMark={mark}
+                              maximumMark={section.maximumMark}
+                              onSave={saveMark}
+                            />
                             {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
                           </Section>
                         )

@@ -38,7 +38,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
     feedback: '',
   }
   const markHistory = orderBy(currentMark?.history, 'timestamp', 'desc') ?? []
-  const colour = currentMark.mark ? 'green' : 'red'
+  const colour = currentMark?.mark ? 'green' : 'red'
   const [newMark, setNewMark] = useState(initMark)
 
   function handleChange(key: keyof MarkRoot, value: any) {
@@ -92,7 +92,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
         <Flex justify="between">
           <Text>Mark awarded for this section</Text>
           <Badge radius="full" variant="solid" color={colour}>
-            {currentMark.mark ?? NO_MARK} <Separator orientation="vertical" color="gray" />{' '}
+            {currentMark?.mark ?? NO_MARK} <Separator orientation="vertical" color="gray" />{' '}
             {maximumMark}
           </Badge>
         </Flex>
