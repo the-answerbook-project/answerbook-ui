@@ -5,6 +5,20 @@ This repo contains the frontend code for the Answerbook project. The frontend is
 1. Run `nvm use` to ensure you're using the correct Node version.
 2. Run `npm install` to install dependencies (this will also setup commit hooks).
 
+## Running the application
+### In Docker
+#### With Docker-based postgres (recommended)
+1. For first run, do: `docker compose -f dev.docker-compose.yml up --build`
+2. After, use: `docker compose -f dev.docker-compose.yml up`
+
+#### With a local copy of Postgres
+1. For first run, do: `docker compose -f dev.local.docker-compose.yml up --build`
+2. After, use: `docker compose -f dev.local.docker-compose.yml up`
+
+For either, you might also want to pass in `-d` to run in detached mode.
+
+#### After startup
+1. Setup the database: `docker exec $(docker ps -qf "name=answerbook-ui-backend" | head -n1) poetry run alembic upgrade head` 
 
 # Old README: Getting Started with Create React App
 
