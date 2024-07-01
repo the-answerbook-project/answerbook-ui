@@ -1,4 +1,12 @@
-# Getting Started with Create React App
+# Answerbook UI (Frontend)
+This repo contains the frontend code for the Answerbook project. The frontend is a React app that uses the Radix UI library for styling & component primitives.
+
+## Setup
+1. Run `nvm use` to ensure you're using the correct Node version.
+2. Run `npm install` to install dependencies (this will also setup commit hooks).
+
+
+# Old README: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
