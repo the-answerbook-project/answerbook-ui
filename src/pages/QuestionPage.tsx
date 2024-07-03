@@ -1,8 +1,7 @@
-import { Separator } from '@radix-ui/themes'
+import { Button, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import memoize from 'fast-memoize'
 import { map, sum } from 'lodash'
-import React, { FC, useMemo } from 'react'
+import React, { FC } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
 import Body from '../components/pageStructure/Body'
@@ -19,11 +18,13 @@ const QuestionPage: FC = () => {
   const pathMatch = matchPath({ path: '/questions/:number' }, pathname)
 
   const { question, questionIsLoaded } = useQuestion(Number(pathMatch?.params?.number))
-  const { lookupAnswer, setAnswer } = useQuestionAnswers(Number(pathMatch?.params?.number))
+  const { lookupAnswer, setAnswer, saveAnswers } = useQuestionAnswers(
+    Number(pathMatch?.params?.number)
+  )
 
   const handlerFactory =
     (question: number, part: number, section: number, task: number) => (newAnswer: string) => {
-      if (question === 1 && part === 1 && section === 1 && task === 2) {
+      if (question === 1 && part === 1 && section === 1) {
         console.log(
           `Question ${question}, Part ${part}, Section ${section}, Task ${task} updated to ${newAnswer}!`
         )
@@ -82,6 +83,9 @@ const QuestionPage: FC = () => {
             )
           })}
         </Question>
+        <Button size="4" color="green" type="submit" onClick={saveAnswers}>
+          Save Answers
+        </Button>
       </Body>
     </>
   )

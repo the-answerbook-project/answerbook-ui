@@ -54,7 +54,14 @@ export const useQuestionAnswers = (number: number | undefined) => {
     [answers]
   )
 
-  return { lookupAnswer, answersAreLoaded, setAnswer }
+  const saveAnswers = useCallback(() => {
+    if (number === undefined) return
+    axiosInstance.post(routes.questionAnswers(number), answers).then(() => {
+      console.log('Saved!')
+    })
+  }, [answers, number])
+
+  return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }
 }
 
 export const useAssessmentSummary = () => {
