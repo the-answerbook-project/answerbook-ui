@@ -24,12 +24,7 @@ const QuestionPage: FC = () => {
 
   const handlerFactory =
     (question: number, part: number, section: number, task: number) => (newAnswer: string) => {
-      if (question === 1 && part === 1 && section === 1) {
-        console.log(
-          `Question ${question}, Part ${part}, Section ${section}, Task ${task} updated to ${newAnswer}!`
-        )
-        setAnswer(question, part, section, task, newAnswer)
-      }
+      setAnswer(question, part, section, task, newAnswer)
     }
 
   if (!pathMatch || !questionIsLoaded) return <div>Placeholder</div>
@@ -68,7 +63,6 @@ const QuestionPage: FC = () => {
                             key={i}
                             {...({
                               onAnswerUpdate: handlerFactory(questionID, partID, sectionID, taskID),
-                              //onAnswerUpdate: console.log,
                               ...instanceToPlain(task),
                               answer: parseAnswer(answer, task.type),
                             } as TaskProps)}

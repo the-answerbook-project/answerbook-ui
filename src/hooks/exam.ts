@@ -31,8 +31,6 @@ export const useQuestionAnswers = (number: number | undefined) => {
   }, [number])
 
   const answersLookup: AnswerMap = useMemo(() => {
-    console.log('RERENDER')
-    console.log(answers)
     return buildResourceLookupTable(answers, 'answer')
   }, [answers])
 
@@ -50,15 +48,14 @@ export const useQuestionAnswers = (number: number | undefined) => {
       )
       newAnswers.push({ question, part, section, task, answer: newAnswer })
       setAnswers(newAnswers)
+      console.log(newAnswers)
     },
     [answers]
   )
 
   const saveAnswers = useCallback(() => {
     if (number === undefined) return
-    axiosInstance.post(routes.questionAnswers(number), answers).then(() => {
-      console.log('Saved!')
-    })
+    axiosInstance.post(routes.questionAnswers(number), answers).then(() => {})
   }, [answers, number])
 
   return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }

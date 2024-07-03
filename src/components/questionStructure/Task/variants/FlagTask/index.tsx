@@ -1,6 +1,6 @@
 import { Flex, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
@@ -18,15 +18,14 @@ export const FlagTask: FC<FlagTaskProps> = ({
   disabled = false,
 }) => {
   const FLAG_LENGTH = 32
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => {
-    if (inputValue !== undefined) onAnswerUpdate(inputValue)
-  }, [inputValue, onAnswerUpdate])
 
-  function handleChange(e) {
-    const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
-    setInputValue(valueWithoutSpaces)
-  }
+  const handleChange = useCallback(
+    (e) => {
+      const valueWithoutSpaces = e.target.value.replace(/\s+/g, '')
+      onAnswerUpdate(valueWithoutSpaces)
+    },
+    [onAnswerUpdate]
+  )
 
   return (
     <Flex align="stretch">
@@ -37,7 +36,7 @@ export const FlagTask: FC<FlagTaskProps> = ({
       )}
       <TextField.Root
         disabled={disabled}
-        value={inputValue}
+        value={answer}
         onChange={handleChange}
         radius="none"
         type="text"
