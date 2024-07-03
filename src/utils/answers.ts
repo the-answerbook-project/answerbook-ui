@@ -25,7 +25,7 @@ export function parseAnswer(answer: string, targetTaskType: TaskType) {
     case TaskType.INTEGER:
       return Number(answer)
     case TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL:
-      return answer.split(',')
+      return answer === '' ? [] : answer.split(',')
     default:
       return answer
   }

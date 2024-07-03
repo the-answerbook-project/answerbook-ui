@@ -30,10 +30,11 @@ export const useQuestionAnswers = (number: number | undefined) => {
       .finally(() => setAnswersAreLoaded(true))
   }, [number])
 
-  const answersLookup: AnswerMap = useMemo(
-    () => buildResourceLookupTable(answers, 'answer'),
-    [answers]
-  )
+  const answersLookup: AnswerMap = useMemo(() => {
+    console.log('RERENDER')
+    console.log(answers)
+    return buildResourceLookupTable(answers, 'answer')
+  }, [answers])
 
   const lookupAnswer = useCallback(
     (question: number, part: number, section: number, task: number) =>
@@ -41,7 +42,19 @@ export const useQuestionAnswers = (number: number | undefined) => {
     [answersLookup]
   )
 
-  return { lookupAnswer, answersAreLoaded }
+  const setAnswer = useCallback(
+    (question: number, part: number, section: number, task: number, newAnswer: string) => {
+      const newAnswers = answers.filter(
+        (a) =>
+          !(a.question === question && a.part === part && a.section === section && a.task === task)
+      )
+      newAnswers.push({ question, part, section, task, answer: newAnswer })
+      setAnswers(newAnswers)
+    },
+    [answers]
+  )
+
+  return { lookupAnswer, answersAreLoaded, setAnswer }
 }
 
 export const useAssessmentSummary = () => {

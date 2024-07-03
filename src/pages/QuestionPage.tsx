@@ -1,7 +1,8 @@
 import { Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
+import memoize from 'fast-memoize'
 import { map, sum } from 'lodash'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
 import Body from '../components/pageStructure/Body'
@@ -18,13 +19,22 @@ const QuestionPage: FC = () => {
   const pathMatch = matchPath({ path: '/questions/:number' }, pathname)
 
   const { question, questionIsLoaded } = useQuestion(Number(pathMatch?.params?.number))
-  const { lookupAnswer } = useQuestionAnswers(Number(pathMatch?.params?.number))
+  const { lookupAnswer, setAnswer } = useQuestionAnswers(Number(pathMatch?.params?.number))
+
+  const handlerFactory =
+    (question: number, part: number, section: number, task: number) => (newAnswer: string) => {
+      if (question === 1 && part === 1 && section === 1 && task === 2) {
+        console.log(
+          `Question ${question}, Part ${part}, Section ${section}, Task ${task} updated to ${newAnswer}!`
+        )
+        setAnswer(question, part, section, task, newAnswer)
+      }
+    }
 
   if (!pathMatch || !questionIsLoaded) return <div>Placeholder</div>
   if (question === undefined) return <div>404</div>
 
   const questionID = Number(pathMatch.params.number)
-  const handler = (v) => {}
 
   return (
     <>
@@ -39,7 +49,7 @@ const QuestionPage: FC = () => {
                 partId={partID}
                 description={part.instructions}
                 marksContribution={sum(map(part.sections, 'maximumMark'))}
-                onSave={handler}
+                onSave={() => console.log(`Part ${partID} saved!`)} // TODO: Implement
               >
                 {Object.entries(part.sections).map(([sectionIDString, section], i) => {
                   const sectionID = Number(sectionIDString)
@@ -56,7 +66,8 @@ const QuestionPage: FC = () => {
                           <TaskFactory
                             key={i}
                             {...({
-                              onAnswerUpdate: handler,
+                              onAnswerUpdate: handlerFactory(questionID, partID, sectionID, taskID),
+                              //onAnswerUpdate: console.log,
                               ...instanceToPlain(task),
                               answer: parseAnswer(answer, task.type),
                             } as TaskProps)}
