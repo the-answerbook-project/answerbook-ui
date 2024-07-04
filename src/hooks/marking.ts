@@ -66,7 +66,10 @@ export const useStudentMarks = (studentID: string) => {
       .post(routes.studentMarks(studentID), instanceToPlain(newMark))
       .then(({ data }) => {
         const newMark = plainToInstance(MarkRoot, data)
-        setMarks((ms) => ms.map((m) => (m.id === newMark.id ? newMark : m)))
+        setMarks((ms) => {
+          const otherMarks = ms.filter((m) => m.id !== newMark.id)
+          return [...otherMarks, newMark]
+        })
       })
   }
 
