@@ -1,6 +1,6 @@
 import { Container, Section, TabNav } from '@radix-ui/themes'
 import React, { FC } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 
@@ -10,6 +10,8 @@ interface NavBarProps {
 
 const NavBar: FC<NavBarProps> = ({ questionCount }) => {
   const { pathname } = useLocation()
+
+  const { username = DEFAULT_TEST_USERNAME } = useParams()
 
   return (
     <Section
@@ -26,7 +28,7 @@ const NavBar: FC<NavBarProps> = ({ questionCount }) => {
           </TabNav.Link>
           {[...Array(questionCount).keys()].map((i) => (
             <TabNav.Link
-              href={`/questions/${i + 1}/${DEFAULT_TEST_USERNAME}`}
+              href={`/questions/${i + 1}/${username}`}
               key={i}
               active={pathname.startsWith(`/questions/${i + 1}`)}
             >
