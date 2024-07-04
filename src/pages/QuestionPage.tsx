@@ -4,7 +4,7 @@ import { map, sum } from 'lodash'
 import React, { FC } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
-import UserSelector from '../components/NavBar/UserSelector'
+import UserSelector from '../components/Selection/UserSelector'
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
 import Part from '../components/questionStructure/Part'
