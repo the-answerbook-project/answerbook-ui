@@ -48,7 +48,6 @@ export const useQuestionAnswers = (number: number | undefined) => {
       )
       newAnswers.push({ question, part, section, task, answer: newAnswer })
       setAnswers(newAnswers)
-      console.log(newAnswers)
     },
     [answers]
   )
