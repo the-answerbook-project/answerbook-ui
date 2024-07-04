@@ -4,6 +4,7 @@ import { map, sum } from 'lodash'
 import React, { FC } from 'react'
 import { matchPath, useLocation } from 'react-router-dom'
 
+import UserSelector from '../components/NavBar/UserSelector'
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
 import Part from '../components/questionStructure/Part'
@@ -36,6 +37,7 @@ const QuestionPage: FC = () => {
     <>
       <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText={question.title} />
       <Body>
+        <UserSelector />
         <Question instructions={question.instructions}>
           {Object.entries(question.parts).map(([partIDString, part]) => {
             const partID = Number(partIDString)

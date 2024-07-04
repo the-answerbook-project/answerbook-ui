@@ -1,6 +1,8 @@
 import { Container, Flex, Heading, Section } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
+import UserSelector from '../../components/NavBar/UserSelector'
+
 interface QuestionHeaderProps {
   number: string | number
   title?: string
@@ -17,6 +19,7 @@ const QuestionHeader: FC<QuestionHeaderProps> = ({ number, title }) => {
               {title}
             </Heading>
           )}
+          <UserSelector />
         </Flex>
       </Container>
     </Section>

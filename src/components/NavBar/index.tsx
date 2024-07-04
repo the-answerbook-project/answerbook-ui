@@ -3,7 +3,6 @@ import React, { FC } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
-import UserSelector from './UserSelector'
 
 interface NavBarProps {
   questionCount: number
@@ -34,8 +33,6 @@ const NavBar: FC<NavBarProps> = ({ questionCount }) => {
               {`Question ${i + 1}`}
             </TabNav.Link>
           ))}
-
-          <UserSelector />
         </TabNav.Root>
       </Container>
     </Section>
