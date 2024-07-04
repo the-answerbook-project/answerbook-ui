@@ -4,6 +4,7 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import NavBar from '../../components/NavBar'
+import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 
 describe('NavBar', () => {
   const renderWithRouter = (ui, { route = '/' } = {}) => {
@@ -29,12 +30,12 @@ describe('NavBar', () => {
     for (let i = 1; i <= questionCount; i++) {
       const questionLink = screen.getByRole('link', { name: new RegExp(`question ${i}`, 'i') })
       expect(questionLink).toBeInTheDocument()
-      expect(questionLink).toHaveAttribute('href', `/questions/${i}`)
+      expect(questionLink).toHaveAttribute('href', `/questions/${i}/${DEFAULT_TEST_USERNAME}`)
     }
   })
 
   it('highlights the correct active link based on the current path', () => {
-    const activeRoute = '/questions/3'
+    const activeRoute = `/questions/3/${DEFAULT_TEST_USERNAME}`
     renderWithRouter(<NavBar questionCount={5} />, { route: activeRoute })
 
     // Check for active class on the correct link
