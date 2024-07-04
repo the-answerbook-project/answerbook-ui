@@ -17,8 +17,6 @@ const QuestionPage: FC = () => {
   const { pathname } = useLocation()
   const pathMatch = matchPath({ path: '/questions/:number/:username' }, pathname)
 
-  console.log(pathMatch)
-
   const { question, questionIsLoaded } = useQuestion(Number(pathMatch?.params?.number))
   const { lookupAnswer, setAnswer, saveAnswers } = useQuestionAnswers(
     Number(pathMatch?.params?.number)

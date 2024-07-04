@@ -2,6 +2,7 @@ import { Box, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC } from 'react'
+import { useParams } from 'react-router-dom'
 
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
@@ -10,14 +11,16 @@ import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import { useQuestions, useStudentAnswers, useStudentMarks } from '../../hooks/marking'
 import { parseAnswer } from '../../utils/answers'
+import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 import MarkInputPanel from './MarkInputPanel'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
 
 const MarkingPage: FC = () => {
+  const { username = DEFAULT_TEST_USERNAME } = useParams()
   const { questions, questionsAreLoaded } = useQuestions()
-  const { lookupAnswer, answersAreLoaded } = useStudentAnswers('hpotter')
-  const { lookupMark, saveMark, marksAreLoaded } = useStudentMarks('hpotter')
+  const { lookupAnswer, answersAreLoaded } = useStudentAnswers(username)
+  const { lookupMark, saveMark, marksAreLoaded } = useStudentMarks(username)
 
   const handler = (v) => {}
 
