@@ -16,13 +16,9 @@ export const EssayTask: FC<EssayTaskProps> = ({
   lines = 5,
   disabled = false,
 }) => {
-  const [inputValue, setInputValue] = useState(answer)
-  useEffect(() => {
-    if (inputValue !== undefined) onAnswerUpdate(inputValue)
-  }, [inputValue, onAnswerUpdate])
   const commonProps = {
-    value: inputValue,
-    onChange: defaultOnChangeHandler(setInputValue),
+    value: answer,
+    onChange: defaultOnChangeHandler(onAnswerUpdate),
     placeholder: 'Your answer here…',
     disabled: disabled,
     variant: 'soft' as 'soft',

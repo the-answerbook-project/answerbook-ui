@@ -23,9 +23,9 @@ export function buildResourceLookupTable<T extends AnswerBookRootResource>(
 export function parseAnswer(answer: string, targetTaskType: TaskType) {
   switch (targetTaskType) {
     case TaskType.INTEGER:
-      return Number(answer)
+      return answer === '' ? answer : Number(answer)
     case TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL:
-      return answer.split(',')
+      return answer === '' ? [] : answer.split(',')
     default:
       return answer
   }

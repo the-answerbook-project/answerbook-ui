@@ -30,10 +30,9 @@ export const useQuestionAnswers = (number: number | undefined) => {
       .finally(() => setAnswersAreLoaded(true))
   }, [number])
 
-  const answersLookup: AnswerMap = useMemo(
-    () => buildResourceLookupTable(answers, 'answer'),
-    [answers]
-  )
+  const answersLookup: AnswerMap = useMemo(() => {
+    return buildResourceLookupTable(answers, 'answer')
+  }, [answers])
 
   const lookupAnswer = useCallback(
     (question: number, part: number, section: number, task: number) =>
@@ -41,7 +40,24 @@ export const useQuestionAnswers = (number: number | undefined) => {
     [answersLookup]
   )
 
-  return { lookupAnswer, answersAreLoaded }
+  const setAnswer = useCallback(
+    (question: number, part: number, section: number, task: number, newAnswer: string) => {
+      const newAnswers = answers.filter(
+        (a) =>
+          !(a.question === question && a.part === part && a.section === section && a.task === task)
+      )
+      newAnswers.push({ question, part, section, task, answer: newAnswer })
+      setAnswers(newAnswers)
+    },
+    [answers]
+  )
+
+  const saveAnswers = useCallback(() => {
+    if (number === undefined) return
+    axiosInstance.post(routes.questionAnswers(number), answers).then(() => {})
+  }, [answers, number])
+
+  return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }
 }
 
 export const useAssessmentSummary = () => {

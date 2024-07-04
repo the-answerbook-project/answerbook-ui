@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render, screen } from '@testing-library/react'
-import React from 'react'
+import React, { useState } from 'react'
 
 import { TaskType } from '../../../components/questionStructure/Task/constants'
 import { CodeTask } from '../../../components/questionStructure/Task/variants/CodeTask'
@@ -58,7 +58,7 @@ describe('NumberTask', () => {
     render(<NumberTask type={TaskType.INTEGER} answer={0} onAnswerUpdate={handleChange} />)
     const input = screen.getByRole('spinbutton')
     fireEvent.change(input, { target: { value: 5 } })
-    expect(handleChange).toHaveBeenCalledWith(5)
+    expect(handleChange).toHaveBeenCalledWith('5')
   })
 
   it('renders as disabled', () => {
@@ -167,22 +167,33 @@ describe('MCQMultiTask', () => {
     expect(screen.getByLabelText('Option 2')).toBeInTheDocument()
   })
 
-  it('handles multiple option selection', () => {
-    const handleChange = jest.fn()
-    render(
+  const TestMCQWrapper = ({ initialAnswer = [], onAnswerUpdate }) => {
+    const [answer, setAnswer] = useState(initialAnswer)
+
+    const handleAnswerUpdate = (newAnswer) => {
+      setAnswer(newAnswer.split(','))
+      onAnswerUpdate(newAnswer)
+    }
+
+    return (
       <MCQMultiTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
-        answer={[]}
-        onAnswerUpdate={handleChange}
+        answer={answer}
+        onAnswerUpdate={handleAnswerUpdate}
         choices={options}
       />
     )
+  }
+
+  it('handles multiple option selection', () => {
+    const handleChange = jest.fn()
+    render(<TestMCQWrapper onAnswerUpdate={handleChange} initialAnswer={[]} />)
     const option1 = screen.getByLabelText('Option 1')
     const option2 = screen.getByLabelText('Option 2')
     fireEvent.click(option1)
-    expect(handleChange).toHaveBeenCalledWith(['1'])
+    expect(handleChange).toHaveBeenCalledWith('1')
     fireEvent.click(option2)
-    expect(handleChange).toHaveBeenCalledWith(['1', '2'])
+    expect(handleChange).toHaveBeenCalledWith('1,2')
   })
 
   it('renders as disabled', () => {

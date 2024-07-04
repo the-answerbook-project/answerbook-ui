@@ -1,5 +1,5 @@
 import { Blockquote, Code, Em, Flex, Link, Strong, Text } from '@radix-ui/themes'
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
 import { default as MarkdownRoot } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 
@@ -7,7 +7,9 @@ interface MarkdownProps {
   children: string
 }
 
-const Markdown: FC<MarkdownProps> = ({ children }) => {
+// NOTE: Markdown has been memoized to prevent unnecessary re-renders when
+// sibling components change, as rending markdown that includes e.g. images is expensive.
+const Markdown: FC<MarkdownProps> = memo(({ children }) => {
   const componentMapping = {
     p(props) {
       return <Text as="p">{props.children}</Text>
@@ -45,6 +47,6 @@ const Markdown: FC<MarkdownProps> = ({ children }) => {
       </MarkdownRoot>
     </Flex>
   )
-}
+})
 
 export default Markdown
