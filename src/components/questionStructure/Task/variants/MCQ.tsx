@@ -62,12 +62,7 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   )
 
   return (
-    <CheckboxGroup.Root
-      disabled={disabled}
-      variant="soft"
-      defaultValue={answer}
-      onClick={handleOnClick}
-    >
+    <CheckboxGroup.Root disabled={disabled} variant="soft" value={answer} onClick={handleOnClick}>
       {map(choices, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value}>
           {o.label}

@@ -33,7 +33,7 @@ export const useQuestionAnswers = (number: number | undefined) => {
       .get(routes.questionAnswers(number, username))
       .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
       .finally(() => setAnswersAreLoaded(true))
-  }, [number])
+  }, [number, username])
 
   const answersLookup: AnswerMap = useMemo(() => {
     return buildResourceLookupTable(answers, 'answer')
@@ -60,7 +60,7 @@ export const useQuestionAnswers = (number: number | undefined) => {
   const saveAnswers = useCallback(() => {
     if (number === undefined) return
     axiosInstance.post(routes.questionAnswers(number, username), answers).then(() => {})
-  }, [answers, number])
+  }, [answers, number, username])
 
   return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }
 }
