@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <FrontCover />,
       },
       {
-        path: 'questions/:questionId',
+        path: 'questions/:questionId/:username',
         element: <QuestionPage />,
       },
       {

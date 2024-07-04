@@ -1,10 +1,12 @@
 import { plainToInstance } from 'class-transformer'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
 import { Answer, AnswerMap, Question, Summary } from '../types/exam'
 import { buildResourceLookupTable } from '../utils/answers'
+import { DEFAULT_TEST_USERNAME } from '../utils/globalConstants'
 
 export const useQuestion = (number: number | undefined) => {
   const [question, setQuestion] = useState<Question>()
@@ -22,10 +24,13 @@ export const useQuestion = (number: number | undefined) => {
 export const useQuestionAnswers = (number: number | undefined) => {
   const [answers, setAnswers] = useState<Answer[]>([])
   const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
+
+  const { username = DEFAULT_TEST_USERNAME } = useParams()
+
   useEffect(() => {
     if (number === undefined) return
     axiosInstance
-      .get(routes.questionAnswers(number))
+      .get(routes.questionAnswers(number, username))
       .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
       .finally(() => setAnswersAreLoaded(true))
   }, [number])
@@ -54,7 +59,7 @@ export const useQuestionAnswers = (number: number | undefined) => {
 
   const saveAnswers = useCallback(() => {
     if (number === undefined) return
-    axiosInstance.post(routes.questionAnswers(number), answers).then(() => {})
+    axiosInstance.post(routes.questionAnswers(number, username), answers).then(() => {})
   }, [answers, number])
 
   return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }

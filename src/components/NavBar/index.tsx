@@ -2,6 +2,8 @@ import { Container, Section, TabNav } from '@radix-ui/themes'
 import React, { FC } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
+
 interface NavBarProps {
   questionCount: number
 }
@@ -24,9 +26,9 @@ const NavBar: FC<NavBarProps> = ({ questionCount }) => {
           </TabNav.Link>
           {[...Array(questionCount).keys()].map((i) => (
             <TabNav.Link
-              href={`/questions/${i + 1}`}
+              href={`/questions/${i + 1}/${DEFAULT_TEST_USERNAME}`}
               key={i}
-              active={pathname === `/questions/${i + 1}`}
+              active={pathname.startsWith(`/questions/${i + 1}`)}
             >
               {`Question ${i + 1}`}
             </TabNav.Link>
