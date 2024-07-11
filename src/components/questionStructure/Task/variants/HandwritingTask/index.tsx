@@ -43,11 +43,14 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
         </Flex>
       </Card>
 
-      <Dialog.Content size="3" style={{ minWidth: '80vw', minHeight: '80vh' }}>
-        <Flex justify="end">
-          <Dialog.Close>
-            <Button>Save LaTeX</Button>
-          </Dialog.Close>
+      <Dialog.Content style={{ minWidth: '80vw', height: '80vh' }}>
+        <Flex direction="column" height="100%">
+          <Box flexGrow="1">Hello</Box>
+          <Flex justify="end">
+            <Dialog.Close>
+              <Button>Save LaTeX</Button>
+            </Dialog.Close>
+          </Flex>
         </Flex>
       </Dialog.Content>
     </Dialog.Root>
