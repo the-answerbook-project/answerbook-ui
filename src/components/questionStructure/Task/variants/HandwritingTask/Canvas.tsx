@@ -1,6 +1,7 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
 import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box, Flex } from '@radix-ui/themes'
+import classNames from 'classnames'
 import React, { useState } from 'react'
 
 import useLiveUpdates from './live-updates.hook'
@@ -14,6 +15,7 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
 
   return (
     <Box
+      className={classNames('excalidraw-container')}
       flexGrow="1"
       flexShrink="0"
       width="100%"

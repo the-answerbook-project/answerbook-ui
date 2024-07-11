@@ -20,7 +20,7 @@ import { TaskType } from '../../constants'
 import { defaultOnChangeHandler } from '../../index'
 import { TaskBaseProps } from '../../types'
 import HandwritingEditor from './HandwritingEditor'
-import './index.css'
+import './index.scss'
 
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
   type: TaskType.ESSAY
