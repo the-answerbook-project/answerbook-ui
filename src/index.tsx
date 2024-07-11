@@ -1,5 +1,6 @@
 import { Theme, ThemePanel } from '@radix-ui/themes'
 import '@radix-ui/themes/styles.css'
+import { MathJaxContext } from 'better-react-mathjax'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import 'reflect-metadata'
@@ -12,8 +13,10 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <React.StrictMode>
     <Theme radius="small">
-      <App />
-      <ThemePanel defaultOpen={false} />
+      <MathJaxContext>
+        <App />
+        <ThemePanel defaultOpen={false} />
+      </MathJaxContext>
     </Theme>
   </React.StrictMode>
 )
