@@ -13,7 +13,9 @@ import {
 import { MathJax } from 'better-react-mathjax'
 import classnames from 'classnames'
 import React, { FC, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
+import { DEFAULT_TEST_USERNAME } from '../../../../../utils/globalConstants'
 import { TaskType } from '../../constants'
 import { defaultOnChangeHandler } from '../../index'
 import { TaskBaseProps } from '../../types'
@@ -29,12 +31,14 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
   onAnswerUpdate,
   disabled = false,
 }) => {
+  const { username = DEFAULT_TEST_USERNAME } = useParams()
+
   return (
     <Dialog.Root>
       <Card className={classnames('latex-preview')}>
         <Flex gap="3" p="3" align="center" justify="between">
           <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
-            <Text>\( 2x \)</Text>
+            <Text>{answer}</Text>
           </MathJax>
           <Dialog.Trigger>
             <IconButton variant="surface" disabled={disabled}>
@@ -46,7 +50,11 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
 
       <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
         <Flex direction="column" height="100%">
-          <HandwritingEditor />
+          <HandwritingEditor
+            latex={answer ?? ''}
+            onAnswerChange={onAnswerUpdate}
+            username={username}
+          />
           <Flex justify="end">
             <Dialog.Close>
               <Button>Save LaTeX</Button>

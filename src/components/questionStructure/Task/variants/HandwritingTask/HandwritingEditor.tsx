@@ -4,13 +4,17 @@ import React from 'react'
 
 import Canvas from './Canvas'
 
-const HandwritingEditor = () => {
+const HandwritingEditor: React.FC<{
+  username: string
+  latex: string
+  onAnswerChange: (value: string) => void
+}> = ({ username, latex, onAnswerChange }) => {
   return (
     <Flex direction="column" flexGrow="1" align="center">
       <Box>
-        <MathJax>{'\\(x^1\\)'}</MathJax>
+        <MathJax>{latex}</MathJax>
       </Box>
-      <Canvas />
+      <Canvas username={username} onAnswerChange={onAnswerChange} />
     </Flex>
   )
 }
