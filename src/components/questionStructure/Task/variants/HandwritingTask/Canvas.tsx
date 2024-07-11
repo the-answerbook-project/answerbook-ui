@@ -13,6 +13,7 @@ import React, {
 } from 'react'
 
 import axiosInstance from '../../../../../api/axiosInstance'
+import { ConfirmDialog } from './ConfirmDialog'
 import useLiveUpdates from './live-updates.hook'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
@@ -26,6 +27,12 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
 }) => {
   const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
+  const [clearDialogOpen, setClearDialogOpen] = useState(false)
+
+  const clearCanvas = useCallback(() => {
+    updateStrokes({ elements: [] })
+    excalidrawAPI?.updateScene({ elements: [] })
+  }, [excalidrawAPI, updateStrokes])
 
   // HACK: Disable Excalidraw right click menu
   const excalidrawWrapperRef = useRef<HTMLDivElement | null>(null)
@@ -112,9 +119,18 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
         onPaste={pasteHandler}
       >
         <MainMenu>
-          {/* <MainMenu.Item onSelect={clearCanvas}>Clear canvas</MainMenu.Item> */}
+          <MainMenu.Item onSelect={() => setClearDialogOpen(true)} icon={<>🧽</>}>
+            Clear canvas
+          </MainMenu.Item>
         </MainMenu>
       </Excalidraw>
+      <ConfirmDialog
+        title="Clear Canvas?"
+        description="This action cannot be undone!"
+        open={clearDialogOpen}
+        setOpen={setClearDialogOpen}
+        onConfirm={clearCanvas}
+      />
     </Box>
   )
 }
