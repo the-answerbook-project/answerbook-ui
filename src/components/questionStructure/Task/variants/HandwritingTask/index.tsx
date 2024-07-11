@@ -17,6 +17,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { TaskType } from '../../constants'
 import { defaultOnChangeHandler } from '../../index'
 import { TaskBaseProps } from '../../types'
+import HandwritingEditor from './HandwritingEditor'
 import './index.css'
 
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
@@ -43,9 +44,9 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
         </Flex>
       </Card>
 
-      <Dialog.Content style={{ minWidth: '80vw', height: '80vh' }}>
+      <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
         <Flex direction="column" height="100%">
-          <Box flexGrow="1">Hello</Box>
+          <HandwritingEditor />
           <Flex justify="end">
             <Dialog.Close>
               <Button>Save LaTeX</Button>
