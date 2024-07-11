@@ -47,6 +47,9 @@ const transformStrokesForAPI = (strokes: Strokes): Record<string, number[][]> =>
   for (const element of strokes.elements ?? []) {
     const newStrokeX: number[] = []
     const newStrokeY: number[] = []
+
+    if (element.type !== 'freedraw') continue
+
     for (const [x, y] of (element as ExcalidrawFreeDrawElement).points) {
       newStrokeX.push(x + element.x)
       newStrokeY.push(y + element.y)

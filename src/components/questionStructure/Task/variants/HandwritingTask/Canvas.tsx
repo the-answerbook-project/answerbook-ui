@@ -1,10 +1,24 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
-import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
+import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
+import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box, Flex } from '@radix-ui/themes'
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import React, {
+  KeyboardEventHandler,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
+import axiosInstance from '../../../../../api/axiosInstance'
 import useLiveUpdates from './live-updates.hook'
+
+const stopEvent = (e: SyntheticEvent | Event) => {
+  e.preventDefault()
+  e.stopPropagation()
+}
 
 const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => void }> = ({
   username,
@@ -13,13 +27,77 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
   const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
 
+  // HACK: Disable Excalidraw right click menu
+  const excalidrawWrapperRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (!excalidrawAPI || !excalidrawWrapperRef.current) return
+
+    const canvas = excalidrawWrapperRef.current.getElementsByClassName('interactive')[0]
+    canvas?.addEventListener('contextmenu', stopEvent)
+
+    return () => canvas?.removeEventListener('contextmenu', stopEvent)
+  }, [excalidrawAPI, excalidrawWrapperRef]) // wait for Excalidraw to load
+
+  // Excalidraw API handlers
+  useEffect(() => {
+    // Call updateStrokes whenever the user finishes drawing/erasing/moving items
+    const pointerUpHandler = ({ type }: AppState['activeTool']): void => {
+      if (type === 'freedraw' || type === 'eraser' || type === 'selection') {
+        setTimeout(() => {
+          const elements = excalidrawAPI!.getSceneElements()!
+          updateStrokes({ elements })
+        })
+      }
+    }
+
+    const pointerUpCleanup = excalidrawAPI?.onPointerUp(pointerUpHandler)
+
+    return () => {
+      if (pointerUpCleanup) pointerUpCleanup()
+    }
+  }, [excalidrawAPI, updateStrokes])
+
+  // Disable pasting of text
+  const pasteHandler = (data: ClipboardData): boolean => !data.text
+
+  // Only allow specific keyboard actions
+  const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (event) => {
+      // Prevent writing in text boxes
+      if (document.activeElement?.nodeName === 'TEXTAREA') {
+        stopEvent(event)
+      }
+
+      // Only allow certain keys to be pressed in the canvas
+      // This prevents access to hidden tools e.g. pressing "r" to enter rectangle mode
+      if (
+        event.code === 'Backspace' || // Allow backspace for deletions
+        event.code.includes('Arrow') || // Allow arrow keys for moving elements
+        ((event.ctrlKey || event.metaKey) && // Allow specific keyboard shortcuts
+          ['KeyC', 'KeyV', 'KeyZ', 'KeyY', 'Equal', 'Minus', 'Digit0'].includes(event.code))
+      ) {
+        // Wait for the key event to be processed before updating the strokes
+        setTimeout(() => {
+          updateStrokes({ elements: excalidrawAPI?.getSceneElements() })
+        })
+      } else if (
+        // Excalidraw shortcuts for tools that should not be blocked
+        !['KeyH', 'KeyE', 'KeyV', 'KeyP', 'Digit1', 'Digit0', 'Digit7'].includes(event.code)
+      ) {
+        stopEvent(event)
+      }
+    },
+    [excalidrawAPI, updateStrokes]
+  )
+
   return (
     <Box
       className={classNames('excalidraw-container')}
+      ref={excalidrawWrapperRef}
       flexGrow="1"
       flexShrink="0"
       width="100%"
-      // onKeyDownCapture={keyDownHandler}
+      onKeyDownCapture={keyDownHandler}
       onDoubleClick={(e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -29,9 +107,9 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
         zenModeEnabled
         UIOptions={{ tools: { image: false } }}
         gridModeEnabled
-        // excalidrawAPI={setExcalidrawAPI}
+        excalidrawAPI={setExcalidrawAPI}
         // initialData={excalidrawData}
-        // onPaste={pasteHandler}
+        onPaste={pasteHandler}
       >
         <MainMenu>
           {/* <MainMenu.Item onSelect={clearCanvas}>Clear canvas</MainMenu.Item> */}
