@@ -11,7 +11,7 @@ import axiosInstance from '../../../../../api/axiosInstance'
 
 // Constant
 /** Time to wait with user putting no stroks on the pages before API call */
-const NO_STROKES_WAIT_DELAY = 300
+const NO_STROKES_WAIT_DELAY = 1000
 
 /**
  * The strokes object that is used to store the strokes from the Excalidraw canvas.
@@ -34,8 +34,8 @@ interface LiveUpdateHook {
  * The token object that is used to authenticate with the Mathpix API.
  */
 interface Token {
-  app_token: string
-  strokes_session_id: string
+  appToken: string
+  strokesSessionId: string
 }
 
 const transformStrokesForAPI = (strokes: Strokes): Record<string, number[][]> => {
@@ -73,8 +73,8 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, abortController: Ab
     {
       signal: abortController.signal,
       headers: {
-        app_token: token.app_token,
-        strokes_session_id: token.strokes_session_id,
+        app_token: token.appToken,
+        strokes_session_id: token.strokesSessionId,
       },
     }
   )
@@ -82,16 +82,16 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, abortController: Ab
 
 const useLiveUpdates = (username: string, setLatex: (latex: string) => void): LiveUpdateHook => {
   const [token, setToken] = useState<Token>({
-    app_token: '',
-    strokes_session_id: '',
+    appToken: '',
+    strokesSessionId: '',
   })
   const [strokes, setStrokes] = useState<Strokes>({ elements: [] })
 
   // Get a token for a mathpix session for this user
   const getToken = useCallback(() => {
-    // axiosInstance.get(`/${username}/mathpix-token`).then((res) => {
-    //   setToken(res.data)
-    // })
+    axiosInstance.get(`/handwriting/${username}/mathpix-token`).then((res) => {
+      setToken(res.data)
+    })
   }, [username])
 
   // Get token on startup (or username change)

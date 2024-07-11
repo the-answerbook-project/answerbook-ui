@@ -12,7 +12,6 @@ import React, {
   useState,
 } from 'react'
 
-import axiosInstance from '../../../../../api/axiosInstance'
 import { ConfirmDialog } from './ConfirmDialog'
 import useLiveUpdates from './live-updates.hook'
 
