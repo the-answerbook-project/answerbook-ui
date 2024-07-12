@@ -42,7 +42,7 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
     canvas?.addEventListener('contextmenu', stopEvent)
 
     // Force a canvas resize when the dialog opens
-    setTimeout(()=>window.dispatchEvent(new Event('resize')))
+    setTimeout(() => window.dispatchEvent(new Event('resize')))
 
     return () => canvas?.removeEventListener('contextmenu', stopEvent)
   }, [excalidrawAPI, excalidrawWrapperRef]) // wait for Excalidraw to load
