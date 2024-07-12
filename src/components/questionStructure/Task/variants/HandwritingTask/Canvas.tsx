@@ -100,9 +100,8 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
     <Box
       className={classNames('excalidraw-container')}
       ref={excalidrawWrapperRef}
-      flexGrow="1"
-      flexShrink="0"
-      width="100%"
+      height="calc(100% - 4px)"
+      style={{ margin: '2px' }}
       onKeyDownCapture={keyDownHandler}
       onDoubleClick={(e) => {
         e.preventDefault()

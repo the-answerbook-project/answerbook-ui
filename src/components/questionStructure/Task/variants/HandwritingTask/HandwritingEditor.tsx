@@ -22,7 +22,15 @@ const HandwritingEditor: React.FC<{
       >
         <MathJax>{latex}</MathJax>
       </Card>
-      <Canvas username={username} onAnswerChange={onAnswerChange} />
+      <Card
+        style={{
+          flexGrow: 1,
+          flexShrink: 0,
+          width: '100%',
+        }}
+      >
+        <Canvas username={username} onAnswerChange={onAnswerChange} />
+      </Card>
     </Flex>
   )
 }

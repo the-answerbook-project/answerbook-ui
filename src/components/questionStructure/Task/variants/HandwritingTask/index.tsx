@@ -38,7 +38,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
       </Card>
 
       <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
-        <Flex direction="column" height="100%">
+        <Flex direction="column" height="100%" gap="3">
           <HandwritingEditor
             latex={answer ?? ''}
             onAnswerChange={onAnswerUpdate}
