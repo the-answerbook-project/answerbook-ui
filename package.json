@@ -76,6 +76,8 @@
     "@types/lodash": "^4.17.4",
     "conventional-changelog-conventionalcommits": "^8.0.0",
     "husky": "^9.0.11",
+    "jest-canvas-mock": "^2.5.2",
+    "jest-mock-axios": "^4.7.3",
     "lint-staged": "^15.2.2",
     "prettier": "^3.2.5"
   }
