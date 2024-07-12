@@ -1,4 +1,4 @@
-import { Excalidraw, MainMenu, serializeAsJSON } from '@excalidraw/excalidraw'
+import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
 import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box } from '@radix-ui/themes'
@@ -41,7 +41,7 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
     canvas?.addEventListener('contextmenu', stopEvent)
 
     // Force a canvas resize when the dialog opens
-    setTimeout(() => window.dispatchEvent(new Event('resize')))
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 100)
 
     return () => canvas?.removeEventListener('contextmenu', stopEvent)
   }, [excalidrawAPI, excalidrawWrapperRef]) // wait for Excalidraw to load
@@ -50,15 +50,6 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
   useEffect(() => {
     // Call updateStrokes whenever the user finishes drawing/erasing/moving items
     const pointerUpHandler = ({ type }: AppState['activeTool']): void => {
-      const asJSON = serializeAsJSON(
-        excalidrawAPI!.getSceneElements(),
-        excalidrawAPI!.getAppState(),
-        excalidrawAPI!.getFiles(),
-        'local'
-      )
-
-      console.log(asJSON)
-
       if (type === 'freedraw' || type === 'eraser' || type === 'selection') {
         setTimeout(() => {
           const elements = excalidrawAPI!.getSceneElements()!
