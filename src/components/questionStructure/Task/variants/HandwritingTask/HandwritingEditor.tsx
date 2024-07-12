@@ -3,14 +3,17 @@ import { MathJax } from 'better-react-mathjax'
 import React from 'react'
 
 import Canvas from './Canvas'
+import Markdown from '../../../../Markdown'
 
 const HandwritingEditor: React.FC<{
   username: string
   latex: string
   onAnswerChange: (value: string) => void
-}> = ({ username, latex, onAnswerChange }) => {
+  questionText: string
+}> = ({ username, latex, onAnswerChange, questionText }) => {
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
+      <Markdown>{questionText}</Markdown>
       <Card
         style={{
           minHeight: '3.5em',

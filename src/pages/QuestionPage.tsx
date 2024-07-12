@@ -67,6 +67,7 @@ const QuestionPage: FC = () => {
                               onAnswerUpdate: handlerFactory(questionID, partID, sectionID, taskID),
                               ...instanceToPlain(task),
                               answer: parseAnswer(answer, task.type),
+                              questionText: section.instructions,
                             } as TaskProps)}
                           />
                         )
