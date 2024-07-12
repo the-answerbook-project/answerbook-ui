@@ -5,13 +5,13 @@
 import { ExcalidrawFreeDrawElement } from '@excalidraw/excalidraw/types/element/types'
 import { SceneData } from '@excalidraw/excalidraw/types/types'
 import axios, { AxiosError } from 'axios'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import axiosInstance from '../../../../../api/axiosInstance'
 
 // Constant
 /** Time to wait with user putting no stroks on the pages before API call */
-const NO_STROKES_WAIT_DELAY = 1000
+const NO_STROKES_WAIT_DELAY = 300
 
 /**
  * The strokes object that is used to store the strokes from the Excalidraw canvas.
@@ -25,7 +25,7 @@ interface Strokes {
  * This represents what the hook exports to the outside world.
  */
 interface LiveUpdateHook {
-  updateStrokes: React.Dispatch<React.SetStateAction<Strokes>>
+  updateStrokes: (strokes: Strokes) => void
 }
 
 // MathPix API functions
@@ -62,7 +62,7 @@ const transformStrokesForAPI = (strokes: Strokes): Record<string, number[][]> =>
   return apiStrokes
 }
 
-const getLatexFromStrokes = (token: Token, strokes: Strokes, abortController: AbortController) => {
+const getLatexFromStrokes = (token: Token, strokes: Strokes, signal: AbortSignal) => {
   return axios.post(
     `https://api.mathpix.com/v3/strokes`,
     {
@@ -71,7 +71,7 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, abortController: Ab
       },
     },
     {
-      signal: abortController.signal,
+      signal: signal,
       headers: {
         app_token: token.appToken,
         strokes_session_id: token.strokesSessionId,
@@ -85,7 +85,9 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
     appToken: '',
     strokesSessionId: '',
   })
-  const [strokes, setStrokes] = useState<Strokes>({ elements: [] })
+
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Get a token for a mathpix session for this user
   const getToken = useCallback(() => {
@@ -98,41 +100,61 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
   useEffect(getToken, [getToken])
 
   // useEffect to handle strokes changes
-  useEffect(() => {
-    // We use abortController to cancel the request if the strokes change before the timeout
-    const abortController = new AbortController()
-
-    // We use a timeout so that an API request once the person has stopped drawing for 300 ms
-    // this prevents constant requests to the API that can easier hit a rate limit
-    const timeout = setTimeout(() => {
-      if (strokes.elements?.length === 0) {
-        setLatex('')
-        return
+  const updateStrokes = useCallback(
+    (strokes: Strokes) => {
+      // Cleanup previous actions
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current)
       }
 
-      const latexFetch = getLatexFromStrokes(token, strokes, abortController)
-      latexFetch
-        .then(({ data }) =>
-          setLatex(`\\( ${data.latex_styled || '\\text{Failed to parse handwriting}'} \\)`)
-        )
-        .catch((error: Error | AxiosError) => {
-          if (axios.isAxiosError(error) && error.response?.status === 401) {
-            // Refresh the token
-            getToken()
-          } else {
-            console.error(error)
-          }
-        })
-    }, NO_STROKES_WAIT_DELAY)
+      // Setup for new action
+      abortControllerRef.current = new AbortController()
+      const { signal } = abortControllerRef.current
 
+      // We use a timeout so that an API request once the person has stopped drawing for 300 ms
+      // this prevents constant requests to the API that can easier hit a rate limit
+      timeoutIdRef.current = setTimeout(() => {
+        if (strokes.elements?.length === 0) {
+          setLatex('')
+          return
+        }
+
+        const latexFetch = getLatexFromStrokes(token, strokes, signal)
+        latexFetch
+          .then(({ data }) =>
+            setLatex(`\\( ${data.latex_styled || '\\text{Failed to parse handwriting}'} \\)`)
+          )
+          .catch((error: Error | AxiosError) => {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+              // Refresh the token
+              getToken()
+            } else {
+              console.error(error)
+            }
+          })
+      }, NO_STROKES_WAIT_DELAY)
+    },
+    [token, getToken, setLatex]
+  )
+
+  // Cleanup on unmount
+  useEffect(() => {
     return () => {
-      clearTimeout(timeout)
-      abortController.abort('strokes changed')
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort()
+      }
+      if (timeoutIdRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        clearTimeout(timeoutIdRef.current)
+      }
     }
-  }, [strokes, token, getToken, setLatex])
+  }, [])
 
   return {
-    updateStrokes: setStrokes,
+    updateStrokes,
   }
 }
 
