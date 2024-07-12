@@ -1,23 +1,12 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
-import {
-  Box,
-  Button,
-  Card,
-  Dialog,
-  Flex,
-  IconButton,
-  Text,
-  TextArea,
-  TextField,
-} from '@radix-ui/themes'
+import { Button, Card, Dialog, Flex, IconButton, Text } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
 import classnames from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { DEFAULT_TEST_USERNAME } from '../../../../../utils/globalConstants'
 import { TaskType } from '../../constants'
-import { defaultOnChangeHandler } from '../../index'
 import { TaskBaseProps } from '../../types'
 import HandwritingEditor from './HandwritingEditor'
 import './index.scss'
