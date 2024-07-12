@@ -1,7 +1,6 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
-import { Button, Card, Dialog, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Button, Card, Dialog, Flex, Text } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
-import classnames from 'classnames'
 import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -9,6 +8,7 @@ import { DEFAULT_TEST_USERNAME } from '../../../../../utils/globalConstants'
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import HandwritingEditor from './HandwritingEditor'
+import { ViewOnlyCanvas } from './ViewOnlyCanvas'
 import './index.scss'
 
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
@@ -26,18 +26,23 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
 
   return (
     <Dialog.Root>
-      <Card className={classnames('latex-preview')}>
-        <Flex gap="3" p="3" align="center" justify="between">
-          <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
-            <Text>{answer}</Text>
-          </MathJax>
-          <Dialog.Trigger>
-            <IconButton variant="surface" disabled={disabled}>
-              <Pencil2Icon />
-            </IconButton>
-          </Dialog.Trigger>
-        </Flex>
-      </Card>
+      <Dialog.Trigger>
+        <ViewOnlyCanvas initialData={{}} />
+      </Dialog.Trigger>
+      <Flex gap="3" align="center">
+        <Card className="latex-preview">
+          <Flex gap="3" p="3" align="center" justify="between">
+            <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
+              <Text>{answer}</Text>
+            </MathJax>
+          </Flex>
+        </Card>
+        <Dialog.Trigger>
+          <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
+            Edit answer <Pencil2Icon width="1.5rem" height="1.5rem" />
+          </Button>
+        </Dialog.Trigger>
+      </Flex>
 
       <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
         <Flex direction="column" height="100%" gap="3">

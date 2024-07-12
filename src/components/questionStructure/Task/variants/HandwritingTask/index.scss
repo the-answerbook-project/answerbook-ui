@@ -14,7 +14,7 @@
 }
 
 // Hide parts of excalidraw we don't want users to use
-.excalidraw-container {
+.excalidraw-editor-container {
   // Disable toolbar items we don't want users to use
   $titles: 'Rectangle', 'Diamond', 'Ellipse', 'Arrow', 'Line', 'Text', 'Keep selected';
   div.App-toolbar .Stack {
@@ -46,4 +46,16 @@
   .excalidraw-textEditorContainer {
     opacity: 0;
   }
+}
+
+.excalidraw-view-container {
+  min-height: 200px;
+
+  .App-bottom-bar {
+    display: none;
+  }
+}
+
+.latex-preview {
+  flex-grow: 1;
 }

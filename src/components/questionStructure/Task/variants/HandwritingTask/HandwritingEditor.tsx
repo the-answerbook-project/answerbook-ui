@@ -1,9 +1,9 @@
-import { Card, Flex } from '@radix-ui/themes'
+import { Box, Card, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
 import React from 'react'
 
-import Canvas from './Canvas'
 import Markdown from '../../../../Markdown'
+import Canvas from './Canvas'
 
 const HandwritingEditor: React.FC<{
   username: string
@@ -23,7 +23,9 @@ const HandwritingEditor: React.FC<{
           justifyContent: 'center',
         }}
       >
-        <MathJax>{latex}</MathJax>
+        <Box p="3">
+          <MathJax>{latex}</MathJax>
+        </Box>
       </Card>
       <Card
         style={{
