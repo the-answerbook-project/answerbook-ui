@@ -1,7 +1,7 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
 import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
-import { Box, Flex } from '@radix-ui/themes'
+import { Box } from '@radix-ui/themes'
 import classNames from 'classnames'
 import React, {
   KeyboardEventHandler,
@@ -40,6 +40,9 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
 
     const canvas = excalidrawWrapperRef.current.getElementsByClassName('interactive')[0]
     canvas?.addEventListener('contextmenu', stopEvent)
+
+    // Force a canvas resize when the dialog opens
+    setTimeout(()=>window.dispatchEvent(new Event('resize')))
 
     return () => canvas?.removeEventListener('contextmenu', stopEvent)
   }, [excalidrawAPI, excalidrawWrapperRef]) // wait for Excalidraw to load
