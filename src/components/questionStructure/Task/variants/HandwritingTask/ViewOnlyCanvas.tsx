@@ -12,19 +12,16 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
 
   useEffect(() => {
-    setTimeout(() => {
-      excalidrawAPI?.scrollToContent(undefined, {
-        fitToContent: true,
-      })
-    })
-  }, [excalidrawAPI])
-
-  useEffect(() => {
     if (excalidrawAPI && initialData) {
       excalidrawAPI.updateScene({
         elements: initialData,
       })
     }
+    setTimeout(() => {
+      excalidrawAPI?.scrollToContent(undefined, {
+        fitToContent: true,
+      })
+    })
   }, [excalidrawAPI, initialData])
 
   return initialData && initialData?.length ? (
