@@ -14,7 +14,7 @@ import React, {
 
 import { ConfirmDialog } from '../../../../../components/ConfirmDialog'
 import useLiveUpdates from '../HandwritingTask/live-updates.hook'
-import { MathsSingleAnswer } from '../HandwritingTask/types'
+import { HandwritingAnswer, MathsSingleAnswer } from '../HandwritingTask/types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()
@@ -23,7 +23,7 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 
 interface CanvasProps {
   username: string
-  onAnswerChange: (value: string) => void
+  updateStrokes: (value: HandwritingAnswer['raw']) => void
   initialData: {
     elements?: readonly ExcalidrawElement[]
     appState?: AppState
@@ -50,24 +50,9 @@ const ALLOWED_TOOL_SHORTCUTS = [
   'Digit7', // pen
 ]
 
-const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }) => {
+const Canvas: React.FC<CanvasProps> = ({ username, updateStrokes, initialData }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
-
-  const updateHandwriting = useCallback(
-    (latex: string) => {
-      const result: MathsSingleAnswer = {
-        latex,
-        raw: {
-          elements: excalidrawAPI?.getSceneElements() ?? [],
-          appState: excalidrawAPI?.getAppState(),
-        },
-      }
-      onAnswerChange(JSON.stringify(result))
-    },
-    [excalidrawAPI, onAnswerChange]
-  )
-  const { updateStrokes } = useLiveUpdates(username, updateHandwriting)
 
   const clearCanvas = useCallback(() => {
     updateStrokes({ elements: [] })
