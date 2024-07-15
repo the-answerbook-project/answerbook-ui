@@ -12,9 +12,8 @@ import React, {
   useState,
 } from 'react'
 
-import { ConfirmDialog } from '../../../../../components/ConfirmDialog'
-import useLiveUpdates from '../HandwritingTask/live-updates.hook'
-import { HandwritingAnswer, MathsSingleAnswer } from '../HandwritingTask/types'
+import { ConfirmDialog } from '../../../../ConfirmDialog'
+import { HandwritingAnswer } from '../HandwritingTask/types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()

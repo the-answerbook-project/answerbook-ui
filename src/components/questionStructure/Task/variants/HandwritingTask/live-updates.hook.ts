@@ -82,7 +82,7 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, signal: AbortSignal
   )
 }
 
-const useLiveUpdates = (setLatex: (latex: string) => void): LiveUpdateHook => {
+const useLiveUpdates = (): LiveUpdateHook => {
   const [token, setToken] = useState<Token>({
     appToken: '',
     strokesSessionId: '',
