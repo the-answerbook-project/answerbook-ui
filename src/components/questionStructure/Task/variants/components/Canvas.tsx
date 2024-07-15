@@ -22,7 +22,6 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 }
 
 interface CanvasProps {
-  username: string
   updateStrokes: (value: HandwritingAnswer['raw']) => void
   initialData: {
     elements?: readonly ExcalidrawElement[]
@@ -50,7 +49,7 @@ const ALLOWED_TOOL_SHORTCUTS = [
   'Digit7', // pen
 ]
 
-const Canvas: React.FC<CanvasProps> = ({ username, updateStrokes, initialData }) => {
+const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
 

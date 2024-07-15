@@ -1,98 +1,99 @@
 import { Box, Card, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 
 import './handwritingEditor.css'
 import Canvas from '../components/Canvas'
 import useLiveUpdates from './live-updates.hook'
 import { HandwritingAnswer, MathsSingleAnswer } from './types'
 
-interface HandwritingEditorProps<ShowLatex extends boolean> {
-  username: string
-  answer?: ShowLatex extends true ? MathsSingleAnswer : HandwritingAnswer
-  onAnswerChange: (value: string) => void
-  questionText: string
-  showLatex?: ShowLatex
+interface HandwritingEditorProps {
+  answer?: HandwritingAnswer
+  onAnswerChange: (value: HandwritingAnswer['raw']) => void
+  children?: React.ReactNode // This line allows children
 }
 
-function isMathsSingleAnswer(answer: HandwritingAnswer | undefined): answer is MathsSingleAnswer {
-  return answer ? 'latex' in answer : false
+interface MathsHandwritingEditorProps {
+  answer?: MathsSingleAnswer
+  onAnswerChange: (value: MathsSingleAnswer) => void
+  children?: React.ReactNode // This line allows children
 }
 
-const LiveUpdatingLatex: React.FC<{
-  username: string
-  answer: MathsSingleAnswer
-  setLatex: (latex: string) => void
-}> = ({ answer, username, setLatex }) => {
-  const { updateStrokes } = useLiveUpdates(username, setLatex)
-
-  useEffect(() => {
-    if (answer.raw) {
-      updateStrokes(answer.raw)
-    }
-  }, [updateStrokes, answer])
-
-  return (
-    <Box p="3">
-      <MathJax>{`\\( ${answer?.latex ?? ''} \\)`}</MathJax>
-    </Box>
-  )
-}
-
-function HandwritingEditor<ShowLatex extends boolean>({
-  username,
+const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   answer,
   onAnswerChange,
-  questionText,
-  showLatex,
-}: HandwritingEditorProps<ShowLatex>) {
-  const setHandwriting = useCallback(
-    (raw: HandwritingAnswer['raw']) => {
-      const result: HandwritingAnswer = {
-        ...answer,
-        raw,
-      }
-      onAnswerChange(JSON.stringify(result))
-    },
-    [answer, onAnswerChange]
-  )
-
-  const setLatex = useCallback(
-    (latex: string) => {
-      onAnswerChange(
-        JSON.stringify({
-          ...answer,
-          latex,
-        })
-      )
-    },
-    [answer, onAnswerChange]
-  )
-
-  console.log(answer)
-  // @ts-ignore
+  children,
+}) => {
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
-
-      {answer && isMathsSingleAnswer(answer) && (
-        <Card
-          className="mathjax-card"
-        >
-          <LiveUpdatingLatex setLatex={setLatex} username={username} answer={answer} />
-        </Card>
-      )}
-
+      {children}
       <Card
-        className="excalidraw-canvas-card"
+        style={{
+          flexGrow: 1,
+          flexShrink: 0,
+          width: '100%',
+        }}
       >
         <Canvas
-          username={username}
-          updateStrokes={setHandwriting}
+          updateStrokes={onAnswerChange}
           // @ts-expect-error: this is not just initialData
-          initialData={answer?.raw ?? {}}
+          initialData={answer?.excalidraw ?? {}}
         />
       </Card>
     </Flex>
+  )
+}
+
+export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
+  answer,
+  onAnswerChange,
+}) => {
+  const setLatex = useCallback(
+    (latex: string) => {
+      console.log('SET LATEX')
+      onAnswerChange({
+        ...answer,
+        latex,
+      })
+    },
+    [answer, onAnswerChange]
+  )
+
+  const { updateStrokes } = useLiveUpdates(setLatex)
+
+  const setHandwriting = useCallback(
+    (raw: HandwritingAnswer['raw']) => {
+      console.log('SET HANDWRITING')
+      const result: MathsSingleAnswer = {
+        latex: '',
+        ...answer,
+        raw,
+      }
+
+      if (raw) {
+        updateStrokes(raw).then((latex) => {
+          result.latex = latex
+          onAnswerChange(result)
+        })
+      } else {
+        onAnswerChange(result)
+      }
+    },
+    [answer, onAnswerChange, updateStrokes]
+  )
+
+  return (
+    <HandwritingEditor onAnswerChange={setHandwriting} answer={answer}>
+      {
+        <Card
+          className="mathjax-card"
+        >
+          <Box p="3">
+            <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
+          </Box>
+        </Card>
+      }
+    </HandwritingEditor>
   )
 }
 
