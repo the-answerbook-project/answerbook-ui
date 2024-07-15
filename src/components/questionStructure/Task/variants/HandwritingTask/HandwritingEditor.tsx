@@ -24,7 +24,7 @@ const HandwritingEditor: React.FC<{
         }}
       >
         <Box p="3">
-          <MathJax>{latex}</MathJax>
+          <MathJax>{`\\( ${latex} \\)`}</MathJax>
         </Box>
       </Card>
       <Card

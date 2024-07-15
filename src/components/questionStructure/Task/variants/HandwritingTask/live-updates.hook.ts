@@ -124,9 +124,7 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
 
         const latexFetch = getLatexFromStrokes(token, strokes, signal)
         latexFetch
-          .then(({ data }) =>
-            setLatex(`\\( ${data.latex_styled || '\\text{Failed to parse handwriting}'} \\)`)
-          )
+          .then(({ data }) => setLatex(data.latex_styled || '\\text{Failed to parse handwriting}'))
           .catch((error: Error | AxiosError) => {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
               // Refresh the token

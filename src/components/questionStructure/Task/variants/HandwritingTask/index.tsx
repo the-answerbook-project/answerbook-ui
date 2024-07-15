@@ -33,7 +33,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
         <Card className="latex-preview">
           <Flex gap="3" p="3" align="center" justify="between">
             <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
-              <Text>{answer || 'No Answer'}</Text>
+              <Text>{answer ? `\\( ${answer} \\)` : 'No Answer'}</Text>
             </MathJax>
           </Flex>
         </Card>
