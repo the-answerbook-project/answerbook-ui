@@ -1,4 +1,5 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
+import { getDefaultAppState } from '@excalidraw/excalidraw/main'
 import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box } from '@radix-ui/themes'
@@ -53,7 +54,10 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
     (latex: string) => {
       const result: HandwritingAnswer = {
         latex,
-        excalidraw: excalidrawAPI?.getSceneElements(),
+        excalidraw: {
+          elements: excalidrawAPI?.getSceneElements() ?? [],
+          appState: excalidrawAPI?.getAppState() ?? getDefaultAppState(),
+        },
       }
       onAnswerChange(JSON.stringify(result))
     },

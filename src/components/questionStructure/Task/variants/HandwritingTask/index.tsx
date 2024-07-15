@@ -26,7 +26,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <ViewOnlyCanvas initialData={{}} />
+        <ViewOnlyCanvas initialData={answer?.excalidraw?.elements ?? []} />
       </Dialog.Trigger>
       <Flex gap="3" align="center">
         <Card className="latex-preview">
