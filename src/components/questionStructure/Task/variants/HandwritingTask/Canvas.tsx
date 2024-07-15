@@ -1,5 +1,4 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
-import { getDefaultAppState } from '@excalidraw/excalidraw/main'
 import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
 import { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
@@ -25,7 +24,10 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 interface CanvasProps {
   username: string
   onAnswerChange: (value: string) => void
-  initialData: readonly ExcalidrawElement[]
+  initialData: {
+    elements?: readonly ExcalidrawElement[]
+    appState?: AppState
+  }
 }
 
 // Excalidraw keyboard shortcuts we allow in the canvas:
@@ -58,7 +60,7 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }
         latex,
         excalidraw: {
           elements: excalidrawAPI?.getSceneElements() ?? [],
-          appState: excalidrawAPI?.getAppState() ?? getDefaultAppState(),
+          appState: excalidrawAPI?.getAppState(),
         },
       }
       onAnswerChange(JSON.stringify(result))
@@ -146,7 +148,10 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }
         UIOptions={{ tools: { image: false } }}
         gridModeEnabled
         excalidrawAPI={setExcalidrawAPI}
-        initialData={{ elements: initialData }}
+        initialData={{
+          ...initialData,
+          appState: { ...initialData.appState, collaborators: new Map() },
+        }}
         onPaste={pasteHandler}
       >
         <MainMenu>

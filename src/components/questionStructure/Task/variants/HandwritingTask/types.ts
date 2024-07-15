@@ -4,7 +4,7 @@ import { AppState } from '@excalidraw/excalidraw/types/types'
 export interface HandwritingAnswer {
   excalidraw: {
     elements: readonly ExcalidrawElement[]
-    appState: Omit<AppState, 'offsetTop' | 'offsetLeft' | 'width' | 'height'>
+    appState?: Omit<AppState, 'offsetTop' | 'offsetLeft' | 'width' | 'height'>
   }
   latex: string
 }

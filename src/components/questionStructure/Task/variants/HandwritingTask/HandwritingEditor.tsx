@@ -25,8 +25,15 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
           <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
         </Box>
       </Card>
-      <Card className="excalidraw-canvas-card">
-        <Canvas username={username} onAnswerChange={onAnswerChange} initialData={answer?.excalidraw?.elements ?? []} />
+      <Card
+        className="excalidraw-canvas-card"
+      >
+        <Canvas
+          username={username}
+          onAnswerChange={onAnswerChange}
+          // @ts-expect-error: this is not just initialData
+          initialData={answer?.excalidraw ?? {}}
+        />
       </Card>
     </Flex>
   )
