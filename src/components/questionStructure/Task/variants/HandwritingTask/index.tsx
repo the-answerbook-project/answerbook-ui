@@ -11,6 +11,10 @@ import HandwritingEditor from './HandwritingEditor'
 import { ViewOnlyCanvas } from './ViewOnlyCanvas'
 import './index.scss'
 
+export interface HandwritingAnswer {
+  excalidraw: any
+  latex: string
+}
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
   type: TaskType.PROCESSED_HANDWRITING
 }
@@ -43,7 +47,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
           <HandwritingEditor
-            latex={answer ?? ''}
+            latex={answer?.latex ?? ''}
             onAnswerChange={onAnswerUpdate}
             username={username}
           />
