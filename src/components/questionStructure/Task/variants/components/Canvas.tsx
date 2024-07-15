@@ -81,7 +81,8 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
       if (type === 'freedraw' || type === 'eraser' || type === 'selection') {
         setTimeout(() => {
           const elements = excalidrawAPI!.getSceneElements()!
-          updateStrokes({ elements })
+          const appState = excalidrawAPI!.getAppState()!
+          updateStrokes({ elements, appState })
         })
       }
     }
@@ -111,8 +112,14 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
           CONTROL_COMMAND_ALLOWED_KEYBOARD_SHORTCUTS.includes(event.code))
       ) {
         // Wait for the key event to be processed before updating the strokes
-        setTimeout(() => updateStrokes({ elements: excalidrawAPI?.getSceneElements() }))
+        setTimeout(() => {
+          updateStrokes({
+            elements: excalidrawAPI?.getSceneElements() ?? [],
+            appState: excalidrawAPI?.getAppState(),
+          })
+        })
       } else if (!ALLOWED_TOOL_SHORTCUTS.includes(event.code)) stopEvent(event)
+
     },
     [excalidrawAPI, updateStrokes]
   )
