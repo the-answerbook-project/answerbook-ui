@@ -10,12 +10,9 @@ import { TaskBaseProps } from '../../types'
 import HandwritingEditor from './HandwritingEditor'
 import { ViewOnlyCanvas } from './ViewOnlyCanvas'
 import './index.scss'
+import { HandwritingAnswer } from './types'
 
-export interface HandwritingAnswer {
-  excalidraw: any
-  latex: string
-}
-export interface HandwritingTaskProps extends TaskBaseProps<string> {
+export interface HandwritingTaskProps extends TaskBaseProps<HandwritingAnswer> {
   type: TaskType.PROCESSED_HANDWRITING
 }
 

@@ -13,6 +13,7 @@ import React, {
 
 import { ConfirmDialog } from '../../../../ConfirmDialog'
 import useLiveUpdates from './live-updates.hook'
+import { HandwritingAnswer } from './types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()
@@ -45,9 +46,20 @@ const ALLOWED_TOOL_SHORTCUTS = [
 ]
 
 const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
-  const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
+
+  const updateHandwriting = useCallback(
+    (latex: string) => {
+      const result: HandwritingAnswer = {
+        latex,
+        excalidraw: excalidrawAPI?.getSceneElements(),
+      }
+      onAnswerChange(JSON.stringify(result))
+    },
+    [excalidrawAPI, onAnswerChange]
+  )
+  const { updateStrokes } = useLiveUpdates(username, updateHandwriting)
 
   const clearCanvas = useCallback(() => {
     updateStrokes({ elements: [] })
