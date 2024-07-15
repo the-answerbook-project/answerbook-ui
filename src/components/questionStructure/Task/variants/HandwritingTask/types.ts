@@ -6,5 +6,8 @@ export interface HandwritingAnswer {
     elements: readonly ExcalidrawElement[]
     appState?: Omit<AppState, 'offsetTop' | 'offsetLeft' | 'width' | 'height'>
   }
+}
+
+export interface MathsSingleAnswer extends HandwritingAnswer {
   latex: string
 }

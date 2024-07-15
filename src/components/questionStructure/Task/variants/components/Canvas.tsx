@@ -12,9 +12,9 @@ import React, {
   useState,
 } from 'react'
 
-import { ConfirmDialog } from '../../../../ConfirmDialog'
-import useLiveUpdates from './live-updates.hook'
-import { HandwritingAnswer } from './types'
+import { ConfirmDialog } from '../../../../../components/ConfirmDialog'
+import useLiveUpdates from '../HandwritingTask/live-updates.hook'
+import { MathsSingleAnswer } from '../HandwritingTask/types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()
@@ -56,7 +56,7 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }
 
   const updateHandwriting = useCallback(
     (latex: string) => {
-      const result: HandwritingAnswer = {
+      const result: MathsSingleAnswer = {
         latex,
         raw: {
           elements: excalidrawAPI?.getSceneElements() ?? [],

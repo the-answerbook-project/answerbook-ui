@@ -2,9 +2,8 @@ import { Box, Card, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
 import React from 'react'
 
-import Markdown from '../../../../Markdown'
-import Canvas from './Canvas'
 import './handwritingEditor.css'
+import Canvas from '../components/Canvas'
 import { HandwritingAnswer } from './types'
 
 interface HandwritingEditorProps {

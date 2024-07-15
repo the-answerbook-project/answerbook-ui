@@ -11,13 +11,14 @@ import { TaskBaseProps } from '../../types'
 import HandwritingEditor from './HandwritingEditor'
 import { ViewOnlyCanvas } from './ViewOnlyCanvas'
 import './index.scss'
-import { HandwritingAnswer } from './types'
+import { MathsSingleAnswer } from './types'
 
-export interface HandwritingTaskProps extends TaskBaseProps<HandwritingAnswer> {
-  type: TaskType.PROCESSED_HANDWRITING
+export interface MathsSingleAnswerProps extends TaskBaseProps<MathsSingleAnswer> {
+  type: TaskType.MATHS_SINGLE_ANSWER
+  questionText: string
 }
 
-export const HandwritingTask: FC<HandwritingTaskProps> = ({
+export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
