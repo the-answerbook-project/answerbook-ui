@@ -8,6 +8,7 @@ import axios, { AxiosError } from 'axios'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import axiosInstance from '../../../../../api/axiosInstance'
+import routes from '../../../../../api/routes'
 
 // Constant
 /** Time to wait with user putting no stroks on the pages before API call */
@@ -91,10 +92,10 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
 
   // Get a token for a mathpix session for this user
   const getToken = useCallback(() => {
-    axiosInstance.get(`/handwriting/${username}/mathpix-token`).then((res) => {
+    axiosInstance.get(routes.getMathPixToken).then((res) => {
       setToken(res.data)
     })
-  }, [username])
+  }, [])
 
   // Get token on startup (or username change)
   useEffect(getToken, [getToken])
