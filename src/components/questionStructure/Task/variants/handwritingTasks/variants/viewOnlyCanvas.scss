@@ -1,7 +1,11 @@
 .excalidraw-view-container {
-  min-height: 200px;
-
   .App-bottom-bar {
     display: none;
+  }
+  .App-menu_top {
+    display: none !important;
+  }
+  .layer-ui__wrapper__footer-right {
+    display: none !important;
   }
 }

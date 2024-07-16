@@ -6,11 +6,10 @@ import React, { useEffect, useState } from 'react'
 
 import './viewOnlyCanvas.scss'
 
-interface ViewOnlyCanvasProps {
+export const ViewOnlyCanvas: React.FC<{
   initialData: readonly ExcalidrawElement[]
-}
-
-export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) => {
+  minHeight?: string
+}> = ({ initialData, minHeight = '200px' }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
 
   return (
     <Card>
-      <Box className="excalidraw-view-container excalidraw-box">
+      <Box className="excalidraw-view-container excalidraw-box" minHeight={minHeight}>
         <Excalidraw
           excalidrawAPI={setExcalidrawAPI}
           viewModeEnabled

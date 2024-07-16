@@ -21,20 +21,17 @@ export const HandwritingTask: FC<HandwritingProps> = ({
   questionText,
 }) => (
   <Dialog.Root>
-    <Flex gap="3" align="center">
-      <Dialog.Trigger>
-        <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
-          {answer?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
-          <Pencil2Icon width="1.5rem" height="1.5rem" />
-        </Button>
-      </Dialog.Trigger>
-    </Flex>
-    {
-      !isEmpty(answer?.raw?.elements) && <Dialog.Trigger>
-      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
-    </Dialog.Trigger>
-    }
-    
+    {!disabled && (
+      <Flex gap="3" align="center">
+        <Dialog.Trigger>
+          <Button disabled={disabled} size="4">
+            {answer?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
+            <Pencil2Icon width="1.5rem" height="1.5rem" />
+          </Button>
+        </Dialog.Trigger>
+      </Flex>
+    )}
+    <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
