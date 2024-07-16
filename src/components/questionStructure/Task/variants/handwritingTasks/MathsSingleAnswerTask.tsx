@@ -21,23 +21,26 @@ export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
   questionText,
 }) => (
   <Dialog.Root>
+    <Flex gap="3" align="center">
+      <Dialog.Trigger>
+        <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
+          {answer?.excalidraw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
+          <Pencil2Icon width="1.5rem" height="1.5rem" />
+        </Button>
+      </Dialog.Trigger>
+      {answer?.latex && (
+        <Card style={{ flexGrow: 1 }}>
+          <Flex gap="3" p="3" align="center" justify="between">
+            <MathJax style={{ flex: '1 0 0', textAlign: 'center', fontSize: '1.5em' }}>
+              <Text>{`\\( ${answer.latex} \\)`}</Text>
+            </MathJax>
+          </Flex>
+        </Card>
+      )}
+    </Flex>
     <Dialog.Trigger>
       <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
     </Dialog.Trigger>
-    <Flex gap="3" align="center">
-      <Card style={{ flexGrow: 1 }}>
-        <Flex gap="3" p="3" align="center" justify="between">
-          <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
-            <Text>{answer?.latex ? `\\( ${answer.latex} \\)` : 'No Answer'}</Text>
-          </MathJax>
-        </Flex>
-      </Card>
-      <Dialog.Trigger>
-        <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
-          Edit answer <Pencil2Icon width="1.5rem" height="1.5rem" />
-        </Button>
-      </Dialog.Trigger>
-    </Flex>
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">

@@ -51,7 +51,7 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
       <Card
         className="mathjax-card"
       >
-        <Box p="3">
+        <Box p="3" style={{ fontSize: '1.5em' }}>
           <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
         </Box>
       </Card>

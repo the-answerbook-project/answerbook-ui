@@ -7,6 +7,7 @@ import { TaskBaseProps } from '../../types'
 import { HandwritingAnswer } from './types'
 import HandwritingEditor from './variants/HandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
+import { isEmpty } from "lodash"
 
 export interface HandwritingProps extends TaskBaseProps<HandwritingAnswer> {
   type: TaskType.HANDWRITING
@@ -20,16 +21,20 @@ export const HandwritingTask: FC<HandwritingProps> = ({
   questionText,
 }) => (
   <Dialog.Root>
-    <Dialog.Trigger>
-      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
-    </Dialog.Trigger>
     <Flex gap="3" align="center">
       <Dialog.Trigger>
         <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
-          Edit answer <Pencil2Icon width="1.5rem" height="1.5rem" />
+          {answer?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
+          <Pencil2Icon width="1.5rem" height="1.5rem" />
         </Button>
       </Dialog.Trigger>
     </Flex>
+    {
+      !isEmpty(answer?.raw?.elements) && <Dialog.Trigger>
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+    </Dialog.Trigger>
+    }
+    
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
