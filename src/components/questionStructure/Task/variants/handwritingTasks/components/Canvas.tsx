@@ -14,6 +14,7 @@ import React, {
 
 import { ConfirmDialog } from '../../../../../ConfirmDialog'
 import { HandwritingAnswer } from '../types'
+import './canvas.scss'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()

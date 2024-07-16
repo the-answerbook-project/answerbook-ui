@@ -5,7 +5,6 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
-import './index.scss'
 import { MathsSingleAnswer } from './types'
 import { MathsHandwritingEditor } from './variants/MathsHandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
@@ -23,10 +22,10 @@ export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
 }) => (
   <Dialog.Root>
     <Dialog.Trigger>
-      <ViewOnlyCanvas initialData={answer?.excalidraw?.elements ?? []} />
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
     </Dialog.Trigger>
     <Flex gap="3" align="center">
-      <Card className="latex-preview">
+      <Card style={{ flexGrow: 1 }}>
         <Flex gap="3" p="3" align="center" justify="between">
           <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
             <Text>{answer?.latex ? `\\( ${answer.latex} \\)` : 'No Answer'}</Text>
@@ -40,12 +39,11 @@ export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
       </Dialog.Trigger>
     </Flex>
 
-    <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
+    <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
         <MathsHandwritingEditor
           answer={answer}
           onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
-          questionText={questionText}
         />
         <Flex justify="end">
           <Dialog.Close>

@@ -4,7 +4,6 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
-import './index.scss'
 import { HandwritingAnswer } from './types'
 import HandwritingEditor from './variants/HandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
@@ -22,7 +21,7 @@ export const HandwritingTask: FC<HandwritingProps> = ({
 }) => (
   <Dialog.Root>
     <Dialog.Trigger>
-      <ViewOnlyCanvas initialData={answer?.excalidraw?.elements ?? []} />
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
     </Dialog.Trigger>
     <Flex gap="3" align="center">
       <Dialog.Trigger>
@@ -32,12 +31,11 @@ export const HandwritingTask: FC<HandwritingProps> = ({
       </Dialog.Trigger>
     </Flex>
 
-    <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
+    <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
         <HandwritingEditor
           answer={answer}
           onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
-          questionText={questionText}
         />
         <Flex justify="end">
           <Dialog.Close>
