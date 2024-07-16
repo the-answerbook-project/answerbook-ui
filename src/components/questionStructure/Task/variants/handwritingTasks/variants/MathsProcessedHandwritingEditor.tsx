@@ -3,13 +3,18 @@ import { MathJax } from 'better-react-mathjax'
 import React, { useCallback } from 'react'
 
 import useLiveUpdates from '../hooks/live-updates.hook'
-import { GenericHandwritingEditorProps, HandwritingAnswer, MathsSingleAnswer } from '../types'
-import HandwritingEditor from './HandwritingEditor'
+import {
+  GenericHandwritingEditorProps,
+  MathsProcessedHandwritingAnswer,
+  RawHandwritingAnswer,
+} from '../types'
+import RawHandwritingEditor from './RawHandwritingEditor'
 
-type MathsHandwritingEditorProps = GenericHandwritingEditorProps<MathsSingleAnswer> & {
-  restricted?: never
-}
-export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
+type MathsProcessedHandwritingEditorProps =
+  GenericHandwritingEditorProps<MathsProcessedHandwritingAnswer> & {
+    restricted?: never
+  }
+export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
   questionText,
@@ -18,8 +23,8 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
   const { updateStrokes } = useLiveUpdates()
 
   const setHandwriting = useCallback(
-    ({ excalidraw }: HandwritingAnswer) => {
-      const result: MathsSingleAnswer = {
+    ({ excalidraw }: RawHandwritingAnswer) => {
+      const result: MathsProcessedHandwritingAnswer = {
         latex: '',
         ...answer,
         excalidraw: {
@@ -42,7 +47,7 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
   )
 
   return (
-    <HandwritingEditor
+    <RawHandwritingEditor
       onAnswerChange={setHandwriting}
       answer={answer}
       questionText={questionText}
@@ -56,6 +61,6 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
         </Box>
       </Card>
       {children}
-    </HandwritingEditor>
+    </RawHandwritingEditor>
   )
 }

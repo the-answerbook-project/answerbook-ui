@@ -5,16 +5,16 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
-import { MathsSingleAnswer } from './types'
-import { MathsHandwritingEditor } from './variants/MathsHandwritingEditor'
+import { MathsProcessedHandwritingAnswer } from './types'
+import { MathsProcessedHandwritingEditor } from './variants/MathsProcessedHandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
 
-export interface MathsSingleAnswerProps extends TaskBaseProps<MathsSingleAnswer> {
+export interface MathsProcessedHandwriting extends TaskBaseProps<MathsProcessedHandwritingAnswer> {
   type: TaskType.PROCESSED_HANDWRITING
   questionText: string
 }
 
-export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
+export const MathsProcessedHandwritingTask: FC<MathsProcessedHandwriting> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
@@ -44,7 +44,7 @@ export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
-        <MathsHandwritingEditor
+        <MathsProcessedHandwritingEditor
           answer={answer}
           onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
         />

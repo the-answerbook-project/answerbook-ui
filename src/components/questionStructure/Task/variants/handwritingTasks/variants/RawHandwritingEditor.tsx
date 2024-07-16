@@ -2,13 +2,13 @@ import { Card, Flex } from '@radix-ui/themes'
 import React from 'react'
 
 import Canvas from '../components/Canvas'
-import { GenericHandwritingEditorProps, HandwritingAnswer } from '../types'
+import { GenericHandwritingEditorProps, RawHandwritingAnswer } from '../types'
 
 import './handwritingEditor.css'
 
-type HandwritingEditorProps = GenericHandwritingEditorProps<HandwritingAnswer>
+type RawHandwritingEditorProps = GenericHandwritingEditorProps<RawHandwritingAnswer>
 
-const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
+const RawHandwritingEditor: React.FC<RawHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
   children,
@@ -31,4 +31,4 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   )
 }
 
-export default HandwritingEditor
+export default RawHandwritingEditor

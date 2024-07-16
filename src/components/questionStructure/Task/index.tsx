@@ -9,11 +9,14 @@ import { EssayTask, EssayTaskProps } from './variants/EssayTask'
 import { FlagTask, FlagTaskProps } from './variants/FlagTask'
 import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
 import { NumberTask, NumberTaskProps } from './variants/NumberTask'
-import { HandwritingProps, HandwritingTask } from './variants/handwritingTasks/HandwritingTask'
 import {
-  MathsSingleAnswerProps,
-  MathsSingleAnswerTask,
-} from './variants/handwritingTasks/MathsSingleAnswerTask'
+  MathsProcessedHandwriting,
+  MathsProcessedHandwritingTask,
+} from './variants/handwritingTasks/MathsProcessedHandwritingTask'
+import {
+  RawHandwritingProps,
+  RawHandwritingTask,
+} from './variants/handwritingTasks/RawHandwritingTask'
 
 export type TaskProps =
   | FlagTaskProps
@@ -22,8 +25,8 @@ export type TaskProps =
   | CodeTaskProps
   | MCQOneTaskProps
   | MCQMultiTaskProps
-  | MathsSingleAnswerProps
-  | HandwritingProps
+  | MathsProcessedHandwriting
+  | RawHandwritingProps
 
 export function defaultOnChangeHandler(onChange: (v: any) => void) {
   return (e) => onChange(e.target.value)
@@ -36,8 +39,8 @@ const taskComponentMap = {
   [TaskType.FLAG]: FlagTask,
   [TaskType.MULTIPLE_CHOICE_SELECT_ONE]: MCQOneTask,
   [TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL]: MCQMultiTask,
-  [TaskType.RAW_HANDWRITING]: HandwritingTask,
-  [TaskType.PROCESSED_HANDWRITING]: MathsSingleAnswerTask,
+  [TaskType.RAW_HANDWRITING]: RawHandwritingTask,
+  [TaskType.PROCESSED_HANDWRITING]: MathsProcessedHandwritingTask,
 } as const
 
 type TaskComponent = FC<TaskProps & { instructions?: string }>

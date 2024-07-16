@@ -4,17 +4,17 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
-import { HandwritingAnswer } from './types'
-import HandwritingEditor from './variants/HandwritingEditor'
+import { RawHandwritingAnswer } from './types'
+import RawHandwritingEditor from './variants/RawHandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
 import { isEmpty } from "lodash"
 
-export interface HandwritingProps extends TaskBaseProps<HandwritingAnswer> {
+export interface RawHandwritingProps extends TaskBaseProps<RawHandwritingAnswer> {
   type: TaskType.RAW_HANDWRITING
   questionText: string
 }
 
-export const HandwritingTask: FC<HandwritingProps> = ({
+export const RawHandwritingTask: FC<RawHandwritingProps> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
@@ -35,7 +35,7 @@ export const HandwritingTask: FC<HandwritingProps> = ({
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
-        <HandwritingEditor
+        <RawHandwritingEditor
           answer={answer}
           onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
         />

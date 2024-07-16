@@ -14,7 +14,7 @@ import React, {
 } from 'react'
 
 import { ConfirmDialog } from '../../../../../ConfirmDialog'
-import { HandwritingAnswer } from '../types'
+import { RawHandwritingAnswer } from '../types'
 import './canvas.scss'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
@@ -23,7 +23,7 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 }
 
 interface CanvasProps {
-  updateStrokes: (value: HandwritingAnswer) => void
+  updateStrokes: (value: RawHandwritingAnswer) => void
   initialData: {
     elements?: readonly ExcalidrawElement[]
     appState?: AppState

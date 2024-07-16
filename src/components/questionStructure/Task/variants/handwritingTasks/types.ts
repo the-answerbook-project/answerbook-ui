@@ -2,14 +2,14 @@ import { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import { AppState } from '@excalidraw/excalidraw/types/types'
 import React from 'react'
 
-export interface HandwritingAnswer {
+export interface RawHandwritingAnswer {
   raw: {
     elements: readonly ExcalidrawElement[]
     appState?: Omit<AppState, 'offsetTop' | 'offsetLeft' | 'width' | 'height'>
   }
 }
 
-export interface MathsSingleAnswer extends HandwritingAnswer {
+export interface MathsProcessedHandwritingAnswer extends RawHandwritingAnswer {
   latex: string
 }
 
