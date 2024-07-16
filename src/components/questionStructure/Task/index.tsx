@@ -31,7 +31,7 @@ const taskComponentMap = {
   [TaskType.FLAG]: FlagTask,
   [TaskType.MULTIPLE_CHOICE_SELECT_ONE]: MCQOneTask,
   [TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL]: MCQMultiTask,
-  [TaskType.MATHS_SINGLE_ANSWER]: HandwritingTask,
+  [TaskType.PROCESSED_HANDWRITING]: HandwritingTask,
 } as const
 
 type TaskComponent = FC<TaskProps & { instructions?: string }>

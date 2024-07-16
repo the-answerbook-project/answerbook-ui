@@ -12,7 +12,7 @@ import { ViewOnlyCanvas } from './ViewOnlyCanvas'
 import './index.scss'
 
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
-  type: TaskType.MATHS_SINGLE_ANSWER
+  type: TaskType.PROCESSED_HANDWRITING
   questionText: string
 }
 
