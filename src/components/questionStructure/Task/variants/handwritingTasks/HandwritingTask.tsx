@@ -39,7 +39,7 @@ export const HandwritingTask: FC<HandwritingProps> = ({
         />
         <Flex justify="end">
           <Dialog.Close>
-            <Button>Save LaTeX</Button>
+            <Button>Save</Button>
           </Dialog.Close>
         </Flex>
       </Flex>

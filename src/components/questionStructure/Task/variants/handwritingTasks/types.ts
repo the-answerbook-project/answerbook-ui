@@ -17,4 +17,5 @@ export interface GenericHandwritingEditorProps<T> {
   answer?: T
   onAnswerChange: (value: T) => void
   children?: React.ReactNode
+  restricted?: boolean
 }

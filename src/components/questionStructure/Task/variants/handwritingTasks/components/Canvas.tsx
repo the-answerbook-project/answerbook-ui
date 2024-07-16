@@ -3,6 +3,7 @@ import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
 import { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box } from '@radix-ui/themes'
+import classNames from 'classnames'
 import React, {
   KeyboardEventHandler,
   SyntheticEvent,
@@ -27,7 +28,7 @@ interface CanvasProps {
     elements?: readonly ExcalidrawElement[]
     appState?: AppState
   }
-  restricted: boolean
+  restricted?: boolean
 }
 
 // Excalidraw keyboard shortcuts we allow in the canvas:
@@ -142,7 +143,11 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
 
   return (
     <Box
-      className="excalidraw-editor-container excalidraw-box"
+      className={classNames({
+        'excalidraw-editor-container': true,
+        "excalidraw-box": true,
+        'excalidraw-restricted': restricted,
+      })}
       ref={excalidrawWrapperRef}
       onKeyDownCapture={keyDownHandler}
       onDoubleClick={(e) => {

@@ -12,6 +12,7 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   answer,
   onAnswerChange,
   children,
+  restricted,
 }) => {
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
@@ -23,6 +24,7 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
           updateStrokes={onAnswerChange}
           // @ts-expect-error: this is not just initialData
           initialData={answer?.excalidraw ?? {}}
+          restricted={restricted}
         />
       </Card>
     </Flex>

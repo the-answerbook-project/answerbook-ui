@@ -47,7 +47,7 @@ export const MathsSingleAnswerTask: FC<MathsSingleAnswerProps> = ({
         />
         <Flex justify="end">
           <Dialog.Close>
-            <Button>Save LaTeX</Button>
+            <Button>Save</Button>
           </Dialog.Close>
         </Flex>
       </Flex>

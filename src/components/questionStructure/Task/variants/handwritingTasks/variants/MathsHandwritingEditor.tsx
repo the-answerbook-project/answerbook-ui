@@ -6,7 +6,9 @@ import useLiveUpdates from '../hooks/live-updates.hook'
 import { GenericHandwritingEditorProps, HandwritingAnswer, MathsSingleAnswer } from '../types'
 import HandwritingEditor from './HandwritingEditor'
 
-type MathsHandwritingEditorProps = GenericHandwritingEditorProps<MathsSingleAnswer>
+type MathsHandwritingEditorProps = GenericHandwritingEditorProps<MathsSingleAnswer> & {
+  restricted?: never
+}
 export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
@@ -40,7 +42,12 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
   )
 
   return (
-    <HandwritingEditor onAnswerChange={setHandwriting} answer={answer} questionText={questionText}>
+    <HandwritingEditor
+      onAnswerChange={setHandwriting}
+      answer={answer}
+      questionText={questionText}
+      restricted
+    >
       <Card
         className="mathjax-card"
       >
