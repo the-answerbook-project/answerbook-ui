@@ -4,10 +4,9 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
+import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
+import RawHandwritingEditor from './editors/RawHandwritingEditor'
 import { RawHandwritingAnswer } from './types'
-import RawHandwritingEditor from './variants/RawHandwritingEditor'
-import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
-import { isEmpty } from "lodash"
 
 export interface RawHandwritingProps extends TaskBaseProps<RawHandwritingAnswer> {
   type: TaskType.RAW_HANDWRITING

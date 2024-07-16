@@ -5,9 +5,9 @@ import { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
+import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
+import { MathsProcessedHandwritingEditor } from './editors/MathsProcessedHandwritingEditor'
 import { MathsProcessedHandwritingAnswer } from './types'
-import { MathsProcessedHandwritingEditor } from './variants/MathsProcessedHandwritingEditor'
-import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
 
 export interface MathsProcessedHandwriting extends TaskBaseProps<MathsProcessedHandwritingAnswer> {
   type: TaskType.PROCESSED_HANDWRITING
