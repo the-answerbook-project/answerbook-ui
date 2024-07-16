@@ -21,7 +21,7 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 }
 
 interface CanvasProps {
-  updateStrokes: (value: HandwritingAnswer['raw']) => void
+  updateStrokes: (value: HandwritingAnswer) => void
   initialData: {
     elements?: readonly ExcalidrawElement[]
     appState?: AppState
@@ -53,7 +53,7 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
 
   const clearCanvas = useCallback(() => {
-    updateStrokes({ elements: [] })
+    updateStrokes({ raw: { elements: [] } })
     excalidrawAPI?.updateScene({ elements: [] })
   }, [excalidrawAPI, updateStrokes])
 
@@ -81,7 +81,7 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
         setTimeout(() => {
           const elements = excalidrawAPI!.getSceneElements()!
           const appState = excalidrawAPI!.getAppState()!
-          updateStrokes({ elements, appState })
+          updateStrokes({ raw: { elements, appState }})
         })
       }
     }
@@ -113,9 +113,9 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData }) => {
         // Wait for the key event to be processed before updating the strokes
         setTimeout(() => {
           updateStrokes({
-            elements: excalidrawAPI?.getSceneElements() ?? [],
-            appState: excalidrawAPI?.getAppState(),
-          })
+              elements: excalidrawAPI?.getSceneElements() ?? [],
+              appState: excalidrawAPI?.getAppState(),
+            })
         })
       } else if (!ALLOWED_TOOL_SHORTCUTS.includes(event.code)) stopEvent(event)
 

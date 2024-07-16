@@ -7,17 +7,14 @@ import Canvas from '../components/Canvas'
 import useLiveUpdates from './live-updates.hook'
 import { HandwritingAnswer, MathsSingleAnswer } from './types'
 
-interface HandwritingEditorProps {
-  answer?: HandwritingAnswer
-  onAnswerChange: (value: HandwritingAnswer['raw']) => void
-  children?: React.ReactNode // This line allows children
+interface GenericHandwritingEditorProps<T> {
+  answer?: T
+  onAnswerChange: (value: T) => void
+  children?: React.ReactNode
 }
 
-interface MathsHandwritingEditorProps {
-  answer?: MathsSingleAnswer
-  onAnswerChange: (value: MathsSingleAnswer) => void
-  children?: React.ReactNode // This line allows children
-}
+type HandwritingEditorProps = GenericHandwritingEditorProps<HandwritingAnswer>
+type MathsHandwritingEditorProps = GenericHandwritingEditorProps<MathsSingleAnswer>
 
 const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   answer,
@@ -48,30 +45,21 @@ export const MathsHandwritingEditor: React.FC<MathsHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
 }) => {
-  const setLatex = useCallback(
-    (latex: string) => {
-      console.log('SET LATEX')
-      onAnswerChange({
-        ...answer,
-        latex,
-      })
-    },
-    [answer, onAnswerChange]
-  )
-
-  const { updateStrokes } = useLiveUpdates(setLatex)
+  const { updateStrokes } = useLiveUpdates()
 
   const setHandwriting = useCallback(
-    (raw: HandwritingAnswer['raw']) => {
-      console.log('SET HANDWRITING')
+    (excalidraw: HandwritingAnswer) => {
       const result: MathsSingleAnswer = {
         latex: '',
         ...answer,
-        raw,
+        raw: {
+          ...answer?.raw,
+          ...excalidraw.raw,
+        },
       }
 
-      if (raw) {
-        updateStrokes(raw).then((latex) => {
+      if (excalidraw.raw) {
+        updateStrokes(excalidraw.raw).then((latex) => {
           result.latex = latex
           onAnswerChange(result)
         })
