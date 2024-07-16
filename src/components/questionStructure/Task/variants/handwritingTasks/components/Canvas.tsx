@@ -12,8 +12,8 @@ import React, {
   useState,
 } from 'react'
 
-import { ConfirmDialog } from '../../../../ConfirmDialog'
-import { HandwritingAnswer } from '../HandwritingTask/types'
+import { ConfirmDialog } from '../../../../../ConfirmDialog'
+import { HandwritingAnswer } from '../types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()

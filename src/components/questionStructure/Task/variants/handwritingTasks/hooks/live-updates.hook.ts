@@ -7,8 +7,8 @@ import { SceneData } from '@excalidraw/excalidraw/types/types'
 import axios, { AxiosError } from 'axios'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import axiosInstance from '../../../../../api/axiosInstance'
-import routes from '../../../../../api/routes'
+import axiosInstance from '../../../../../../api/axiosInstance'
+import routes from '../../../../../../api/routes'
 
 // Constants
 /** Time to wait with user putting no stroks on the pages before API call */

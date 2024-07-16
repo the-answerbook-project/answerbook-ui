@@ -28,6 +28,8 @@ export function parseAnswer(answer: string, targetTaskType: TaskType) {
       return answer === '' ? [] : answer.split(',')
     case TaskType.MATHS_SINGLE_ANSWER:
       return answer === '' ? { latex: '' } : JSON.parse(answer)
+    case TaskType.HANDWRITING:
+      return answer === '' ? {} : JSON.parse(answer)
     default:
       return answer
   }
