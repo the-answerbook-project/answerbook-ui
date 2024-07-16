@@ -10,7 +10,7 @@ import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
 import { isEmpty } from "lodash"
 
 export interface HandwritingProps extends TaskBaseProps<HandwritingAnswer> {
-  type: TaskType.HANDWRITING
+  type: TaskType.RAW_HANDWRITING
   questionText: string
 }
 

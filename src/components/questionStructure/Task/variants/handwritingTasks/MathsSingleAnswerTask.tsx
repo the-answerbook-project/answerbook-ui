@@ -10,7 +10,7 @@ import { MathsHandwritingEditor } from './variants/MathsHandwritingEditor'
 import { ViewOnlyCanvas } from './variants/ViewOnlyCanvas'
 
 export interface MathsSingleAnswerProps extends TaskBaseProps<MathsSingleAnswer> {
-  type: TaskType.MATHS_SINGLE_ANSWER
+  type: TaskType.PROCESSED_HANDWRITING
   questionText: string
 }
 
