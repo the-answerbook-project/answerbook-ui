@@ -29,8 +29,8 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
         <Canvas
           username={username}
           onAnswerChange={onAnswerChange}
-          // @ts-expect-error: this is not just initialData
-          initialData={answer?.excalidraw ?? {}}
+          // @ts-expect-error: Types of initialData and answer are essentially the same but TypeScript doesn't recognize it
+          initialData={answer?.raw ?? {}}
         />
       </Card>
     </Flex>

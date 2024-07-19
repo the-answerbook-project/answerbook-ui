@@ -58,7 +58,7 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }
     (latex: string) => {
       const result: HandwritingAnswer = {
         latex,
-        excalidraw: {
+        raw: {
           elements: excalidrawAPI?.getSceneElements() ?? [],
           appState: excalidrawAPI?.getAppState(),
         },
