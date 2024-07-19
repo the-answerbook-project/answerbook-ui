@@ -1,7 +1,10 @@
 import { Blockquote, Code, Em, Flex, Link, Strong, Text } from '@radix-ui/themes'
+import 'katex/dist/katex.min.css'
 import React, { FC, memo } from 'react'
-import { default as MarkdownRoot } from 'react-markdown'
+import MarkdownRoot from 'react-markdown'
+import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 
 interface MarkdownProps {
   children: string
@@ -41,7 +44,8 @@ const Markdown: FC<MarkdownProps> = memo(({ children }) => {
       <MarkdownRoot
         components={componentMapping}
         urlTransform={(value: string) => value}
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
       >
         {children}
       </MarkdownRoot>

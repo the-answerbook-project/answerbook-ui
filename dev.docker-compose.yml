@@ -6,6 +6,8 @@ services:
       service: backend
     environment:
       - DB_URL=postgresql://user:pass@db/answerbook
+      - MATHPIX_APP_ID
+      - MATHPIX_APP_KEY
   
   frontend:
     extends:
