@@ -26,11 +26,7 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
 
   return (
     <Card>
-      <Box
-        className="excalidraw-view-container excalidraw-box"
-        height="calc(100% - 4px)"
-        style={{ margin: '2px' }}
-      >
+      <Box className="excalidraw-view-container excalidraw-box">
         <Excalidraw
           excalidrawAPI={setExcalidrawAPI}
           viewModeEnabled
