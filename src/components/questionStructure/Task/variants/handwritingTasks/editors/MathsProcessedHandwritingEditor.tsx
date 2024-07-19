@@ -9,6 +9,7 @@ import {
   RawHandwritingAnswer,
 } from '../types'
 import RawHandwritingEditor from './RawHandwritingEditor'
+import './mathjax.css'
 
 type MathsProcessedHandwritingEditorProps =
   GenericHandwritingEditorProps<MathsProcessedHandwritingAnswer> & {
@@ -17,25 +18,23 @@ type MathsProcessedHandwritingEditorProps =
 export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
-  questionText,
   children,
 }) => {
   const { updateStrokes } = useLiveUpdates()
 
   const setHandwriting = useCallback(
-    ({ excalidraw }: RawHandwritingAnswer) => {
+    ({ raw }: RawHandwritingAnswer) => {
       const result: MathsProcessedHandwritingAnswer = {
         latex: '',
         ...answer,
-        excalidraw: {
-          elements: [],
-          ...answer?.excalidraw,
-          ...excalidraw,
+        raw: {
+          ...answer?.raw,
+          ...raw,
         },
       }
 
-      if (excalidraw) {
-        updateStrokes(excalidraw).then((latex) => {
+      if (raw) {
+        updateStrokes(raw).then((latex) => {
           result.latex = latex
           onAnswerChange(result)
         })
@@ -47,17 +46,10 @@ export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwriting
   )
 
   return (
-    <RawHandwritingEditor
-      onAnswerChange={setHandwriting}
-      answer={answer}
-      questionText={questionText}
-      restricted
-    >
-      <Card
-        className="mathjax-card"
-      >
+    <RawHandwritingEditor onAnswerChange={setHandwriting} answer={answer} restricted>
+      <Card className="mathjax-card">
         <Box p="3" style={{ fontSize: '1.5em' }}>
-          <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
+          <MathJax>{`\\( ${answer?.latex ?? ''} \\)`}</MathJax>
         </Box>
       </Card>
       {children}

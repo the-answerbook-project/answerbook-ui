@@ -1,6 +1,7 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button, Card, Dialog, Flex, Text } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
+import { isEmpty } from 'lodash'
 import { FC } from 'react'
 
 import { TaskType } from '../../constants'
@@ -11,20 +12,18 @@ import { MathsProcessedHandwritingAnswer } from './types'
 
 export interface MathsProcessedHandwriting extends TaskBaseProps<MathsProcessedHandwritingAnswer> {
   type: TaskType.PROCESSED_HANDWRITING
-  questionText: string
 }
 
 export const MathsProcessedHandwritingTask: FC<MathsProcessedHandwriting> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
-  questionText,
 }) => (
   <Dialog.Root>
     <Flex gap="3" align="center">
       {!disabled && (
         <Dialog.Trigger>
-          <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
+          <Button disabled={disabled} size="4">
             {answer?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
             <Pencil2Icon width="1.5rem" height="1.5rem" />
           </Button>
@@ -40,7 +39,9 @@ export const MathsProcessedHandwritingTask: FC<MathsProcessedHandwriting> = ({
         </Card>
       )}
     </Flex>
-    <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+    {!isEmpty(answer?.raw?.elements) && (
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+    )}
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">

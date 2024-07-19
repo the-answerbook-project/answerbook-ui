@@ -85,7 +85,7 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
         setTimeout(() => {
           const elements = excalidrawAPI!.getSceneElements()!
           const appState = excalidrawAPI!.getAppState()!
-          updateStrokes({ raw: { elements, appState }})
+          updateStrokes({ raw: { elements, appState } })
         })
       }
     }
@@ -106,7 +106,6 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
       // Prevent writing in text boxes in restricted mode
       if (document.activeElement?.nodeName === 'TEXTAREA') stopEvent(event)
 
-
       // Only allow certain keys to be pressed in the canvas
       // This prevents access to hidden tools e.g. pressing "r" to enter rectangle mode
       if (restricted) {
@@ -125,16 +124,15 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
               },
             })
           })
-        } else if (
-          // Excalidraw shortcuts for tools that should not be blocked
-          !ALLOWED_TOOL_SHORTCUTS.includes(event.code)
-        ) stopEvent(event)
+        } else if (!ALLOWED_TOOL_SHORTCUTS.includes(event.code)) stopEvent(event)
       } else {
         setTimeout(() => {
-          updateStrokes({raw:{
+          updateStrokes({
+            raw: {
               elements: excalidrawAPI?.getSceneElements() ?? [],
               appState: excalidrawAPI?.getAppState(),
-            }})
+            },
+          })
         })
       }
     },
@@ -145,7 +143,7 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
     <Box
       className={classNames({
         'excalidraw-editor-container': true,
-        "excalidraw-box": true,
+        'excalidraw-box': true,
         'excalidraw-restricted': restricted,
       })}
       ref={excalidrawWrapperRef}

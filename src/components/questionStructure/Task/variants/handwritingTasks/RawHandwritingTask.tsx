@@ -1,5 +1,6 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
+import { isEmpty } from 'lodash'
 import { FC } from 'react'
 
 import { TaskType } from '../../constants'
@@ -10,14 +11,12 @@ import { RawHandwritingAnswer } from './types'
 
 export interface RawHandwritingProps extends TaskBaseProps<RawHandwritingAnswer> {
   type: TaskType.RAW_HANDWRITING
-  questionText: string
 }
 
 export const RawHandwritingTask: FC<RawHandwritingProps> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
-  questionText,
 }) => (
   <Dialog.Root>
     {!disabled && (
@@ -30,7 +29,9 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
         </Dialog.Trigger>
       </Flex>
     )}
-    <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+    {!isEmpty(answer?.raw?.elements) && (
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+    )}
 
     <Dialog.Content className="excalidraw-dialog-content">
       <Flex direction="column" height="100%" gap="3">
