@@ -39,7 +39,7 @@ interface Token {
   strokesSessionId: string
 }
 
-const transformStrokesForAPI = (strokes: Strokes): Record<string, number[][]> => {
+const serialiseStrokes = (strokes: Strokes): Record<string, number[][]> => {
   const apiStrokes: Record<string, number[][]> = {
     x: [],
     y: [],
@@ -68,7 +68,7 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, signal: AbortSignal
     `https://api.mathpix.com/v3/strokes`,
     {
       strokes: {
-        strokes: transformStrokesForAPI(strokes),
+        strokes: serialiseStrokes(strokes),
       },
     },
     {
