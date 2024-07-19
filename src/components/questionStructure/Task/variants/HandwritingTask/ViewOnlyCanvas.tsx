@@ -23,11 +23,7 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
 
   return initialData && initialData.elements?.length ? (
     <Card>
-      <Box
-        className="excalidraw-view-container"
-        height="calc(100% - 4px)"
-        style={{ margin: '2px' }}
-      >
+      <Box className="excalidraw-view-container excalidraw-box">
         <Excalidraw excalidrawAPI={setExcalidrawAPI} viewModeEnabled initialData={initialData} />
       </Box>
     </Card>

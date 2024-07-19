@@ -115,7 +115,7 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
 
   return (
     <Box
-      className="excalidraw-editor-container"
+      className="excalidraw-editor-container excalidraw-box"
       ref={excalidrawWrapperRef}
       onKeyDownCapture={keyDownHandler}
       onDoubleClick={(e) => {
