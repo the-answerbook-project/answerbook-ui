@@ -10,9 +10,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import axiosInstance from '../../../../../api/axiosInstance'
 import routes from '../../../../../api/routes'
 
-// Constant
+// Constants
 /** Time to wait with user putting no stroks on the pages before API call */
 const NO_STROKES_WAIT_DELAY = 300
+const MATHPIX_HANDWRITING_TO_LATEX = `https://api.mathpix.com/v3/strokes`
 
 /**
  * The strokes object that is used to store the strokes from the Excalidraw canvas.
@@ -65,7 +66,7 @@ const serialiseStrokes = (strokes: Strokes): Record<string, number[][]> => {
 
 const getLatexFromStrokes = (token: Token, strokes: Strokes, signal: AbortSignal) => {
   return axios.post(
-    `https://api.mathpix.com/v3/strokes`,
+    MATHPIX_HANDWRITING_TO_LATEX,
     {
       strokes: {
         strokes: serialiseStrokes(strokes),
@@ -132,7 +133,7 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) abortControllerRef.current.abort()
-       // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
     }
   }, [])
