@@ -110,8 +110,8 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
       abortControllerRef.current = new AbortController()
       const { signal } = abortControllerRef.current
 
-      // We use a timeout so that an API request once the person has stopped drawing for 300 ms
-      // this prevents constant requests to the API that can easier hit a rate limit
+      // We use a timeout so that an API request is only sent once the person has stopped drawing for 300 ms.
+      // This prevents constant requests to the API which might cause the rate limit to be hit
       timeoutIdRef.current = setTimeout(() => {
         if (strokes.elements?.length === 0) {
           setLatex('')
