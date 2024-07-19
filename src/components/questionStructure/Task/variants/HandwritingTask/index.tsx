@@ -1,5 +1,5 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
-import { Button, Card, Dialog, Flex, Text } from '@radix-ui/themes'
+import { Button, Card, Dialog, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
 import { FC } from 'react'
 import { useParams } from 'react-router-dom'
@@ -42,7 +42,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
         </Dialog.Trigger>
       </Flex>
 
-      <Dialog.Content style={{ minWidth: '90vw', height: '80vh' }}>
+      <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
           <HandwritingEditor
             latex={answer ?? ''}

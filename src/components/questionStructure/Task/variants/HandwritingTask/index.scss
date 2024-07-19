@@ -56,6 +56,11 @@
   }
 }
 
+.excalidraw-dialog-content {
+  min-width: 90vw;
+  height: 80vh;
+}
+
 .excalidraw-box {
   margin: '2px';
   height: calc(100% - 4px);
