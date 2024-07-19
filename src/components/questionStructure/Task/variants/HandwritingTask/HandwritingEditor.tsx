@@ -4,6 +4,7 @@ import React from 'react'
 
 import Markdown from '../../../../Markdown'
 import Canvas from './Canvas'
+import './handwritingEditor.css'
 
 interface HandwritingEditorProps {
   username: string
@@ -21,26 +22,12 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
       <Markdown>{questionText}</Markdown>
-      <Card
-        style={{
-          minHeight: '3.5em',
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <Card className="mathjax-card">
         <Box p="3">
           <MathJax>{`\\( ${latex} \\)`}</MathJax>
         </Box>
       </Card>
-      <Card
-        style={{
-          flexGrow: 1,
-          flexShrink: 0,
-          width: '100%',
-        }}
-      >
+      <Card className="excalidraw-canvas-card">
         <Canvas username={username} onAnswerChange={onAnswerChange} />
       </Card>
     </Flex>
