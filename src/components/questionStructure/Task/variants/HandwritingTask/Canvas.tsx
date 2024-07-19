@@ -34,12 +34,14 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
     excalidrawAPI?.updateScene({ elements: [] })
   }, [excalidrawAPI, updateStrokes])
 
-  // HACK: Disable Excalidraw right click menu
   const excalidrawWrapperRef = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
     if (!excalidrawAPI || !excalidrawWrapperRef.current) return
 
     const canvas = excalidrawWrapperRef.current.getElementsByClassName('interactive')[0]
+
+    // Disable Excalidraw right click menu, to prevent users from using hidden tools
+    // that we don't want them to use, as mathpix can't handle them
     canvas?.addEventListener('contextmenu', stopEvent)
 
     // Force a canvas resize when the dialog opens
