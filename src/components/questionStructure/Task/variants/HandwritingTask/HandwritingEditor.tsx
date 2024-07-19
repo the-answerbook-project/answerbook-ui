@@ -22,7 +22,7 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
     <Flex direction="column" flexGrow="1" align="center" gap="3">
       <Card className="mathjax-card">
         <Box p="3">
-          <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
+          <MathJax>{`\\( ${answer?.latex ?? ''} \\)`}</MathJax>
         </Box>
       </Card>
       <Card className="excalidraw-canvas-card">
