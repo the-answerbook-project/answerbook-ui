@@ -6,9 +6,11 @@ import {
 import { Box, Card } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 
-export const ViewOnlyCanvas: React.FC<{ initialData: ExcalidrawInitialDataState }> = ({
-  initialData,
-}) => {
+interface ViewOnlyCanvasProps {
+  initialData: ExcalidrawInitialDataState
+}
+
+export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
 
   useEffect(() => {
