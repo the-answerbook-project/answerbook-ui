@@ -1,5 +1,6 @@
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw'
 import { ClipboardData } from '@excalidraw/excalidraw/types/clipboard'
+import { ExcalidrawElement } from '@excalidraw/excalidraw/types/element/types'
 import { AppState, ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box } from '@radix-ui/themes'
 import React, {
@@ -13,6 +14,7 @@ import React, {
 
 import { ConfirmDialog } from '../../../../ConfirmDialog'
 import useLiveUpdates from './live-updates.hook'
+import { HandwritingAnswer } from './types'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
   e.preventDefault()
@@ -22,6 +24,10 @@ const stopEvent = (e: SyntheticEvent | Event) => {
 interface CanvasProps {
   username: string
   onAnswerChange: (value: string) => void
+  initialData: {
+    elements?: readonly ExcalidrawElement[]
+    appState?: AppState
+  }
 }
 
 // Excalidraw keyboard shortcuts we allow in the canvas:
@@ -44,10 +50,24 @@ const ALLOWED_TOOL_SHORTCUTS = [
   'Digit7', // pen
 ]
 
-const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
-  const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
+const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange, initialData }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
+
+  const updateHandwriting = useCallback(
+    (latex: string) => {
+      const result: HandwritingAnswer = {
+        latex,
+        raw: {
+          elements: excalidrawAPI?.getSceneElements() ?? [],
+          appState: excalidrawAPI?.getAppState(),
+        },
+      }
+      onAnswerChange(JSON.stringify(result))
+    },
+    [excalidrawAPI, onAnswerChange]
+  )
+  const { updateStrokes } = useLiveUpdates(username, updateHandwriting)
 
   const clearCanvas = useCallback(() => {
     updateStrokes({ elements: [] })
@@ -128,7 +148,10 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
         UIOptions={{ tools: { image: false } }}
         gridModeEnabled
         excalidrawAPI={setExcalidrawAPI}
-        // initialData={excalidrawData}
+        initialData={{
+          ...initialData,
+          appState: { ...initialData.appState, collaborators: new Map() },
+        }}
         onPaste={pasteHandler}
       >
         <MainMenu>

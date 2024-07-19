@@ -26,6 +26,8 @@ export function parseAnswer(answer: string, targetTaskType: TaskType) {
       return answer === '' ? answer : Number(answer)
     case TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL:
       return answer === '' ? [] : answer.split(',')
+    case TaskType.PROCESSED_HANDWRITING:
+      return answer === '' ? { excalidraw: null, latex: '' } : JSON.parse(answer)
     default:
       return answer
   }
