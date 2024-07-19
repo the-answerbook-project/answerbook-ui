@@ -117,8 +117,6 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
     <Box
       className="excalidraw-editor-container"
       ref={excalidrawWrapperRef}
-      height="calc(100% - 4px)"
-      style={{ margin: '2px' }}
       onKeyDownCapture={keyDownHandler}
       onDoubleClick={(e) => {
         e.preventDefault()
