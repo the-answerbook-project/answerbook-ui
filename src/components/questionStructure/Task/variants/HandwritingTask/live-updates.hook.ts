@@ -92,9 +92,7 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
 
   // Get a token for a mathpix session for this user
   const getToken = useCallback(() => {
-    axiosInstance.get(routes.getMathPixToken).then((res) => {
-      setToken(res.data)
-    })
+    axiosInstance.get(routes.getMathPixToken).then((res) => setToken(res.data))
   }, [])
 
   // Get token on startup (or username change)
@@ -104,12 +102,8 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
   const updateStrokes = useCallback(
     (strokes: Strokes) => {
       // Cleanup previous actions
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
-      }
-      if (timeoutIdRef.current) {
-        clearTimeout(timeoutIdRef.current)
-      }
+      if (abortControllerRef.current) abortControllerRef.current.abort()
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
 
       // Setup for new action
       abortControllerRef.current = new AbortController()
@@ -123,16 +117,11 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
           return
         }
 
-        const latexFetch = getLatexFromStrokes(token, strokes, signal)
-        latexFetch
+        getLatexFromStrokes(token, strokes, signal)
           .then(({ data }) => setLatex(data.latex_styled || '\\text{Failed to parse handwriting}'))
           .catch((error: Error | AxiosError) => {
-            if (axios.isAxiosError(error) && error.response?.status === 401) {
-              // Refresh the token
-              getToken()
-            } else {
-              console.error(error)
-            }
+            if (axios.isAxiosError(error) && error.response?.status === 401) getToken()
+            else console.error(error)
           })
       }, NO_STROKES_WAIT_DELAY)
     },
@@ -142,13 +131,9 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort()
-      }
-      if (timeoutIdRef.current) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        clearTimeout(timeoutIdRef.current)
-      }
+      if (abortControllerRef.current) abortControllerRef.current.abort()
+       // eslint-disable-next-line react-hooks/exhaustive-deps
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
     }
   }, [])
 
