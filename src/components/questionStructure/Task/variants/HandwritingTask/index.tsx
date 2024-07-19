@@ -13,14 +13,12 @@ import './index.scss'
 
 export interface HandwritingTaskProps extends TaskBaseProps<string> {
   type: TaskType.PROCESSED_HANDWRITING
-  questionText: string
 }
 
 export const HandwritingTask: FC<HandwritingTaskProps> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
-  questionText,
 }) => {
   const { username = DEFAULT_TEST_USERNAME } = useParams()
 
@@ -48,7 +46,6 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
             latex={answer ?? ''}
             onAnswerChange={onAnswerUpdate}
             username={username}
-            questionText={questionText}
           />
           <Flex justify="end">
             <Dialog.Close>

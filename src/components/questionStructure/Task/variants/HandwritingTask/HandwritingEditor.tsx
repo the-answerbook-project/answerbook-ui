@@ -10,18 +10,15 @@ interface HandwritingEditorProps {
   username: string
   latex: string
   onAnswerChange: (value: string) => void
-  questionText: string
 }
 
 const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
   username,
   latex,
   onAnswerChange,
-  questionText,
 }) => {
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
-      <Markdown>{questionText}</Markdown>
       <Card className="mathjax-card">
         <Box p="3">
           <MathJax>{`\\( ${latex} \\)`}</MathJax>
