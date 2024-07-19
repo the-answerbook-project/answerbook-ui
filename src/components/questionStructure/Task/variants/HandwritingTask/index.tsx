@@ -31,10 +31,8 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
       </Dialog.Trigger>
       <Flex gap="3" align="center">
         <Card className="latex-preview">
-          <Flex gap="3" p="3" align="center" justify="between">
-            <MathJax style={{ flex: '1 0 0', textAlign: 'center' }}>
-              <Text>{answer ? `\\( ${answer} \\)` : 'No Answer'}</Text>
-            </MathJax>
+          <Flex p="3">
+            <MathJax>{answer ? `\\( ${answer} \\)` : 'No Answer'}</MathJax>
           </Flex>
         </Card>
         <Dialog.Trigger>
