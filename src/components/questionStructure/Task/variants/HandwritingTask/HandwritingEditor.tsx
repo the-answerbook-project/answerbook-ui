@@ -5,12 +5,19 @@ import React from 'react'
 import Markdown from '../../../../Markdown'
 import Canvas from './Canvas'
 
-const HandwritingEditor: React.FC<{
+interface HandwritingEditorProps {
   username: string
   latex: string
   onAnswerChange: (value: string) => void
   questionText: string
-}> = ({ username, latex, onAnswerChange, questionText }) => {
+}
+
+const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
+  username,
+  latex,
+  onAnswerChange,
+  questionText,
+}) => {
   return (
     <Flex direction="column" flexGrow="1" align="center" gap="3">
       <Markdown>{questionText}</Markdown>
