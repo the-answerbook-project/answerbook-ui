@@ -36,7 +36,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
           </Flex>
         </Card>
         <Dialog.Trigger>
-          <Button variant="surface" disabled={disabled} style={{ cursor: 'pointer' }} size="4">
+          <Button disabled={disabled} size="4">
             Edit answer <Pencil2Icon width="1.5rem" height="1.5rem" />
           </Button>
         </Dialog.Trigger>
