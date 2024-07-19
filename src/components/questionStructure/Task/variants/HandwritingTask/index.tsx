@@ -26,13 +26,15 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger>
-        {!isEmpty(answer?.raw?.elements) && <ViewOnlyCanvas initialData={answer!.raw.elements} />}
-      </Dialog.Trigger>
+      {!isEmpty(answer?.raw?.elements) && (
+        <Dialog.Trigger>
+          <ViewOnlyCanvas initialData={answer!.raw.elements} />
+        </Dialog.Trigger>
+      )}
       <Flex gap="3" align="center">
         <Card className="latex-preview">
           <Flex p="3">
-            <MathJax>{answer ? `\\( ${answer} \\)` : 'No Answer'}</MathJax>
+            <MathJax>{answer?.latex ? `\\( ${answer.latex} \\)` : 'No Answer'}</MathJax>
           </Flex>
         </Card>
         <Dialog.Trigger>
