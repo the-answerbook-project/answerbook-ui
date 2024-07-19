@@ -19,10 +19,12 @@ const stopEvent = (e: SyntheticEvent | Event) => {
   e.stopPropagation()
 }
 
-const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => void }> = ({
-  username,
-  onAnswerChange,
-}) => {
+interface CanvasProps {
+  username: string
+  onAnswerChange: (value: string) => void
+}
+
+const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
   const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
