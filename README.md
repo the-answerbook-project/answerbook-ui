@@ -4,6 +4,8 @@ This repo contains the frontend code for the Answerbook project. The frontend is
 ## Setup
 1. Run `nvm use` to ensure you're using the correct Node version.
 2. Run `npm install` to install dependencies (this will also setup commit hooks).
+3. Make a copy of `.env.template` as `.env` and fill it in. This file is used to store environment variables, specifically the API keys needed to use mathpix for handwriting recognition.
+4. Copy the `.env` file to the root of `answerbook-api` as well
 
 ## Running the application
 ### In Docker
