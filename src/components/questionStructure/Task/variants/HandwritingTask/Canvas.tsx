@@ -11,7 +11,7 @@ import React, {
   useState,
 } from 'react'
 
-import { ConfirmDialog } from './ConfirmDialog'
+import { ConfirmDialog } from '../../../../ConfirmDialog'
 import useLiveUpdates from './live-updates.hook'
 
 const stopEvent = (e: SyntheticEvent | Event) => {
