@@ -72,9 +72,7 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
   const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       // Prevent writing in text boxes
-      if (document.activeElement?.nodeName === 'TEXTAREA') {
-        stopEvent(event)
-      }
+      if (document.activeElement?.nodeName === 'TEXTAREA') stopEvent(event)
 
       // Only allow certain keys to be pressed in the canvas
       // This prevents access to hidden tools e.g. pressing "r" to enter rectangle mode
@@ -85,9 +83,7 @@ const Canvas: React.FC<{ username: string; onAnswerChange: (value: string) => vo
           ['KeyC', 'KeyV', 'KeyZ', 'KeyY', 'Equal', 'Minus', 'Digit0'].includes(event.code))
       ) {
         // Wait for the key event to be processed before updating the strokes
-        setTimeout(() => {
-          updateStrokes({ elements: excalidrawAPI?.getSceneElements() })
-        })
+        setTimeout(() => updateStrokes({ elements: excalidrawAPI?.getSceneElements() }))
       } else if (
         // Excalidraw shortcuts for tools that should not be blocked
         !['KeyH', 'KeyE', 'KeyV', 'KeyP', 'Digit1', 'Digit0', 'Digit7'].includes(event.code)
