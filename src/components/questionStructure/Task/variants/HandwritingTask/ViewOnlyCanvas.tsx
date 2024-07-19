@@ -24,7 +24,7 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
     })
   }, [excalidrawAPI, initialData])
 
-  return initialData && initialData?.length ? (
+  return (
     <Card>
       <Box
         className="excalidraw-view-container excalidraw-box"
@@ -38,5 +38,5 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
         />
       </Box>
     </Card>
-  ) : null
+  )
 }

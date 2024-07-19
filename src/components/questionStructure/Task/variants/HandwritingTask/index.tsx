@@ -1,6 +1,7 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button, Card, Dialog, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
+import { isEmpty } from 'lodash'
 import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 
@@ -26,7 +27,9 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <ViewOnlyCanvas initialData={answer?.excalidraw?.elements ?? []} />
+        {!isEmpty(answer?.excalidraw?.elements) && (
+          <ViewOnlyCanvas initialData={answer!.excalidraw.elements} />
+        )}
       </Dialog.Trigger>
       <Flex gap="3" align="center">
         <Card className="latex-preview">
