@@ -43,11 +43,7 @@ export const HandwritingTask: FC<HandwritingTaskProps> = ({
 
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
-          <HandwritingEditor
-            answer={answer}
-            onAnswerChange={onAnswerUpdate}
-            username={username}
-          />
+          <HandwritingEditor answer={answer} onAnswerChange={onAnswerUpdate} username={username} />
           <Flex justify="end">
             <Dialog.Close>
               <Button>Save LaTeX</Button>

@@ -25,9 +25,7 @@ const HandwritingEditor: React.FC<HandwritingEditorProps> = ({
           <MathJax>{`\\( ${answer?.latex} \\)`}</MathJax>
         </Box>
       </Card>
-      <Card
-        className="excalidraw-canvas-card"
-      >
+      <Card className="excalidraw-canvas-card">
         <Canvas
           username={username}
           onAnswerChange={onAnswerChange}
