@@ -24,6 +24,26 @@ interface CanvasProps {
   onAnswerChange: (value: string) => void
 }
 
+// Excalidraw keyboard shortcuts we allow in the canvas:
+const CONTROL_COMMAND_ALLOWED_KEYBOARD_SHORTCUTS = [
+  'KeyC', // copy
+  'KeyV', // paste
+  'KeyZ', // undo
+  'KeyY', // redo
+  'Equal', // zoom in
+  'Minus', // zoom out
+  'Digit0', // reset zoom
+]
+const ALLOWED_TOOL_SHORTCUTS = [
+  'KeyH', // drag hand
+  'KeyE', // eraser
+  'KeyV', // selection
+  'KeyP', // pen
+  'Digit1', // selection
+  'Digit0', // eraser
+  'Digit7', // pen
+]
+
 const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
   const { updateStrokes } = useLiveUpdates(username, onAnswerChange)
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
@@ -84,16 +104,11 @@ const Canvas: React.FC<CanvasProps> = ({ username, onAnswerChange }) => {
         event.code === 'Backspace' || // Allow backspace for deletions
         event.code.includes('Arrow') || // Allow arrow keys for moving elements
         ((event.ctrlKey || event.metaKey) && // Allow specific keyboard shortcuts
-          ['KeyC', 'KeyV', 'KeyZ', 'KeyY', 'Equal', 'Minus', 'Digit0'].includes(event.code))
+          CONTROL_COMMAND_ALLOWED_KEYBOARD_SHORTCUTS.includes(event.code))
       ) {
         // Wait for the key event to be processed before updating the strokes
         setTimeout(() => updateStrokes({ elements: excalidrawAPI?.getSceneElements() }))
-      } else if (
-        // Excalidraw shortcuts for tools that should not be blocked
-        !['KeyH', 'KeyE', 'KeyV', 'KeyP', 'Digit1', 'Digit0', 'Digit7'].includes(event.code)
-      ) {
-        stopEvent(event)
-      }
+      } else if (!ALLOWED_TOOL_SHORTCUTS.includes(event.code)) stopEvent(event)
     },
     [excalidrawAPI, updateStrokes]
   )
