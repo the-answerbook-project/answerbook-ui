@@ -47,7 +47,6 @@ type TaskComponent = FC<TaskProps & { instructions?: string }>
 
 export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
-  console.log(Component)
   return (
     <Flex gap="3" direction="column">
       {instructions && <Markdown>{instructions}</Markdown>}
