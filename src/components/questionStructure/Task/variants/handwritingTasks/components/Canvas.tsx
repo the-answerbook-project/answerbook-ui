@@ -51,6 +51,12 @@ const ALLOWED_TOOL_SHORTCUTS = [
   'Digit7', // pen
 ]
 
+const RESTRICTED_MODE_TOOLS = [
+  'freedraw', // pen
+  'eraser', // eraser
+  'selection', // selection
+]
+
 const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
   const [clearDialogOpen, setClearDialogOpen] = useState(false)
@@ -81,7 +87,7 @@ const Canvas: React.FC<CanvasProps> = ({ updateStrokes, initialData, restricted 
     // Call updateStrokes whenever the user finishes drawing/erasing/moving items
     const pointerUpHandler = ({ type }: AppState['activeTool']): void => {
       // If in restricted mode, only certain tools should trigger a rerender
-      if (!restricted || type === 'freedraw' || type === 'eraser' || type === 'selection') {
+      if (!restricted || RESTRICTED_MODE_TOOLS.includes(type)) {
         setTimeout(() => {
           const elements = excalidrawAPI!.getSceneElements()!
           const appState = excalidrawAPI!.getAppState()!
