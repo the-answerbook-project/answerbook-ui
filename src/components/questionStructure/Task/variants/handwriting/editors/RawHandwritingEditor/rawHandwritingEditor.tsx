@@ -1,9 +1,9 @@
 import { Card, Flex } from '@radix-ui/themes'
 import React from 'react'
 
-import Canvas from '../components/Canvas'
-import { GenericHandwritingEditorProps, RawHandwritingAnswer } from '../types'
-import './rawEditor.css'
+import Canvas from '../../components/Canvas'
+import { GenericHandwritingEditorProps, RawHandwritingAnswer } from '../../types'
+import './index.css'
 
 type RawHandwritingEditorProps = GenericHandwritingEditorProps<RawHandwritingAnswer>
 

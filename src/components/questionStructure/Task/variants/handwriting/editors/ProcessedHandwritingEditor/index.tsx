@@ -2,14 +2,14 @@ import { Box, Card } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
 import React, { useCallback } from 'react'
 
-import useLiveUpdates from '../hooks/live-updates.hook'
+import useLiveUpdates from '../../hooks/live-updates.hook'
 import {
   GenericHandwritingEditorProps,
   ProcessedHandwritingAnswer,
   RawHandwritingAnswer,
-} from '../types'
-import RawHandwritingEditor from './RawHandwritingEditor'
-import './mathjax.css'
+} from '../../types'
+import RawHandwritingEditor from '../RawHandwritingEditor/rawHandwritingEditor'
+import './index.css'
 
 type ProcessedHandwritingEditorProps = GenericHandwritingEditorProps<ProcessedHandwritingAnswer> & {
   restricted?: never

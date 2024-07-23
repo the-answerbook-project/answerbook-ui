@@ -12,11 +12,8 @@ import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 import {
   ProcessedHandwritingProps,
   ProcessedHandwritingTask,
-} from './variants/handwritingTasks/ProcessedHandwritingTask'
-import {
-  RawHandwritingProps,
-  RawHandwritingTask,
-} from './variants/handwritingTasks/RawHandwritingTask'
+} from './variants/handwriting/ProcessedHandwritingTask'
+import { RawHandwritingProps, RawHandwritingTask } from './variants/handwriting/RawHandwritingTask'
 
 export type TaskProps =
   | FlagTaskProps

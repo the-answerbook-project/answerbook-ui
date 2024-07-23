@@ -6,7 +6,7 @@ import { FC } from 'react'
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
-import RawHandwritingEditor from './editors/RawHandwritingEditor'
+import RawHandwritingEditor from './editors/RawHandwritingEditor/rawHandwritingEditor'
 import { RawHandwritingAnswer } from './types'
 
 export interface RawHandwritingProps extends TaskBaseProps<RawHandwritingAnswer> {

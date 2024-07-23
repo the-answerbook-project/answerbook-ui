@@ -4,7 +4,7 @@ import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box, Card } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 
-import './viewOnlyCanvas.scss'
+import './index.scss'
 
 interface ViewOnlyCanvasProps {
   initialData: readonly ExcalidrawElement[]
