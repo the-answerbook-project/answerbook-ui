@@ -10,9 +10,9 @@ import { FlagTask, FlagTaskProps } from './variants/FlagTask'
 import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
 import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 import {
-  MathsProcessedHandwriting,
-  MathsProcessedHandwritingTask,
-} from './variants/handwritingTasks/MathsProcessedHandwritingTask'
+  ProcessedHandwritingProps,
+  ProcessedHandwritingTask,
+} from './variants/handwritingTasks/ProcessedHandwritingTask'
 import {
   RawHandwritingProps,
   RawHandwritingTask,
@@ -25,7 +25,7 @@ export type TaskProps =
   | CodeTaskProps
   | MCQOneTaskProps
   | MCQMultiTaskProps
-  | MathsProcessedHandwriting
+  | ProcessedHandwritingProps
   | RawHandwritingProps
 
 export function defaultOnChangeHandler(onChange: (v: any) => void) {
@@ -40,13 +40,14 @@ const taskComponentMap = {
   [TaskType.MULTIPLE_CHOICE_SELECT_ONE]: MCQOneTask,
   [TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL]: MCQMultiTask,
   [TaskType.RAW_HANDWRITING]: RawHandwritingTask,
-  [TaskType.PROCESSED_HANDWRITING]: MathsProcessedHandwritingTask,
+  [TaskType.PROCESSED_HANDWRITING]: ProcessedHandwritingTask,
 } as const
 
 type TaskComponent = FC<TaskProps & { instructions?: string }>
 
 export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
+  console.log(Component)
   return (
     <Flex gap="3" direction="column">
       {instructions && <Markdown>{instructions}</Markdown>}
