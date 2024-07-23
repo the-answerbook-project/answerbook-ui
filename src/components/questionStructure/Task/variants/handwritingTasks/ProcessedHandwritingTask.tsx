@@ -7,10 +7,10 @@ import { FC } from 'react'
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
-import { MathsProcessedHandwritingEditor } from './editors/MathsProcessedHandwritingEditor'
-import { MathsProcessedHandwritingAnswer } from './types'
+import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
+import { ProcessedHandwritingAnswer } from './types'
 
-export interface ProcessedHandwritingProps extends TaskBaseProps<MathsProcessedHandwritingAnswer> {
+export interface ProcessedHandwritingProps extends TaskBaseProps<ProcessedHandwritingAnswer> {
   type: TaskType.PROCESSED_HANDWRITING
 }
 
@@ -43,7 +43,7 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
 
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
-          <MathsProcessedHandwritingEditor
+          <ProcessedHandwritingEditor
             answer={answer}
             onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
           />

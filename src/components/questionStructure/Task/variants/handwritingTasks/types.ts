@@ -9,7 +9,7 @@ export interface RawHandwritingAnswer {
   }
 }
 
-export interface MathsProcessedHandwritingAnswer extends RawHandwritingAnswer {
+export interface ProcessedHandwritingAnswer extends RawHandwritingAnswer {
   latex: string
 }
 

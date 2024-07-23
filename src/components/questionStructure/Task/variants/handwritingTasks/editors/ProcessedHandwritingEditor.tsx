@@ -5,17 +5,16 @@ import React, { useCallback } from 'react'
 import useLiveUpdates from '../hooks/live-updates.hook'
 import {
   GenericHandwritingEditorProps,
-  MathsProcessedHandwritingAnswer,
+  ProcessedHandwritingAnswer,
   RawHandwritingAnswer,
 } from '../types'
 import RawHandwritingEditor from './RawHandwritingEditor'
 import './mathjax.css'
 
-type MathsProcessedHandwritingEditorProps =
-  GenericHandwritingEditorProps<MathsProcessedHandwritingAnswer> & {
-    restricted?: never
-  }
-export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwritingEditorProps> = ({
+type ProcessedHandwritingEditorProps = GenericHandwritingEditorProps<ProcessedHandwritingAnswer> & {
+  restricted?: never
+}
+export const ProcessedHandwritingEditor: React.FC<ProcessedHandwritingEditorProps> = ({
   answer,
   onAnswerChange,
   children,
@@ -24,7 +23,7 @@ export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwriting
 
   const setHandwriting = useCallback(
     ({ raw }: RawHandwritingAnswer) => {
-      const result: MathsProcessedHandwritingAnswer = {
+      const result: ProcessedHandwritingAnswer = {
         latex: '',
         ...answer,
         raw: {
@@ -48,7 +47,7 @@ export const MathsProcessedHandwritingEditor: React.FC<MathsProcessedHandwriting
   return (
     <RawHandwritingEditor onAnswerChange={setHandwriting} answer={answer} restricted>
       <Card className="mathjax-card">
-        <Box p="3" style={{ fontSize: '1.5em' }}>
+        <Box p="3">
           <MathJax>{`\\( ${answer?.latex ?? ''} \\)`}</MathJax>
         </Box>
       </Card>

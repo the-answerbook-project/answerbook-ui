@@ -30,7 +30,7 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
       </Flex>
     )}
     {!isEmpty(answer?.raw?.elements) && (
-      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} />
+      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} minHeight="500px" />
     )}
 
     <Dialog.Content className="excalidraw-dialog-content">
