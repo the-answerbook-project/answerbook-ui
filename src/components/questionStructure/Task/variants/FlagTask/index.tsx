@@ -1,6 +1,6 @@
 import { Flex, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'

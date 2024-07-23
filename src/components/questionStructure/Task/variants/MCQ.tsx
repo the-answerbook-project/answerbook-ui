@@ -1,6 +1,6 @@
 import { CheckboxGroup, RadioGroup } from '@radix-ui/themes'
 import { map } from 'lodash'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import { TaskType } from '../constants'
 import { defaultOnChangeHandler } from '../index'

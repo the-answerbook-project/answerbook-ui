@@ -1,5 +1,5 @@
 import { TextArea, TextField } from '@radix-ui/themes'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 
 import { TaskType } from '../constants'
 import { defaultOnChangeHandler } from '../index'
