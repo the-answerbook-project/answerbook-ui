@@ -32,9 +32,9 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
           </Dialog.Trigger>
         )}
         {answer?.latex && (
-          <Card style={{ flexGrow: 1 }}>
-            <Flex gap="3" p="3" align="center" justify="between">
-              <MathJax className="latex-preview">{`\\( ${answer.latex} \\)`}</MathJax>
+          <Card className="latex-preview">
+            <Flex p="3">
+              <MathJax>{`\\( ${answer.latex} \\)`}</MathJax>
             </Flex>
           </Card>
         )}
