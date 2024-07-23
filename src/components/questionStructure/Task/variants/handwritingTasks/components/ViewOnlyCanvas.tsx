@@ -4,11 +4,17 @@ import { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types/types'
 import { Box, Card } from '@radix-ui/themes'
 import React, { useEffect, useState } from 'react'
 
+import './viewOnlyCanvas.scss'
+
 interface ViewOnlyCanvasProps {
   initialData: readonly ExcalidrawElement[]
+  minHeight?: string
 }
 
-export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) => {
+export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({
+  initialData,
+  minHeight = '200px',
+}) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
 
   useEffect(() => {
@@ -26,7 +32,7 @@ export const ViewOnlyCanvas: React.FC<ViewOnlyCanvasProps> = ({ initialData }) =
 
   return (
     <Card>
-      <Box className="excalidraw-view-container excalidraw-box">
+      <Box className="excalidraw-view-container excalidraw-box" minHeight={minHeight}>
         <Excalidraw
           excalidrawAPI={setExcalidrawAPI}
           viewModeEnabled

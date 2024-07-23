@@ -15,14 +15,24 @@
 
 // Hide parts of excalidraw we don't want users to use
 .excalidraw-editor-container {
-  // Disable toolbar items we don't want users to use
-  $titles: 'Rectangle', 'Diamond', 'Ellipse', 'Arrow', 'Line', 'Text', 'Keep selected';
-  div.App-toolbar .Stack {
-    label.ToolIcon {
-      @include hide-elements-by-param($titles);
-    }
+  &.excalidraw-restricted {
+    // Disable toolbar items we don't want users to use
+    $titles: 'Rectangle', 'Diamond', 'Ellipse', 'Arrow', 'Line', 'Text', 'Keep selected';
+    div.App-toolbar .Stack {
+      label.ToolIcon {
+        @include hide-elements-by-param($titles);
+      }
 
-    @include hide('.App-toolbar__divider');
+      @include hide('.App-toolbar__divider');
+    }
+    // Hide text element input boxes
+    .excalidraw-textEditorContainer {
+      opacity: 0;
+    }
+  }
+
+  // Hide extra tools trigger
+  div.App-toolbar .Stack {
     @include hide('.App-toolbar__extra-tools-trigger');
   }
 
@@ -45,14 +55,6 @@
   // Hide text element input boxes
   .excalidraw-textEditorContainer {
     opacity: 0;
-  }
-}
-
-.excalidraw-view-container {
-  min-height: 200px;
-
-  .App-bottom-bar {
-    display: none;
   }
 }
 

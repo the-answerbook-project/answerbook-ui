@@ -7,8 +7,8 @@ import { SceneData } from '@excalidraw/excalidraw/types/types'
 import axios, { AxiosError } from 'axios'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import axiosInstance from '../../../../../api/axiosInstance'
-import routes from '../../../../../api/routes'
+import axiosInstance from '../../../../../../api/axiosInstance'
+import routes from '../../../../../../api/routes'
 
 // Constants
 /** Time to wait with user putting no stroks on the pages before API call */
@@ -27,7 +27,7 @@ interface Strokes {
  * This represents what the hook exports to the outside world.
  */
 interface LiveUpdateHook {
-  updateStrokes: (strokes: Strokes) => void
+  updateStrokes: (strokes: Strokes) => Promise<string>
 }
 
 // MathPix API functions
@@ -82,7 +82,7 @@ const getLatexFromStrokes = (token: Token, strokes: Strokes, signal: AbortSignal
   )
 }
 
-const useLiveUpdates = (username: string, setLatex: (latex: string) => void): LiveUpdateHook => {
+const useLiveUpdates = (): LiveUpdateHook => {
   const [token, setToken] = useState<Token>({
     appToken: '',
     strokesSessionId: '',
@@ -100,33 +100,34 @@ const useLiveUpdates = (username: string, setLatex: (latex: string) => void): Li
   useEffect(getToken, [getToken])
 
   // useEffect to handle strokes changes
-  const updateStrokes = useCallback(
-    (strokes: Strokes) => {
-      // Cleanup previous actions
-      if (abortControllerRef.current) abortControllerRef.current.abort()
-      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
+  const updateStrokes: (strokes: Strokes) => Promise<string> = useCallback(
+    (strokes: Strokes) =>
+      new Promise((resolve, reject) => {
+        // Cleanup previous actions
+        if (abortControllerRef.current) abortControllerRef.current.abort()
+        if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current)
 
-      // Setup for new action
-      abortControllerRef.current = new AbortController()
-      const { signal } = abortControllerRef.current
+        // Setup for new action
+        abortControllerRef.current = new AbortController()
+        const { signal } = abortControllerRef.current
 
-      // We use a timeout so that an API request is only sent once the person has stopped drawing for 300 ms.
-      // This prevents constant requests to the API which might cause the rate limit to be hit
-      timeoutIdRef.current = setTimeout(() => {
-        if (strokes.elements?.length === 0) {
-          setLatex('')
-          return
-        }
+        // We use a timeout so that an API request is only sent once the person has stopped drawing for 300 ms.
+        // This prevents constant requests to the API which might cause the rate limit to be hit
+        timeoutIdRef.current = setTimeout(() => {
+          if (strokes.elements?.length === 0) {
+            resolve('')
+            return
+          }
 
-        getLatexFromStrokes(token, strokes, signal)
-          .then(({ data }) => setLatex(data.latex_styled || '\\text{Failed to parse handwriting}'))
-          .catch((error: Error | AxiosError) => {
-            if (axios.isAxiosError(error) && error.response?.status === 401) getToken()
-            else console.error(error)
-          })
-      }, NO_STROKES_WAIT_DELAY)
-    },
-    [token, getToken, setLatex]
+          getLatexFromStrokes(token, strokes, signal)
+            .then(({ data }) => resolve(data.latex_styled || '\\text{Failed to parse handwriting}'))
+            .catch((error: Error | AxiosError) => {
+              if (axios.isAxiosError(error) && error.response?.status === 401) getToken()
+              else console.error(error)
+            })
+        }, NO_STROKES_WAIT_DELAY)
+      }),
+    [token, getToken]
   )
 
   // Cleanup on unmount
