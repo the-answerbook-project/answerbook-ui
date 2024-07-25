@@ -20,8 +20,8 @@ import QuestionHeader from './QuestionHeader'
 const MarkingPage: FC = () => {
   const { username = DEFAULT_TEST_USERNAME } = useParams()
   const { questions, questionsAreLoaded } = useQuestions()
-  const { lookupAnswer, answersAreLoaded } = useStudentAnswers(username)
-  const { lookupMark, saveMark, marksAreLoaded } = useStudentMarks(username)
+  const { lookupAnswer } = useStudentAnswers(username)
+  const { lookupMark, saveMark } = useStudentMarks(username)
 
   const handler = (v) => {}
 

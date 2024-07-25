@@ -1,6 +1,5 @@
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons'
 import { Select } from '@radix-ui/themes'
-import React, { ComponentProps, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { matchPath, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
