@@ -1,5 +1,6 @@
-import { Badge, Container, Flex, Section } from '@radix-ui/themes'
-import { isUndefined } from 'lodash'
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
+import { Badge, Button, Flex, Section } from '@radix-ui/themes'
+import { first, indexOf, isUndefined, last } from 'lodash'
 import React, { FC, ReactNode, useMemo } from 'react'
 import Select from 'react-select'
 
@@ -46,6 +47,9 @@ const Toolbar: FC<ToolbarProps> = ({ students, selected, onSelect }) => {
     onSelect(students.find((s) => s.username === newValue.value))
   }
 
+  const prev = () => onSelect(students[indexOf(students, selected) - 1])
+  const next = () => onSelect(students[indexOf(students, selected) + 1])
+
   const formatGroupLabel = (data): ReactNode => (
     <Flex justify="between">
       <span>{data.label}</span>
@@ -63,14 +67,30 @@ const Toolbar: FC<ToolbarProps> = ({ students, selected, onSelect }) => {
       width="100%"
       style={{ backgroundColor: 'var(--gray-8)', zIndex: 1000 }}
     >
-      <Container>
+      <Flex align="center" justify="center">
+        <Button
+          color="gray"
+          size="3"
+          disabled={isUndefined(selected) || selected === first(students)}
+          onClick={prev}
+        >
+          <ChevronLeftIcon />
+        </Button>
         <Select
           value={value}
           onChange={handleChange}
           options={groupedOptions}
           formatGroupLabel={formatGroupLabel}
-        ></Select>
-      </Container>
+        />
+        <Button
+          color="gray"
+          size="3"
+          disabled={isUndefined(selected) || selected === last(students)}
+          onClick={next}
+        >
+          <ChevronRightIcon />
+        </Button>
+      </Flex>
     </Section>
   )
 }
