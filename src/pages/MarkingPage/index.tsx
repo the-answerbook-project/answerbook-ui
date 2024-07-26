@@ -1,4 +1,5 @@
-import { Box, Card, Section as RadixUISection, Separator } from '@radix-ui/themes'
+import { ChevronUpIcon } from '@radix-ui/react-icons'
+import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useState } from 'react'
@@ -26,7 +27,19 @@ const MarkingPage: FC = () => {
   const handleStudentChange = (s: Student | undefined) => setStudent(s)
   const handler = (v) => {}
 
-  const Landing = () => <Card>Select a student from the menu above</Card>
+  const Landing = () => (
+    <Body>
+      <Box width="80%">
+        <Card>
+          <Flex py="8" gap="2" align="center" justify="center">
+            <ChevronUpIcon />
+            <Text color="gray">Select a student from the menu above to start marking</Text>
+            <ChevronUpIcon />
+          </Flex>
+        </Card>
+      </Box>
+    </Body>
+  )
 
   if (!questionsAreLoaded) return <div>Loading...</div>
   if (!questions) return <div>Failed to load questions</div>

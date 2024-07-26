@@ -76,18 +76,16 @@ const Toolbar: FC<ToolbarProps> = ({ students, selected, onSelect }) => {
         >
           <ChevronLeftIcon />
         </Button>
-        <Select
-          value={value}
-          onChange={handleChange}
-          options={groupedOptions}
-          formatGroupLabel={formatGroupLabel}
-        />
-        <Button
-          color="gray"
-          size="3"
-          disabled={isUndefined(selected) || selected === last(students)}
-          onClick={next}
-        >
+        <div style={{ width: '30%' }}>
+          <Select
+            placeholder={'Select a student...'}
+            value={value}
+            onChange={handleChange}
+            options={groupedOptions}
+            formatGroupLabel={formatGroupLabel}
+          />
+        </div>
+        <Button color="gray" size="3" disabled={selected === last(students)} onClick={next}>
           <ChevronRightIcon />
         </Button>
       </Flex>
