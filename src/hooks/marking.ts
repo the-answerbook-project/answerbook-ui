@@ -24,30 +24,6 @@ export const useStudents = () => {
   return { students, studentsAreLoaded }
 }
 
-export const useAnswers = (studentID: string) => {
-  const [answers, setAnswers] = useState<Answer[]>([])
-  const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
-  useEffect(() => {
-    axiosInstance
-      .get(routes.studentAnswers(studentID))
-      .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
-      .finally(() => setAnswersAreLoaded(true))
-  }, [studentID])
-
-  const answersLookup: AnswerMap = useMemo(
-    () => buildResourceLookupTable(answers, 'answer'),
-    [answers]
-  )
-
-  const lookupAnswer = useCallback(
-    (question: number, part: number, section: number, task: number) =>
-      answersLookup[question]?.[part]?.[section]?.[task] ?? '',
-    [answersLookup]
-  )
-
-  return { lookupAnswer, answersAreLoaded }
-}
-
 export const useQuestions = () => {
   const [questions, setQuestions] = useState<Record<number, Question>>()
   const [questionsAreLoaded, setQuestionsAreLoaded] = useState(false)
@@ -126,4 +102,28 @@ export const useMarks = () => {
   }
 
   return { lookupMark, marksAreLoaded, saveMark }
+}
+
+export const useAnswers = () => {
+  const [answers, setAnswers] = useState<Answer[]>([])
+  const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.answers)
+      .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
+      .finally(() => setAnswersAreLoaded(true))
+  }, [])
+
+  const answersLookup: { [username: string]: AnswerMap } = useMemo(
+    () => mapValues(groupBy(answers, 'username'), (as) => buildResourceLookupTable(as, 'answer')),
+    [answers]
+  )
+
+  const lookupAnswer = useCallback(
+    (student: string, question: number, part: number, section: number, task: number) =>
+      answersLookup[student]?.[question]?.[part]?.[section]?.[task] ?? '',
+    [answersLookup]
+  )
+
+  return { lookupAnswer, answersAreLoaded }
 }

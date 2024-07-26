@@ -8,7 +8,7 @@ import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
-import { useMarks, useQuestions, useStudents } from '../../hooks/marking'
+import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import { parseAnswer } from '../../utils/answers'
 import MarkInputPanel from './MarkInputPanel'
@@ -20,6 +20,7 @@ const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
   const { students, studentsAreLoaded } = useStudents()
   const { lookupMark, marksAreLoaded } = useMarks()
+  const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
 
   const handleStudentChange = (s: Student | undefined) => setStudent(s)
@@ -64,8 +65,13 @@ const MarkingPage: FC = () => {
                             >
                               {section.tasks.map((task, t) => {
                                 const taskID = t + 1
-                                // const answer = lookupAnswer(questionID, partID, sectionID, taskID)
-                                const answer = undefined
+                                const answer = lookupAnswer(
+                                  student.username,
+                                  questionID,
+                                  partID,
+                                  sectionID,
+                                  taskID
+                                )
                                 if (!answer) return <NoAnswerBanner key={t} />
                                 return (
                                   <TaskFactory
