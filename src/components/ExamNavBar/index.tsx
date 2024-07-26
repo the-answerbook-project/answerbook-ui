@@ -8,7 +8,7 @@ interface NavBarProps {
   questionCount: number
 }
 
-const NavBar: FC<NavBarProps> = ({ questionCount }) => {
+const ExamNavBar: FC<NavBarProps> = ({ questionCount }) => {
   const { pathname } = useLocation()
 
   const { username = DEFAULT_TEST_USERNAME } = useParams()
@@ -41,4 +41,4 @@ const NavBar: FC<NavBarProps> = ({ questionCount }) => {
   )
 }
 
-export default NavBar
+export default ExamNavBar
