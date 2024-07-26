@@ -1,14 +1,30 @@
 import { instanceToPlain, plainToInstance } from 'class-transformer'
-import { mapValues } from 'lodash'
+import { groupBy, mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
 import { Answer, AnswerMap, Question } from '../types/exam'
-import { MarkMap, MarkRoot } from '../types/marking'
+import { MarkMap, MarkRoot, Student } from '../types/marking'
 import { buildResourceLookupTable } from '../utils/answers'
 
-export const useStudentAnswers = (studentID: string) => {
+export const useStudents = () => {
+  const [students, setStudents] = useState<Student[]>([])
+  const [studentsAreLoaded, setStudentsAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.students)
+      .then(({ data }) => {
+        console.log(data)
+        setStudents(data.map((d) => plainToInstance(Student, d)))
+      })
+      .finally(() => setStudentsAreLoaded(true))
+  }, [])
+
+  return { students, studentsAreLoaded }
+}
+
+export const useAnswers = (studentID: string) => {
   const [answers, setAnswers] = useState<Answer[]>([])
   const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
   useEffect(() => {
@@ -71,6 +87,42 @@ export const useStudentMarks = (studentID: string) => {
           return [...otherMarks, newMark]
         })
       })
+  }
+
+  return { lookupMark, marksAreLoaded, saveMark }
+}
+
+export const useMarks = () => {
+  const [marks, setMarks] = useState<MarkRoot[]>([])
+  const [marksAreLoaded, setMarksAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.marks)
+      .then(({ data }) => setMarks(data.map((d) => plainToInstance(MarkRoot, d))))
+      .finally(() => setMarksAreLoaded(true))
+  }, [])
+
+  const marksLookup: { [username: string]: MarkMap } = useMemo(
+    () => mapValues(groupBy(marks, 'username'), (ms) => buildResourceLookupTable(ms)),
+    [marks]
+  )
+
+  const lookupMark = useCallback(
+    (student: string, question: number, part: number, section: number) =>
+      marksLookup[student]?.[question]?.[part]?.[section],
+    [marksLookup]
+  )
+
+  function saveMark(newMark: MarkRoot) {
+    // axiosInstance
+    //   .post(routes.studentMarks(studentID), instanceToPlain(newMark))
+    //   .then(({ data }) => {
+    //     const newMark = plainToInstance(MarkRoot, data)
+    //     setMarks((ms) => {
+    //       const otherMarks = ms.filter((m) => m.id !== newMark.id)
+    //       return [...otherMarks, newMark]
+    //     })
+    //   })
   }
 
   return { lookupMark, marksAreLoaded, saveMark }
