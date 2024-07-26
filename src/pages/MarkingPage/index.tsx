@@ -19,7 +19,7 @@ import Toolbar from './Toolbar'
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
   const { students, studentsAreLoaded } = useStudents()
-  const { lookupMark, marksAreLoaded } = useMarks()
+  const { lookupMark, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
 
@@ -87,12 +87,13 @@ const MarkingPage: FC = () => {
                               })}
 
                               <MarkInputPanel
+                                username={student.username}
                                 question={questionID}
                                 part={partID}
                                 section={sectionID}
                                 currentMark={mark}
                                 maximumMark={section.maximumMark}
-                                onSave={() => {}}
+                                onSave={saveMark}
                               />
                               {i + 1 !== Object.keys(part.sections).length && (
                                 <Separator size="4" />

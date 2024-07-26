@@ -36,38 +36,6 @@ export const useQuestions = () => {
   return { questions, questionsAreLoaded }
 }
 
-export const useStudentMarks = (studentID: string) => {
-  const [marks, setMarks] = useState<MarkRoot[]>([])
-  const [marksAreLoaded, setMarksAreLoaded] = useState(false)
-  useEffect(() => {
-    axiosInstance
-      .get(routes.studentMarks(studentID))
-      .then(({ data }) => setMarks(data.map((d) => plainToInstance(MarkRoot, d))))
-      .finally(() => setMarksAreLoaded(true))
-  }, [studentID])
-
-  const marksLookup: MarkMap = useMemo(() => buildResourceLookupTable(marks), [marks])
-
-  const lookupMark = useCallback(
-    (question: number, part: number, section: number) => marksLookup[question]?.[part]?.[section],
-    [marksLookup]
-  )
-
-  function saveMark(newMark: MarkRoot) {
-    axiosInstance
-      .post(routes.studentMarks(studentID), instanceToPlain(newMark))
-      .then(({ data }) => {
-        const newMark = plainToInstance(MarkRoot, data)
-        setMarks((ms) => {
-          const otherMarks = ms.filter((m) => m.id !== newMark.id)
-          return [...otherMarks, newMark]
-        })
-      })
-  }
-
-  return { lookupMark, marksAreLoaded, saveMark }
-}
-
 export const useMarks = () => {
   const [marks, setMarks] = useState<MarkRoot[]>([])
   const [marksAreLoaded, setMarksAreLoaded] = useState(false)
@@ -90,15 +58,13 @@ export const useMarks = () => {
   )
 
   function saveMark(newMark: MarkRoot) {
-    // axiosInstance
-    //   .post(routes.studentMarks(studentID), instanceToPlain(newMark))
-    //   .then(({ data }) => {
-    //     const newMark = plainToInstance(MarkRoot, data)
-    //     setMarks((ms) => {
-    //       const otherMarks = ms.filter((m) => m.id !== newMark.id)
-    //       return [...otherMarks, newMark]
-    //     })
-    //   })
+    axiosInstance.post(routes.marks, instanceToPlain(newMark)).then(({ data }) => {
+      const newMark = plainToInstance(MarkRoot, data)
+      setMarks((ms) => {
+        const otherMarks = ms.filter((m) => m.id !== newMark.id)
+        return [...otherMarks, newMark]
+      })
+    })
   }
 
   return { lookupMark, marksAreLoaded, saveMark }
