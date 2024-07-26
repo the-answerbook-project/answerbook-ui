@@ -14,10 +14,7 @@ export const useStudents = () => {
   useEffect(() => {
     axiosInstance
       .get(routes.students)
-      .then(({ data }) => {
-        console.log(data)
-        setStudents(data.map((d) => plainToInstance(Student, d)))
-      })
+      .then(({ data }) => setStudents(data.map((d) => plainToInstance(Student, d))))
       .finally(() => setStudentsAreLoaded(true))
   }, [])
 
