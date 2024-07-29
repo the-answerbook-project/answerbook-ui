@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
-import ExamNavBar from '../../components/ExamNavBar'
+import ExamNavBar from '../../components/topBars/ExamNavBar'
 import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 
 describe('NavBar', () => {

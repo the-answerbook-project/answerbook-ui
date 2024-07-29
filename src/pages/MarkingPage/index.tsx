@@ -9,13 +9,13 @@ import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
+import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import { parseAnswer } from '../../utils/answers'
 import MarkInputPanel from './MarkInputPanel'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
-import Toolbar from './Toolbar'
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
@@ -24,7 +24,7 @@ const MarkingPage: FC = () => {
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
 
-  const handleStudentChange = (s: Student | undefined) => setStudent(s)
+  const onSelect = (s: Student | undefined) => setStudent(s)
   const handler = (v) => {}
 
   const Landing = () => (
@@ -46,7 +46,7 @@ const MarkingPage: FC = () => {
 
   return (
     <RadixUISection pt="9">
-      <Toolbar students={students} selected={student} onSelect={handleStudentChange} />
+      <MarkingToolbar candidateSelectorProps={{ students, student, onSelect }} />
       {!student ? (
         <Landing />
       ) : (
