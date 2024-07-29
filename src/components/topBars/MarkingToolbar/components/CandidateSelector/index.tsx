@@ -2,9 +2,10 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 import { Badge, Button, Flex } from '@radix-ui/themes'
 import { first, indexOf, isUndefined, last } from 'lodash'
 import React, { FC, ReactNode, useMemo } from 'react'
-import Select from 'react-select'
+import Select, { StylesConfig } from 'react-select'
 
 import { Student } from '../../../../../types/marking'
+import './index.css'
 
 type Option = {
   value: string
@@ -59,9 +60,24 @@ const CandidateSelector: FC<CandidateSelectorProps> = ({ students, student, onSe
     </Flex>
   )
 
+  const selectStyles: StylesConfig = {
+    control: (baseStyles, state) => ({
+      ...baseStyles,
+      border: 'none',
+      height: '100%',
+      borderRadius: 'none',
+    }),
+    container: (baseStyles, state) => ({
+      ...baseStyles,
+      height: 'var(--space-7)',
+      width: '30%',
+    }),
+  }
+
   return (
     <Flex align="center" justify="center">
       <Button
+        className="left-arrow-button"
         color="gray"
         size="3"
         disabled={isUndefined(student) || student === first(students)}
@@ -69,16 +85,21 @@ const CandidateSelector: FC<CandidateSelectorProps> = ({ students, student, onSe
       >
         <ChevronLeftIcon />
       </Button>
-      <div style={{ width: '30%' }}>
-        <Select
-          placeholder={'Select a student...'}
-          value={value}
-          onChange={handleChange}
-          options={groupedOptions}
-          formatGroupLabel={formatGroupLabel}
-        />
-      </div>
-      <Button color="gray" size="3" disabled={student === last(students)} onClick={next}>
+      <Select
+        styles={selectStyles}
+        placeholder={'Select a student...'}
+        value={value}
+        onChange={handleChange}
+        options={groupedOptions}
+        formatGroupLabel={formatGroupLabel}
+      />
+      <Button
+        className="right-arrow-button"
+        color="gray"
+        size="3"
+        disabled={student === last(students)}
+        onClick={next}
+      >
         <ChevronRightIcon />
       </Button>
     </Flex>
