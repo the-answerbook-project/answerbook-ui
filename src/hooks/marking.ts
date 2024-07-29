@@ -43,9 +43,11 @@ export const useMarks = () => {
       .finally(() => setMarksAreLoaded(true))
   }, [])
 
+  const rawMarksTable = useMemo(() => groupBy(marks, 'username'), [marks])
+
   const marksLookup: { [username: string]: MarkMap } = useMemo(
-    () => mapValues(groupBy(marks, 'username'), (ms) => buildResourceLookupTable(ms)),
-    [marks]
+    () => mapValues(rawMarksTable, (ms) => buildResourceLookupTable(ms)),
+    [rawMarksTable]
   )
 
   const lookupMark = useCallback(
@@ -64,7 +66,7 @@ export const useMarks = () => {
     })
   }
 
-  return { lookupMark, marksAreLoaded, saveMark }
+  return { lookupMark, rawMarksTable, marksAreLoaded, saveMark }
 }
 
 export const useAnswers = () => {

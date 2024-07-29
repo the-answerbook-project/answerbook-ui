@@ -1,8 +1,8 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import { map, sum } from 'lodash'
-import React, { FC, useState } from 'react'
+import { map, mapValues, sum, sumBy, values } from 'lodash'
+import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
@@ -20,9 +20,14 @@ import QuestionHeader from './QuestionHeader'
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
   const { students, studentsAreLoaded } = useStudents()
-  const { lookupMark, saveMark, marksAreLoaded } = useMarks()
+  const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
+
+  const markingStatus = useMemo(() => {
+    const sectionsToMark = sumBy(values(questions), 'totalSections')
+    return mapValues(rawMarksTable, (ms) => sectionsToMark - ms.length)
+  }, [questions, rawMarksTable])
 
   const onSelect = (s: Student | undefined) => setStudent(s)
   const handler = (v) => {}
@@ -46,7 +51,7 @@ const MarkingPage: FC = () => {
 
   return (
     <RadixUISection pt="9">
-      <MarkingToolbar candidateSelectorProps={{ students, student, onSelect }} />
+      <MarkingToolbar candidateSelectorProps={{ students, student, markingStatus, onSelect }} />
       {!student ? (
         <Landing />
       ) : (

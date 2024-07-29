@@ -20,10 +20,16 @@ type GroupedOption = {
 export interface CandidateSelectorProps {
   students: Student[]
   student: Student | undefined
+  markingStatus: { [_: string]: number }
   onSelect: (student: Student | undefined) => void
 }
 
-const CandidateSelector: FC<CandidateSelectorProps> = ({ students, student, onSelect }) => {
+const CandidateSelector: FC<CandidateSelectorProps> = ({
+  students,
+  student,
+  markingStatus,
+  onSelect,
+}) => {
   const groupedOptions: GroupedOption[] = useMemo(
     () => [
       {
@@ -60,6 +66,18 @@ const CandidateSelector: FC<CandidateSelectorProps> = ({ students, student, onSe
     </Flex>
   )
 
+  const formatOptionLabel = (data): ReactNode => {
+    const sectionsRemaining = markingStatus[data.value]
+    return (
+      <Flex justify="between">
+        <span>{data.label}</span>
+        <Badge color={!sectionsRemaining ? 'green' : 'red'} variant="solid" radius="full">
+          {sectionsRemaining}
+        </Badge>
+      </Flex>
+    )
+  }
+
   const selectStyles: StylesConfig = {
     control: (baseStyles, state) => ({
       ...baseStyles,
@@ -92,6 +110,7 @@ const CandidateSelector: FC<CandidateSelectorProps> = ({ students, student, onSe
         onChange={handleChange}
         options={groupedOptions}
         formatGroupLabel={formatGroupLabel}
+        formatOptionLabel={formatOptionLabel}
       />
       <Button
         className="right-arrow-button"
