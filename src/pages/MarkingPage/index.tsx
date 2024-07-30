@@ -1,7 +1,7 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import { map, mapValues, sum, sumBy, values } from 'lodash'
+import { keyBy, map, mapValues, sum, sumBy, values } from 'lodash'
 import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
@@ -26,8 +26,11 @@ const MarkingPage: FC = () => {
 
   const markingStatus = useMemo(() => {
     const sectionsToMark = sumBy(values(questions), 'totalSections')
-    return mapValues(rawMarksTable, (ms) => sectionsToMark - ms.length)
-  }, [questions, rawMarksTable])
+    return mapValues(
+      keyBy(students, 'username'),
+      ({ username }) => sectionsToMark - (rawMarksTable[username]?.length ?? 0)
+    )
+  }, [questions, rawMarksTable, students])
 
   const onSelect = (s: Student | undefined) => setStudent(s)
   const handler = (v) => {}
