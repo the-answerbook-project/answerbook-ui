@@ -1,35 +1,24 @@
 import { instanceToPlain, plainToInstance } from 'class-transformer'
-import { mapValues } from 'lodash'
+import { groupBy, mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
 import routes from '../api/routes'
 import { Answer, AnswerMap, Question } from '../types/exam'
-import { MarkMap, MarkRoot } from '../types/marking'
+import { MarkMap, MarkRoot, Student } from '../types/marking'
 import { buildResourceLookupTable } from '../utils/answers'
 
-export const useStudentAnswers = (studentID: string) => {
-  const [answers, setAnswers] = useState<Answer[]>([])
-  const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
+export const useStudents = () => {
+  const [students, setStudents] = useState<Student[]>([])
+  const [studentsAreLoaded, setStudentsAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.studentAnswers(studentID))
-      .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
-      .finally(() => setAnswersAreLoaded(true))
-  }, [studentID])
+      .get(routes.students)
+      .then(({ data }) => setStudents(data.map((d) => plainToInstance(Student, d))))
+      .finally(() => setStudentsAreLoaded(true))
+  }, [])
 
-  const answersLookup: AnswerMap = useMemo(
-    () => buildResourceLookupTable(answers, 'answer'),
-    [answers]
-  )
-
-  const lookupAnswer = useCallback(
-    (question: number, part: number, section: number, task: number) =>
-      answersLookup[question]?.[part]?.[section]?.[task] ?? '',
-    [answersLookup]
-  )
-
-  return { lookupAnswer, answersAreLoaded }
+  return { students, studentsAreLoaded }
 }
 
 export const useQuestions = () => {
@@ -44,34 +33,62 @@ export const useQuestions = () => {
   return { questions, questionsAreLoaded }
 }
 
-export const useStudentMarks = (studentID: string) => {
+export const useMarks = () => {
   const [marks, setMarks] = useState<MarkRoot[]>([])
   const [marksAreLoaded, setMarksAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.studentMarks(studentID))
+      .get(routes.marks)
       .then(({ data }) => setMarks(data.map((d) => plainToInstance(MarkRoot, d))))
       .finally(() => setMarksAreLoaded(true))
-  }, [studentID])
+  }, [])
 
-  const marksLookup: MarkMap = useMemo(() => buildResourceLookupTable(marks), [marks])
+  const rawMarksTable = useMemo(() => groupBy(marks, 'username'), [marks])
+
+  const marksLookup: { [username: string]: MarkMap } = useMemo(
+    () => mapValues(rawMarksTable, (ms) => buildResourceLookupTable(ms)),
+    [rawMarksTable]
+  )
 
   const lookupMark = useCallback(
-    (question: number, part: number, section: number) => marksLookup[question]?.[part]?.[section],
+    (student: string, question: number, part: number, section: number) =>
+      marksLookup[student]?.[question]?.[part]?.[section],
     [marksLookup]
   )
 
   function saveMark(newMark: MarkRoot) {
-    axiosInstance
-      .post(routes.studentMarks(studentID), instanceToPlain(newMark))
-      .then(({ data }) => {
-        const newMark = plainToInstance(MarkRoot, data)
-        setMarks((ms) => {
-          const otherMarks = ms.filter((m) => m.id !== newMark.id)
-          return [...otherMarks, newMark]
-        })
+    axiosInstance.post(routes.marks, instanceToPlain(newMark)).then(({ data }) => {
+      const newMark = plainToInstance(MarkRoot, data)
+      setMarks((ms) => {
+        const otherMarks = ms.filter((m) => m.id !== newMark.id)
+        return [...otherMarks, newMark]
       })
+    })
   }
 
-  return { lookupMark, marksAreLoaded, saveMark }
+  return { lookupMark, rawMarksTable, marksAreLoaded, saveMark }
+}
+
+export const useAnswers = () => {
+  const [answers, setAnswers] = useState<Answer[]>([])
+  const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
+  useEffect(() => {
+    axiosInstance
+      .get(routes.answers)
+      .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
+      .finally(() => setAnswersAreLoaded(true))
+  }, [])
+
+  const answersLookup: { [username: string]: AnswerMap } = useMemo(
+    () => mapValues(groupBy(answers, 'username'), (as) => buildResourceLookupTable(as, 'answer')),
+    [answers]
+  )
+
+  const lookupAnswer = useCallback(
+    (student: string, question: number, part: number, section: number, task: number) =>
+      answersLookup[student]?.[question]?.[part]?.[section]?.[task] ?? '',
+    [answersLookup]
+  )
+
+  return { lookupAnswer, answersAreLoaded }
 }

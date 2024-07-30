@@ -11,6 +11,7 @@ import { MarkRoot } from '../../../types/marking'
 import './index.css'
 
 interface MarkInputPanelProps {
+  username: string
   question: number
   part: number
   section: number
@@ -23,6 +24,7 @@ const NO_MARK = 'No mark'
 const NO_FEEDBACK = 'No comment'
 
 const MarkInputPanel: FC<MarkInputPanelProps> = ({
+  username,
   question,
   part,
   section,
@@ -31,6 +33,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
   onSave,
 }) => {
   const initMark = {
+    username,
     question,
     part,
     section,

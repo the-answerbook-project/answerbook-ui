@@ -15,6 +15,7 @@ export class Mark {
 export class MarkRoot {
   @Exclude({ toPlainOnly: true })
   id: number
+  username: string
   question: number
   part: number
   section: number
@@ -38,3 +39,12 @@ export class MarkRoot {
 }
 
 export type MarkMap = Record<number, Record<number, Record<number, MarkRoot>>>
+
+export class Student {
+  id: number
+  username: string
+  firstname: string
+  lastname: string
+  cid: string
+  degreeCode: string
+}

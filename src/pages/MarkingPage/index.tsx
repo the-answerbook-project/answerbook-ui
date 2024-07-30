@@ -1,104 +1,137 @@
-import { Box, Separator } from '@radix-ui/themes'
+import { ChevronUpIcon } from '@radix-ui/react-icons'
+import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
-import { map, sum } from 'lodash'
-import React, { FC } from 'react'
-import { useParams } from 'react-router-dom'
+import { keyBy, map, mapValues, sum, sumBy, values } from 'lodash'
+import React, { FC, useMemo, useState } from 'react'
 
-import UserSelector from '../../components/Selection/UserSelector'
 import Body from '../../components/pageStructure/Body'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
-import { useQuestions, useStudentAnswers, useStudentMarks } from '../../hooks/marking'
+import MarkingToolbar from '../../components/topBars/MarkingToolbar'
+import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
+import { Student } from '../../types/marking'
 import { parseAnswer } from '../../utils/answers'
-import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 import MarkInputPanel from './MarkInputPanel'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
 
 const MarkingPage: FC = () => {
-  const { username = DEFAULT_TEST_USERNAME } = useParams()
   const { questions, questionsAreLoaded } = useQuestions()
-  const { lookupAnswer } = useStudentAnswers(username)
-  const { lookupMark, saveMark } = useStudentMarks(username)
+  const { students, studentsAreLoaded } = useStudents()
+  const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
+  const { lookupAnswer, answersAreLoaded } = useAnswers()
+  const [student, setStudent] = useState<Student>()
 
+  const markingStatus = useMemo(() => {
+    const sectionsToMark = sumBy(values(questions), 'totalSections')
+    return mapValues(
+      keyBy(students, 'username'),
+      ({ username }) => sectionsToMark - (rawMarksTable[username]?.length ?? 0)
+    )
+  }, [questions, rawMarksTable, students])
+
+  const onSelect = (s: Student | undefined) => setStudent(s)
   const handler = (v) => {}
+
+  const Landing = () => (
+    <Body>
+      <Box width="80%">
+        <Card>
+          <Flex py="8" gap="2" align="center" justify="center">
+            <ChevronUpIcon />
+            <Text color="gray">Select a student from the menu above to start marking</Text>
+            <ChevronUpIcon />
+          </Flex>
+        </Card>
+      </Box>
+    </Body>
+  )
 
   if (!questionsAreLoaded) return <div>Loading...</div>
   if (!questions) return <div>Failed to load questions</div>
 
   return (
-    <>
-      <Box>
-        <Body>
-          <UserSelector />
-        </Body>
-      </Box>
-      {Object.entries(questions).map(([questionIDString, question]) => {
-        const questionID = Number(questionIDString)
-        return (
-          <Box key={questionIDString}>
-            <QuestionHeader number={questionIDString} title={question.title} />
-            <Body>
-              <Question instructions={question.instructions}>
-                {Object.entries(question.parts).map(([partIDString, part]) => {
-                  const partID = Number(partIDString)
-                  return (
-                    <Part
-                      key={partID}
-                      partId={partID}
-                      description={part.instructions}
-                      marksContribution={sum(map(part.sections, 'maximumMark'))}
-                      onSave={handler}
-                    >
-                      {Object.entries(part.sections).map(([sectionIDString, section], i) => {
-                        const sectionID = Number(sectionIDString)
-                        const mark = lookupMark(questionID, partID, sectionID)
-                        return (
-                          <Section
-                            key={sectionID}
-                            sectionId={sectionID}
-                            description={section.instructions}
-                          >
-                            {section.tasks.map((task, t) => {
-                              const taskID = t + 1
-                              const answer = lookupAnswer(questionID, partID, sectionID, taskID)
-                              if (!answer) return <NoAnswerBanner key={t} />
-                              return (
-                                <TaskFactory
-                                  key={`${sectionID}-${taskID}`}
-                                  {...({
-                                    disabled: true,
-                                    answer: parseAnswer(answer, task.type),
-                                    onAnswerUpdate: handler,
-                                    ...instanceToPlain(task),
-                                  } as TaskProps)}
-                                />
-                              )
-                            })}
+    <RadixUISection pt="9">
+      <MarkingToolbar candidateSelectorProps={{ students, student, markingStatus, onSelect }} />
+      {!student ? (
+        <Landing />
+      ) : (
+        Object.entries(questions).map(([questionIDString, question]) => {
+          const questionID = Number(questionIDString)
+          return (
+            <Box key={questionIDString}>
+              <QuestionHeader number={questionIDString} title={question.title} />
+              <Body>
+                <Question instructions={question.instructions}>
+                  {Object.entries(question.parts).map(([partIDString, part]) => {
+                    const partID = Number(partIDString)
+                    return (
+                      <Part
+                        key={partID}
+                        partId={partID}
+                        description={part.instructions}
+                        marksContribution={sum(map(part.sections, 'maximumMark'))}
+                        onSave={handler}
+                      >
+                        {Object.entries(part.sections).map(([sectionIDString, section], i) => {
+                          const sectionID = Number(sectionIDString)
+                          const mark = lookupMark(student.username, questionID, partID, sectionID)
+                          return (
+                            <Section
+                              key={sectionID}
+                              sectionId={sectionID}
+                              description={section.instructions}
+                            >
+                              {section.tasks.map((task, t) => {
+                                const taskID = t + 1
+                                const answer = lookupAnswer(
+                                  student.username,
+                                  questionID,
+                                  partID,
+                                  sectionID,
+                                  taskID
+                                )
+                                if (!answer) return <NoAnswerBanner key={t} />
+                                return (
+                                  <TaskFactory
+                                    key={`${sectionID}-${taskID}`}
+                                    {...({
+                                      disabled: true,
+                                      answer: parseAnswer(answer, task.type),
+                                      onAnswerUpdate: handler,
+                                      ...instanceToPlain(task),
+                                    } as TaskProps)}
+                                  />
+                                )
+                              })}
 
-                            <MarkInputPanel
-                              question={questionID}
-                              part={partID}
-                              section={sectionID}
-                              currentMark={mark}
-                              maximumMark={section.maximumMark}
-                              onSave={saveMark}
-                            />
-                            {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
-                          </Section>
-                        )
-                      })}
-                    </Part>
-                  )
-                })}
-              </Question>
-            </Body>
-          </Box>
-        )
-      })}
-    </>
+                              <MarkInputPanel
+                                username={student.username}
+                                question={questionID}
+                                part={partID}
+                                section={sectionID}
+                                currentMark={mark}
+                                maximumMark={section.maximumMark}
+                                onSave={saveMark}
+                              />
+                              {i + 1 !== Object.keys(part.sections).length && (
+                                <Separator size="4" />
+                              )}
+                            </Section>
+                          )
+                        })}
+                      </Part>
+                    )
+                  })}
+                </Question>
+              </Body>
+            </Box>
+          )
+        })
+      )}
+    </RadixUISection>
   )
 }
 

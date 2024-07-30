@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
-import NavBar from '../../components/NavBar'
+import ExamNavBar from '../../components/topBars/ExamNavBar'
 import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 
 describe('NavBar', () => {
@@ -19,7 +19,7 @@ describe('NavBar', () => {
 
   it('renders with correct links', () => {
     const questionCount = 5
-    renderWithRouter(<NavBar questionCount={questionCount} />)
+    renderWithRouter(<ExamNavBar questionCount={questionCount} />)
 
     // Check for static link
     const frontCoverLink = screen.getByRole('link', { name: /frontcover/i })
@@ -36,7 +36,7 @@ describe('NavBar', () => {
 
   it('highlights the correct active link based on the current path', () => {
     const activeRoute = `/questions/3/${DEFAULT_TEST_USERNAME}`
-    renderWithRouter(<NavBar questionCount={5} />, { route: activeRoute })
+    renderWithRouter(<ExamNavBar questionCount={5} />, { route: activeRoute })
 
     // Check for active class on the correct link
     const activeLink = screen.getByRole('link', { name: /question 3/i })
@@ -46,7 +46,7 @@ describe('NavBar', () => {
   })
 
   it('renders without crashing with zero questionCount', () => {
-    renderWithRouter(<NavBar questionCount={0} />)
+    renderWithRouter(<ExamNavBar questionCount={0} />)
 
     // Check for static link
     const frontCoverLink = screen.getByRole('link', { name: /frontcover/i })

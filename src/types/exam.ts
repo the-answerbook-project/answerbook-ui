@@ -1,5 +1,6 @@
 import { Transform, Type } from 'class-transformer'
 import { addMinutes } from 'date-fns'
+import { reduce, size } from 'lodash'
 
 import { TaskType } from '../components/questionStructure/Task/constants'
 import { stringToEnumValue } from '../utils/types'
@@ -38,6 +39,10 @@ export class Question {
   title: string
   showPartWeights: boolean
   parts: Record<number, Part>
+
+  get totalSections() {
+    return reduce(this.parts, (sum, p, _) => sum + size(p.sections), 0)
+  }
 }
 
 export class Rubric {
