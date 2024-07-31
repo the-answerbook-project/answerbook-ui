@@ -1,6 +1,8 @@
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons'
 import {
   Box,
   Button,
+  Callout,
   Card,
   Container,
   Flex,
@@ -14,7 +16,7 @@ import React, { FC, useState } from 'react'
 import { useAuthentication } from '../hooks/authentication'
 
 const LoginPage: FC = () => {
-  const { getToken } = useAuthentication()
+  const { authError, getToken } = useAuthentication()
   const initialCreds = { username: '', password: '' }
   const [credentials, setCredentials] = useState(initialCreds)
 
@@ -58,6 +60,14 @@ const LoginPage: FC = () => {
                   Log in
                 </Button>
               </Flex>
+              {authError && (
+                <Callout.Root color="red">
+                  <Callout.Icon>
+                    <ExclamationTriangleIcon />
+                  </Callout.Icon>
+                  <Callout.Text>{authError}</Callout.Text>
+                </Callout.Root>
+              )}
             </Flex>
           </Box>
         </Card>
