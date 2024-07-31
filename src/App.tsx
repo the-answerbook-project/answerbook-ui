@@ -1,6 +1,7 @@
 import React from 'react'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import AuthWrapper from './pages/AuthWrapper'
 import ExamRoot from './pages/ExamRoot'
 import FrontCover from './pages/FrontCover'
 import LoginPage from './pages/LoginPage'
@@ -9,8 +10,12 @@ import QuestionPage from './pages/QuestionPage'
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <ExamRoot />,
+    path: ':year/:moduleCode/:qualifier/',
+    element: (
+      <AuthWrapper>
+        <ExamRoot />
+      </AuthWrapper>
+    ),
     children: [
       {
         index: true,
@@ -28,7 +33,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'marking',
-    element: <MarkingPage />,
+    element: (
+      <AuthWrapper>
+        <MarkingPage />
+      </AuthWrapper>
+    ),
   },
   {
     path: ':year/:moduleCode/:qualifier/login',

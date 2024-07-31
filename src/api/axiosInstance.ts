@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } from 'lodash'
 
+import { getToken } from '../hooks/authentication'
+
 const convertKeys = (obj, convertFunc) => {
   if (isArray(obj)) {
     return obj.map((item) => convertKeys(item, convertFunc))
@@ -18,9 +20,8 @@ const axiosInstance = axios.create({
 })
 
 axiosInstance.interceptors.request.use((config) => {
-  if (config.data) {
-    config.data = convertKeys(config.data, snakeCase)
-  }
+  if (config.data) config.data = convertKeys(config.data, snakeCase)
+  if (getToken()) config.headers.set('Authentication', `Bearer: ${getToken()}`)
   return config
 })
 
