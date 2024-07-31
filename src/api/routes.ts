@@ -4,6 +4,7 @@ const routes = {
   students: '/students',
   answers: '/answers',
   marks: '/marks',
+  login: (assesmentID: string) => `/${assesmentID}/auth/login`,
   studentMarks: (studentID: string) => `/${studentID}/marks`,
   question: (number: number) => `/questions/${number}`,
   questionAnswers: (number: number, username: string) => `/answers/${username}/question/${number}`,

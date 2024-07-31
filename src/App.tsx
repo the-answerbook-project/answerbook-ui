@@ -3,6 +3,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import ExamRoot from './pages/ExamRoot'
 import FrontCover from './pages/FrontCover'
+import LoginPage from './pages/LoginPage'
 import MarkingPage from './pages/MarkingPage'
 import QuestionPage from './pages/QuestionPage'
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: 'marking',
     element: <MarkingPage />,
+  },
+  {
+    path: ':year/:moduleCode/:qualifier/login',
+    element: <LoginPage />,
   },
 ])
 
