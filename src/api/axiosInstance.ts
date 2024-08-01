@@ -3,6 +3,8 @@ import { camelCase, isArray, isObject, mapKeys, mapValues, snakeCase } from 'lod
 
 import { getToken } from '../hooks/authentication'
 
+export const BASE_URL = process.env.REACT_APP_API_ENTRYPOINT
+
 const convertKeys = (obj, convertFunc) => {
   if (isArray(obj)) {
     return obj.map((item) => convertKeys(item, convertFunc))
@@ -16,7 +18,7 @@ const convertKeys = (obj, convertFunc) => {
 }
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_ENTRYPOINT,
+  baseURL: BASE_URL,
 })
 
 axiosInstance.interceptors.request.use((config) => {

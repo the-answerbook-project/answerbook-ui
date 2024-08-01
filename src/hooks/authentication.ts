@@ -1,7 +1,8 @@
+import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { useState } from 'react'
 
-import axiosInstance from '../api/axiosInstance'
+import { BASE_URL } from '../api/axiosInstance'
 import routes from '../api/routes'
 import { useAssessmentParams } from './assessmentParams'
 
@@ -37,9 +38,12 @@ export const useAuthentication = () => {
   }
 
   function fetchToken(credentials: Credentials) {
-    axiosInstance
-      .post(routes.login(assessmentID), credentials)
-      .then(({ data }) => saveToken(data['accessToken']))
+    const form = new FormData()
+    form.set('username', credentials.username)
+    form.set('password', credentials.password)
+    axios
+      .post(`${BASE_URL}${routes.login(assessmentID)}`, form)
+      .then(({ data }) => saveToken(data.access_token))
       .catch((error) => setAuthError(error?.response?.data?.detail ?? 'Authentication failed'))
   }
 
