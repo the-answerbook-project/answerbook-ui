@@ -16,7 +16,7 @@ import React, { FC, useState } from 'react'
 import { useAuthentication } from '../hooks/authentication'
 
 const LoginPage: FC = () => {
-  const { authError, getToken } = useAuthentication()
+  const { authError, requestToken } = useAuthentication()
   const initialCreds = { username: '', password: '' }
   const [credentials, setCredentials] = useState(initialCreds)
 
@@ -55,7 +55,7 @@ const LoginPage: FC = () => {
               <Flex justify="end">
                 <Button
                   disabled={!credentials.username || !credentials.password}
-                  onClick={() => getToken(credentials)}
+                  onClick={() => requestToken(credentials)}
                 >
                   Log in
                 </Button>

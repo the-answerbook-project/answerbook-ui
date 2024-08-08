@@ -23,7 +23,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config) => {
   if (config.data) config.data = convertKeys(config.data, snakeCase)
-  if (getToken()) config.headers.set('Authentication', `Bearer: ${getToken()}`)
+  if (getToken()) config.headers.setAuthorization(`Bearer ${getToken()}`)
   return config
 })
 

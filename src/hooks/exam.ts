@@ -7,6 +7,7 @@ import routes from '../api/routes'
 import { Answer, AnswerMap, Question, Summary } from '../types/exam'
 import { buildResourceLookupTable } from '../utils/answers'
 import { DEFAULT_TEST_USERNAME } from '../utils/globalConstants'
+import { useAssessmentParams } from './assessmentParams'
 
 export const useQuestion = (number: number | undefined) => {
   const [question, setQuestion] = useState<Question>()
@@ -66,13 +67,15 @@ export const useQuestionAnswers = (number: number | undefined) => {
 }
 
 export const useAssessmentSummary = () => {
+  const { assessmentID } = useAssessmentParams()
   const [summary, setSummary] = useState<Summary>()
   const [summaryIsLoaded, setSummaryIsLoaded] = useState(false)
   useEffect(() => {
+    if (!assessmentID) return
     axiosInstance
-      .get(routes.summary)
+      .get(routes.summary(assessmentID))
       .then(({ data }) => setSummary(plainToInstance(Summary, data)))
       .finally(() => setSummaryIsLoaded(true))
-  }, [])
+  }, [assessmentID])
   return { summary, summaryIsLoaded }
 }

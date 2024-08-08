@@ -1,5 +1,5 @@
 const routes = {
-  summary: '/summary',
+  summary: (assessmentID: string) => `/${assessmentID}/summary`,
   questions: '/questions',
   students: '/students',
   answers: '/answers',
