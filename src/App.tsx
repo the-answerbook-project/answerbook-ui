@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         element: <FrontCover />,
       },
       {
-        path: 'questions/:questionId/:username',
+        path: 'questions/:number',
         element: <QuestionPage />,
       },
     ],

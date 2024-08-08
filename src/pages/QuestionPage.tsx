@@ -2,9 +2,8 @@ import { Button, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC } from 'react'
-import { matchPath, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import UserSelector from '../components/Selection/UserSelector'
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
 import Part from '../components/questionStructure/Part'
@@ -15,29 +14,25 @@ import { useQuestion, useQuestionAnswers } from '../hooks/exam'
 import { parseAnswer } from '../utils/answers'
 
 const QuestionPage: FC = () => {
-  const { pathname } = useLocation()
-  const pathMatch = matchPath({ path: '/questions/:number/:username' }, pathname)
+  const { number } = useParams()
 
-  const { question, questionIsLoaded } = useQuestion(Number(pathMatch?.params?.number))
-  const { lookupAnswer, setAnswer, saveAnswers } = useQuestionAnswers(
-    Number(pathMatch?.params?.number)
-  )
+  const { question, questionIsLoaded } = useQuestion(Number(number))
+  const { lookupAnswer, setAnswer, saveAnswers } = useQuestionAnswers(Number(number))
 
   const handlerFactory =
     (question: number, part: number, section: number, task: number) => (newAnswer: string) => {
       setAnswer(question, part, section, task, newAnswer)
     }
 
-  if (!pathMatch || !questionIsLoaded) return <div>Placeholder</div>
+  if (!number || !questionIsLoaded) return <div>Placeholder</div>
   if (question === undefined) return <div>404</div>
 
-  const questionID = Number(pathMatch.params.number)
+  const questionID = Number(number)
 
   return (
     <>
-      <Header primaryText={`Question ${pathMatch.params.number}`} secondaryText={question.title} />
+      <Header primaryText={`Question ${number}`} secondaryText={question.title} />
       <Body>
-        <UserSelector />
         <Question instructions={question.instructions}>
           {Object.entries(question.parts).map(([partIDString, part]) => {
             const partID = Number(partIDString)
