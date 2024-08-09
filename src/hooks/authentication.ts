@@ -2,7 +2,6 @@ import axios from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { toPairs } from 'lodash'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import { BASE_URL } from '../api/axiosInstance'
 import routes from '../api/routes'
@@ -20,7 +19,6 @@ export function getToken() {
 }
 
 export const useAuthentication = () => {
-  const navigate = useNavigate()
   const { assessmentID } = useAssessmentParams()
   const [authError, setAuthError] = useState()
 
@@ -43,11 +41,10 @@ export const useAuthentication = () => {
   function requestToken(credentials: Credentials) {
     const form = new FormData()
     toPairs(credentials).forEach(([k, v]) => form.set(k, v))
-    axios
+    return axios
       .post(`${BASE_URL}${routes.login(assessmentID)}`, form)
       .then(({ data }) => {
         saveToken(data.access_token)
-        navigate('../frontcover', { relative: 'path' })
       })
       .catch((error) => setAuthError(error?.response?.data?.detail ?? 'Authentication failed'))
   }
