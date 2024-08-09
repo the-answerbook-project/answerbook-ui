@@ -7,41 +7,45 @@ import routes from '../api/routes'
 import { Answer, AnswerMap, Question } from '../types/exam'
 import { MarkMap, MarkRoot, Student } from '../types/marking'
 import { buildResourceLookupTable } from '../utils/answers'
+import { useAssessmentParams } from './assessmentParams'
 
 export const useStudents = () => {
+  const { assessmentID } = useAssessmentParams()
   const [students, setStudents] = useState<Student[]>([])
   const [studentsAreLoaded, setStudentsAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.students)
+      .get(routes.students(assessmentID))
       .then(({ data }) => setStudents(data.map((d) => plainToInstance(Student, d))))
       .finally(() => setStudentsAreLoaded(true))
-  }, [])
+  }, [assessmentID])
 
   return { students, studentsAreLoaded }
 }
 
 export const useQuestions = () => {
+  const { assessmentID } = useAssessmentParams()
   const [questions, setQuestions] = useState<Record<number, Question>>()
   const [questionsAreLoaded, setQuestionsAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.questions)
+      .get(routes.questions(assessmentID))
       .then(({ data }) => setQuestions(mapValues(data, (q) => plainToInstance(Question, q))))
       .finally(() => setQuestionsAreLoaded(true))
-  }, [])
+  }, [assessmentID])
   return { questions, questionsAreLoaded }
 }
 
 export const useMarks = () => {
+  const { assessmentID } = useAssessmentParams()
   const [marks, setMarks] = useState<MarkRoot[]>([])
   const [marksAreLoaded, setMarksAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.marks)
+      .get(routes.marks(assessmentID))
       .then(({ data }) => setMarks(data.map((d) => plainToInstance(MarkRoot, d))))
       .finally(() => setMarksAreLoaded(true))
-  }, [])
+  }, [assessmentID])
 
   const rawMarksTable = useMemo(() => groupBy(marks, 'username'), [marks])
 
@@ -57,7 +61,7 @@ export const useMarks = () => {
   )
 
   function saveMark(newMark: MarkRoot) {
-    axiosInstance.post(routes.marks, instanceToPlain(newMark)).then(({ data }) => {
+    axiosInstance.post(routes.marks(assessmentID), instanceToPlain(newMark)).then(({ data }) => {
       const newMark = plainToInstance(MarkRoot, data)
       setMarks((ms) => {
         const otherMarks = ms.filter((m) => m.id !== newMark.id)
@@ -70,14 +74,15 @@ export const useMarks = () => {
 }
 
 export const useAnswers = () => {
+  const { assessmentID } = useAssessmentParams()
   const [answers, setAnswers] = useState<Answer[]>([])
   const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
   useEffect(() => {
     axiosInstance
-      .get(routes.answers)
+      .get(routes.answers(assessmentID))
       .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
       .finally(() => setAnswersAreLoaded(true))
-  }, [])
+  }, [assessmentID])
 
   const answersLookup: { [username: string]: AnswerMap } = useMemo(
     () => mapValues(groupBy(answers, 'username'), (as) => buildResourceLookupTable(as, 'answer')),
