@@ -7,21 +7,25 @@ import routes from '../api/routes'
 import { Answer, AnswerMap, Question, Summary } from '../types/exam'
 import { buildResourceLookupTable } from '../utils/answers'
 import { DEFAULT_TEST_USERNAME } from '../utils/globalConstants'
+import { useAssessmentParams } from './assessmentParams'
 
 export const useQuestion = (number: number | undefined) => {
+  const { assessmentID } = useAssessmentParams()
   const [question, setQuestion] = useState<Question>()
   const [questionIsLoaded, setQuestionIsLoaded] = useState(false)
   useEffect(() => {
     if (number === undefined) return
     axiosInstance
-      .get(routes.question(number))
+      .get(routes.question(assessmentID, number))
       .then(({ data }) => setQuestion(plainToInstance(Question, data)))
       .finally(() => setQuestionIsLoaded(true))
-  }, [number])
+  }, [assessmentID, number])
   return { question, questionIsLoaded }
 }
 
 export const useQuestionAnswers = (number: number | undefined) => {
+  const { assessmentID } = useAssessmentParams()
+
   const [answers, setAnswers] = useState<Answer[]>([])
   const [answersAreLoaded, setAnswersAreLoaded] = useState(false)
 
@@ -33,7 +37,7 @@ export const useQuestionAnswers = (number: number | undefined) => {
       .get(routes.questionAnswers(number, username))
       .then(({ data }) => setAnswers(data.map((d) => plainToInstance(Answer, d))))
       .finally(() => setAnswersAreLoaded(true))
-  }, [number, username])
+  }, [assessmentID, number, username])
 
   const answersLookup: AnswerMap = useMemo(() => {
     return buildResourceLookupTable(answers, 'answer')
@@ -60,19 +64,21 @@ export const useQuestionAnswers = (number: number | undefined) => {
   const saveAnswers = useCallback(() => {
     if (number === undefined) return
     axiosInstance.post(routes.questionAnswers(number, username), answers).then(() => {})
-  }, [answers, number, username])
+  }, [answers, assessmentID, number, username])
 
   return { lookupAnswer, answersAreLoaded, setAnswer, saveAnswers }
 }
 
 export const useAssessmentSummary = () => {
+  const { assessmentID } = useAssessmentParams()
   const [summary, setSummary] = useState<Summary>()
   const [summaryIsLoaded, setSummaryIsLoaded] = useState(false)
   useEffect(() => {
+    if (!assessmentID) return
     axiosInstance
-      .get(routes.summary)
+      .get(routes.summary(assessmentID))
       .then(({ data }) => setSummary(plainToInstance(Summary, data)))
       .finally(() => setSummaryIsLoaded(true))
-  }, [])
+  }, [assessmentID])
   return { summary, summaryIsLoaded }
 }

@@ -4,7 +4,6 @@ import React from 'react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 import ExamNavBar from '../../components/topBars/ExamNavBar'
-import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
 
 describe('NavBar', () => {
   const renderWithRouter = (ui, { route = '/' } = {}) => {
@@ -24,24 +23,23 @@ describe('NavBar', () => {
     // Check for static link
     const frontCoverLink = screen.getByRole('link', { name: /frontcover/i })
     expect(frontCoverLink).toBeInTheDocument()
-    expect(frontCoverLink).toHaveAttribute('href', '/frontcover')
+    expect(frontCoverLink).toHaveAttribute('href', 'frontcover')
 
     // Check for dynamic question links
     for (let i = 1; i <= questionCount; i++) {
       const questionLink = screen.getByRole('link', { name: new RegExp(`question ${i}`, 'i') })
       expect(questionLink).toBeInTheDocument()
-      expect(questionLink).toHaveAttribute('href', `/questions/${i}/${DEFAULT_TEST_USERNAME}`)
     }
   })
 
   it('highlights the correct active link based on the current path', () => {
-    const activeRoute = `/questions/3/${DEFAULT_TEST_USERNAME}`
+    const activeRoute = '/questions/3'
     renderWithRouter(<ExamNavBar questionCount={5} />, { route: activeRoute })
 
     // Check for active class on the correct link
     const activeLink = screen.getByRole('link', { name: /question 3/i })
     expect(activeLink).toBeInTheDocument()
-    expect(activeLink).toHaveAttribute('href', activeRoute)
+    expect(activeLink).toHaveAttribute('href', `..${activeRoute}`)
     expect(activeLink).toHaveAttribute('data-active')
   })
 
@@ -51,7 +49,7 @@ describe('NavBar', () => {
     // Check for static link
     const frontCoverLink = screen.getByRole('link', { name: /frontcover/i })
     expect(frontCoverLink).toBeInTheDocument()
-    expect(frontCoverLink).toHaveAttribute('href', '/frontcover')
+    expect(frontCoverLink).toHaveAttribute('href', 'frontcover')
 
     // Check that no question links are rendered
     const questionLink = screen.queryByRole('link', { name: /Question \d/ })

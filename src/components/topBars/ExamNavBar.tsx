@@ -1,17 +1,26 @@
 import { Container, Section, TabNav } from '@radix-ui/themes'
-import React, { FC } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
-
-import { DEFAULT_TEST_USERNAME } from '../../utils/globalConstants'
+import { range } from 'lodash'
+import React, { FC, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 
 interface NavBarProps {
   questionCount: number
 }
 
+enum Pages {
+  QUESTION,
+  FRONTCOVER,
+}
+
+function pathToPage(pathname: string): Pages {
+  if (pathname.includes('questions')) return Pages.QUESTION
+  return Pages.FRONTCOVER
+}
+
 const ExamNavBar: FC<NavBarProps> = ({ questionCount }) => {
   const { pathname } = useLocation()
-
-  const { username = DEFAULT_TEST_USERNAME } = useParams()
+  const currentPage = useMemo(() => pathToPage(pathname), [pathname])
+  const linkPrefix = useMemo(() => (currentPage === Pages.QUESTION ? '../' : ''), [currentPage])
 
   return (
     <Section
@@ -23,16 +32,16 @@ const ExamNavBar: FC<NavBarProps> = ({ questionCount }) => {
     >
       <Container>
         <TabNav.Root size="2">
-          <TabNav.Link href="/frontcover" active={pathname === '/frontcover'}>
+          <TabNav.Link href={`${linkPrefix}frontcover`} active={currentPage === Pages.FRONTCOVER}>
             Frontcover
           </TabNav.Link>
-          {[...Array(questionCount).keys()].map((i) => (
+          {range(1, questionCount + 1).map((q) => (
             <TabNav.Link
-              href={`/questions/${i + 1}/${username}`}
-              key={i}
-              active={pathname.startsWith(`/questions/${i + 1}`)}
+              key={q}
+              href={`${linkPrefix}questions/${q}`}
+              active={pathname.endsWith(`/questions/${q}`)}
             >
-              {`Question ${i + 1}`}
+              {`Question ${q}`}
             </TabNav.Link>
           ))}
         </TabNav.Root>
