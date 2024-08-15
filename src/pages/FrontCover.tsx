@@ -5,21 +5,20 @@ import LogisticsBanner from '../components/LogisticsBanner'
 import Markdown from '../components/Markdown'
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
-import { useAssessmentSummary } from '../hooks/exam'
+import { Heading } from '../types/exam'
 
-const FrontCover: FC = () => {
-  const { summary, summaryIsLoaded } = useAssessmentSummary()
+interface FrontCoverProps {
+  heading: Heading
+}
 
-  if (!summaryIsLoaded) return <div>Loading...</div>
-  if (summary === undefined) return <div>Error</div>
-
+const FrontCover: FC<FrontCoverProps> = ({ heading }) => {
   return (
     <>
-      <Header primaryText={summary.courseCode} secondaryText={summary.courseName} />
+      <Header primaryText={heading.courseCode} secondaryText={heading.courseName} />
       <Body>
         <FormattedCard title="Instructions">
-          <Markdown>{summary.rubric.instructions}</Markdown>
-          <LogisticsBanner start={summary.begins} end={summary.ends} />
+          <Markdown>{heading.rubric.instructions}</Markdown>
+          <LogisticsBanner start={heading.begins} end={heading.ends} />
         </FormattedCard>
       </Body>
     </>

@@ -1,12 +1,10 @@
 import React from 'react'
-import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
+import Answerbook from './pages/Answerbook'
 import AuthWrapper from './pages/AuthWrapper'
-import ExamRoot from './pages/ExamRoot'
-import FrontCover from './pages/FrontCover'
 import LoginPage from './pages/LoginPage'
 import MarkingPage from './pages/MarkingPage'
-import QuestionPage from './pages/QuestionPage'
 
 const AuthRoot = () => (
   <AuthWrapper>
@@ -26,21 +24,8 @@ const router = createBrowserRouter([
             element: <MarkingPage />,
           },
           {
-            element: <ExamRoot />,
-            children: [
-              {
-                index: true,
-                element: <Navigate to="frontcover" replace />,
-              },
-              {
-                path: 'frontcover',
-                element: <FrontCover />,
-              },
-              {
-                path: 'questions/:number',
-                element: <QuestionPage />,
-              },
-            ],
+            index: true,
+            element: <Answerbook />,
           },
         ],
       },

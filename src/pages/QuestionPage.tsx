@@ -2,7 +2,6 @@ import { Button, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC } from 'react'
-import { useParams } from 'react-router-dom'
 
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
@@ -10,28 +9,29 @@ import Part from '../components/questionStructure/Part'
 import Question from '../components/questionStructure/Question'
 import Section from '../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
-import { useQuestion, useQuestionAnswers } from '../hooks/exam'
+import { Question as QuestionSpec } from '../types/exam'
 import { parseAnswer } from '../utils/answers'
 
-const QuestionPage: FC = () => {
-  const { number } = useParams()
+interface QuestionPageProps {
+  questionNumber: number
+  question: QuestionSpec
+  lookupAnswer: (part: number, section: number, task: number) => string
+  onAnswerChange: (part: number, section: number, task: number, newAnswer: string) => void
+}
 
-  const { question, questionIsLoaded } = useQuestion(Number(number))
-  const { lookupAnswer, setAnswer, saveAnswers } = useQuestionAnswers(Number(number))
-
-  const handlerFactory =
-    (question: number, part: number, section: number, task: number) => (newAnswer: string) => {
-      setAnswer(question, part, section, task, newAnswer)
-    }
-
-  if (!number || !questionIsLoaded) return <div>Placeholder</div>
-  if (question === undefined) return <div>404</div>
-
-  const questionID = Number(number)
+const QuestionPage: FC<QuestionPageProps> = ({
+  questionNumber,
+  question,
+  lookupAnswer,
+  onAnswerChange,
+}) => {
+  const handlerFactory = (part: number, section: number, task: number) => (newAnswer: string) => {
+    onAnswerChange(part, section, task, newAnswer)
+  }
 
   return (
     <>
-      <Header primaryText={`Question ${number}`} secondaryText={question.title} />
+      <Header primaryText={`Question ${questionNumber}`} secondaryText={question.title} />
       <Body>
         <Question instructions={question.instructions}>
           {Object.entries(question.parts).map(([partIDString, part]) => {
@@ -54,12 +54,12 @@ const QuestionPage: FC = () => {
                     >
                       {section.tasks.map((task, i) => {
                         const taskID = i + 1
-                        const answer = lookupAnswer(questionID, partID, sectionID, taskID)
+                        const answer = lookupAnswer(partID, sectionID, taskID)
                         return (
                           <TaskFactory
                             key={i}
                             {...({
-                              onAnswerUpdate: handlerFactory(questionID, partID, sectionID, taskID),
+                              onAnswerUpdate: handlerFactory(partID, sectionID, taskID),
                               ...instanceToPlain(task),
                               answer: parseAnswer(answer, task.type),
                             } as TaskProps)}
@@ -74,7 +74,7 @@ const QuestionPage: FC = () => {
             )
           })}
         </Question>
-        <Button size="4" color="green" type="submit" onClick={saveAnswers}>
+        <Button size="4" color="green" type="submit" onClick={() => {}}>
           Save Answers
         </Button>
       </Body>

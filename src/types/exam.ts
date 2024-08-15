@@ -50,7 +50,7 @@ export class Rubric {
   questionsToAnswer: number
 }
 
-export class Summary {
+export class Heading {
   courseCode: string
   courseName: string
   duration: number
