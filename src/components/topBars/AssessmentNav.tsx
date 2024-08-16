@@ -1,4 +1,4 @@
-import { Container, Section, Tabs } from '@radix-ui/themes'
+import { Box, Container, Tabs } from '@radix-ui/themes'
 import { range } from 'lodash'
 import React, { FC } from 'react'
 
@@ -10,12 +10,11 @@ interface AssessmentNavProps {
 
 const AssessmentNav: FC<AssessmentNavProps> = ({ currentPage, onPageChange, questionCount }) => {
   return (
-    <Section
-      p="3"
+    <Box
       position="fixed"
       top="0"
       width="100%"
-      style={{ backgroundColor: 'var(--gray-8)', zIndex: 1000 }}
+      style={{ zIndex: 1000, backgroundColor: 'var(--color-background)' }}
     >
       <Container>
         <Tabs.Root value={currentPage} onValueChange={onPageChange}>
@@ -29,7 +28,7 @@ const AssessmentNav: FC<AssessmentNavProps> = ({ currentPage, onPageChange, ques
           </Tabs.List>
         </Tabs.Root>
       </Container>
-    </Section>
+    </Box>
   )
 }
 

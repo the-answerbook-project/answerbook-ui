@@ -43,7 +43,7 @@ const Answerbook: FC = () => {
   return (
     <>
       <AssessmentNav currentPage={currentPage} onPageChange={setCurrentPage} questionCount={3} />
-      <Section pt="9">{renderPage()}</Section>
+      <Section pt="7">{renderPage()}</Section>
     </>
   )
 }

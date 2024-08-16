@@ -8,7 +8,7 @@ interface PageHeaderProps {
 
 const Header: FC<PageHeaderProps> = ({ primaryText, secondaryText }) => {
   return (
-    <Section style={{ backgroundColor: 'var(--gray-a3)' }}>
+    <Section pb="0">
       <Container size="4" px="6">
         <Flex gap="2">
           <Heading size="8">{primaryText}</Heading>
