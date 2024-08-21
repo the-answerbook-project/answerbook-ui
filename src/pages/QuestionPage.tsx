@@ -9,13 +9,13 @@ import Part from '../components/questionStructure/Part'
 import Question from '../components/questionStructure/Question'
 import Section from '../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
-import { Question as QuestionSpec } from '../types/exam'
+import { Answer, Question as QuestionSpec } from '../types/exam'
 import { parseAnswer } from '../utils/answers'
 
 interface QuestionPageProps {
   questionNumber: number
   question: QuestionSpec
-  lookupAnswer: (part: number, section: number, task: number) => string
+  lookupAnswer: (part: number, section: number, task: number) => Answer | undefined
   onAnswerChange: (part: number, section: number, task: number, newAnswer: string) => void
 }
 
@@ -61,11 +61,10 @@ const QuestionPage: FC<QuestionPageProps> = ({
                         const answer = lookupAnswer(partID, sectionID, taskID)
                         return (
                           <TaskFactory
-                            key={i}
                             {...({
                               onAnswerUpdate: handlerFactory(partID, sectionID, taskID),
                               ...instanceToPlain(task),
-                              answer: parseAnswer(answer, task.type),
+                              answer: parseAnswer(answer?.answer ?? '', task.type),
                             } as TaskProps)}
                           />
                         )

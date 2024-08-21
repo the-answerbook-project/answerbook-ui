@@ -99,7 +99,7 @@ const MarkingPage: FC = () => {
                                     key={`${sectionID}-${taskID}`}
                                     {...({
                                       disabled: true,
-                                      answer: parseAnswer(answer, task.type),
+                                      answer: parseAnswer(answer?.answer ?? '', task.type),
                                       onAnswerUpdate: handler,
                                       ...instanceToPlain(task),
                                     } as TaskProps)}

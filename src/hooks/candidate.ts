@@ -42,14 +42,11 @@ export const useAnswers = (assessmentID: string) => {
       .finally(() => setAnswersAreLoaded(true))
   }, [assessmentID])
 
-  const answersLookup: AnswerMap = useMemo(
-    () => buildResourceLookupTable(answers, 'answer'),
-    [answers]
-  )
+  const answersLookup: AnswerMap = useMemo(() => buildResourceLookupTable(answers), [answers])
 
   const lookupAnswer = useCallback(
     (question: number) => (part: number, section: number, task: number) =>
-      answersLookup?.[question]?.[part]?.[section]?.[task] ?? '',
+      answersLookup?.[question]?.[part]?.[section]?.[task],
     [answersLookup]
   )
 

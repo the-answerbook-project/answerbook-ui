@@ -67,11 +67,15 @@ export class Heading {
 }
 
 export class Answer {
+  id: number
   question: number
   part: number
   section: number
   task: number
   answer: string
+
+  @Type(() => Date)
+  timestamp: Date
 }
 
-export type AnswerMap = Record<number, Record<number, Record<number, Record<number, string>>>>
+export type AnswerMap = Record<number, Record<number, Record<number, Record<number, Answer>>>>

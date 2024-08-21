@@ -91,7 +91,7 @@ export const useAnswers = () => {
 
   const lookupAnswer = useCallback(
     (student: string, question: number, part: number, section: number, task: number) =>
-      answersLookup[student]?.[question]?.[part]?.[section]?.[task] ?? '',
+      answersLookup[student]?.[question]?.[part]?.[section]?.[task],
     [answersLookup]
   )
 
