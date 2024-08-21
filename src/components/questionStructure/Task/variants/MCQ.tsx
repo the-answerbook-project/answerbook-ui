@@ -1,6 +1,6 @@
 import { CheckboxGroup, RadioGroup } from '@radix-ui/themes'
-import { map } from 'lodash'
-import React, { FC, useCallback } from 'react'
+import { isEqual, map } from 'lodash'
+import React, { FC, useEffect, useState } from 'react'
 
 import { TaskType } from '../constants'
 import { defaultOnChangeHandler } from '../index'
@@ -48,23 +48,22 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   choices,
   disabled = false,
 }) => {
-  const handleOnClick = useCallback(
-    (e) => {
-      const newAnswer = e.target.value
-      const oldAnswer = answer ?? []
-      const newAnswersArray = oldAnswer.includes(newAnswer)
-        ? oldAnswer.filter((v) => v !== newAnswer)
-        : [...oldAnswer, newAnswer]
+  const [value, setValue] = useState<string[]>(answer ?? [])
+  useEffect(() => {
+    if (!isEqual(value, answer)) onAnswerUpdate(value.join(','))
+  }, [value, onAnswerUpdate, answer])
 
-      onAnswerUpdate(newAnswersArray.join(','))
-    },
-    [answer, onAnswerUpdate]
-  )
+  const handleOnClick = (e) => {
+    const newAnswer = e.target.value
+    setValue((curr) =>
+      curr.includes(newAnswer) ? curr.filter((v) => v !== newAnswer) : [...curr, newAnswer]
+    )
+  }
 
   return (
-    <CheckboxGroup.Root disabled={disabled} variant="soft" value={answer} onClick={handleOnClick}>
+    <CheckboxGroup.Root disabled={disabled} variant="soft" value={value}>
       {map(choices, (o) => (
-        <CheckboxGroup.Item key={o.value} value={o.value}>
+        <CheckboxGroup.Item key={o.value} value={o.value} onClick={handleOnClick}>
           {o.label}
         </CheckboxGroup.Item>
       ))}
