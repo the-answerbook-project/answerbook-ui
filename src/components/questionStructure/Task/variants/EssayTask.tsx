@@ -1,8 +1,7 @@
 import { TextArea, TextField } from '@radix-ui/themes'
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { TaskType } from '../constants'
-import { defaultOnChangeHandler } from '../index'
 import { TaskBaseProps } from '../types'
 
 export interface EssayTaskProps extends TaskBaseProps<string> {
@@ -16,9 +15,19 @@ export const EssayTask: FC<EssayTaskProps> = ({
   lines = 5,
   disabled = false,
 }) => {
+  const [value, setValue] = useState(answer)
+  useEffect(() => {
+    if (value !== undefined) onAnswerUpdate(value)
+  }, [value, onAnswerUpdate])
+
+  const handleOnChange = (e) => {
+    const newValue = e.target.value
+    setValue(newValue)
+  }
+
   const commonProps = {
-    value: answer,
-    onChange: defaultOnChangeHandler(onAnswerUpdate),
+    value: value,
+    onChange: handleOnChange,
     placeholder: 'Your answer here…',
     disabled: disabled,
     variant: 'soft' as 'soft',
