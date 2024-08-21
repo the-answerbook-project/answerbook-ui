@@ -1,16 +1,17 @@
-import { Button, Separator } from '@radix-ui/themes'
+import { Button, Flex, Grid, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useCallback } from 'react'
 
-import Body from '../components/pageStructure/Body'
-import Header from '../components/pageStructure/Header'
-import Part from '../components/questionStructure/Part'
-import Question from '../components/questionStructure/Question'
-import Section from '../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../components/questionStructure/Task'
-import { Answer, Question as QuestionSpec } from '../types/exam'
-import { parseAnswer } from '../utils/answers'
+import Body from '../../components/pageStructure/Body'
+import Header from '../../components/pageStructure/Header'
+import Part from '../../components/questionStructure/Part'
+import Question from '../../components/questionStructure/Question'
+import Section from '../../components/questionStructure/Section'
+import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
+import { Answer, Question as QuestionSpec } from '../../types/exam'
+import { parseAnswer } from '../../utils/answers'
+import AnswerStatus from './AnswerStatus'
 
 interface QuestionPageProps {
   questionNumber: number
@@ -60,13 +61,22 @@ const QuestionPage: FC<QuestionPageProps> = ({
                         const taskID = i + 1
                         const answer = lookupAnswer(partID, sectionID, taskID)
                         return (
-                          <TaskFactory
-                            {...({
-                              onAnswerUpdate: handlerFactory(partID, sectionID, taskID),
-                              ...instanceToPlain(task),
-                              answer: parseAnswer(answer?.answer ?? '', task.type),
-                            } as TaskProps)}
-                          />
+                          <Grid columns="6fr 2fr" key={i}>
+                            <TaskFactory
+                              {...({
+                                ...instanceToPlain(task),
+                                onAnswerUpdate: handlerFactory(partID, sectionID, taskID),
+                                answer: parseAnswer(answer?.answer ?? '', task.type),
+                              } as TaskProps)}
+                            />
+                            {answer && (
+                              <Flex direction="column" justify="end">
+                                <Flex justify="end" gap="1">
+                                  <AnswerStatus timestamp={answer.timestamp} />{' '}
+                                </Flex>
+                              </Flex>
+                            )}
+                          </Grid>
                         )
                       })}
                       {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}

@@ -12,7 +12,7 @@ interface SectionProps {
 
 const Section: FC<SectionProps> = ({ sectionId, description, children }) => {
   return (
-    <Grid columns="1fr 5fr">
+    <Grid columns="1fr 8fr">
       <Text>
         <Strong>{numberToRoman(sectionId)})</Strong>
       </Text>
