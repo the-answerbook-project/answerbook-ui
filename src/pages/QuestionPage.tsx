@@ -1,7 +1,7 @@
 import { Button, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import Body from '../components/pageStructure/Body'
 import Header from '../components/pageStructure/Header'
@@ -25,9 +25,13 @@ const QuestionPage: FC<QuestionPageProps> = ({
   lookupAnswer,
   onAnswerChange,
 }) => {
-  const handlerFactory = (part: number, section: number, task: number) => (newAnswer: string) => {
-    onAnswerChange(part, section, task, newAnswer)
-  }
+  const handlerFactory = useCallback(
+    (part: number, section: number, task: number) => (newAnswer: string) => {
+      console.log(newAnswer)
+      // onAnswerChange(part, section, task, newAnswer)
+    },
+    []
+  )
 
   return (
     <>
