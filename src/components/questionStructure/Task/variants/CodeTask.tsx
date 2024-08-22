@@ -1,6 +1,7 @@
 import { TextArea, TextField } from '@radix-ui/themes'
 import React, { FC, useEffect, useState } from 'react'
 
+import useDebounce from '../../../../hooks/debouncing'
 import { TaskType } from '../constants'
 import '../index.css'
 import { TaskBaseProps } from '../types'
@@ -17,9 +18,19 @@ export const CodeTask: FC<CodeTaskProps> = ({
   disabled = false,
 }) => {
   const [value, setValue] = useState(answer)
+  const debouncedValue = useDebounce(value)
+
   useEffect(() => {
-    if (value !== undefined) onAnswerUpdate(value)
-  }, [value, onAnswerUpdate])
+    // Call save half a second after the last typed character
+    if (debouncedValue !== undefined) onAnswerUpdate(debouncedValue)
+  }, [debouncedValue, onAnswerUpdate])
+
+  useEffect(() => {
+    // Call save on unmounting in any case
+    return () => {
+      if (value !== undefined) onAnswerUpdate(value)
+    }
+  }, [])
 
   const handleOnChange = (e) => {
     const newValue = e.target.value

@@ -2,6 +2,7 @@ import { Flex, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
 import React, { FC, useEffect, useState } from 'react'
 
+import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import './index.css'
@@ -20,9 +21,19 @@ export const FlagTask: FC<FlagTaskProps> = ({
   const FLAG_LENGTH = 32
 
   const [value, setValue] = useState(answer)
+  const debouncedValue = useDebounce(value)
+
   useEffect(() => {
-    if (value !== undefined) onAnswerUpdate(value)
-  }, [value, onAnswerUpdate])
+    // Call save half a second after the last typed character
+    if (debouncedValue !== undefined) onAnswerUpdate(debouncedValue)
+  }, [debouncedValue, onAnswerUpdate])
+
+  useEffect(() => {
+    // Call save on unmounting in any case
+    return () => {
+      if (value !== undefined) onAnswerUpdate(value)
+    }
+  }, [])
 
   const handleChange = (e) => {
     const newValue = e.target.value.replace(/\s+/g, '')
