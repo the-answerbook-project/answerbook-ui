@@ -25,10 +25,6 @@ export type TaskProps =
   | ProcessedHandwritingProps
   | RawHandwritingProps
 
-export function defaultOnChangeHandler(onChange: (v: any) => void) {
-  return (e) => onChange(e.target.value)
-}
-
 const taskComponentMap = {
   [TaskType.ESSAY]: EssayTask,
   [TaskType.CODE]: CodeTask,

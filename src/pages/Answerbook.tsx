@@ -12,7 +12,7 @@ const Answerbook: FC = () => {
   const { assessmentID } = useAssessmentParams()
   const { heading, headingIsLoaded } = useAssessmentHeading(assessmentID)
   const { questions, questionsAreLoaded } = useQuestions(assessmentID)
-  const { lookupAnswer, answersAreLoaded, updateAnswer } = useAnswers(assessmentID)
+  const { lookupAnswer, answersAreLoaded, saveAnswer } = useAnswers(assessmentID)
 
   function renderFrontCover() {
     if (!headingIsLoaded) return <div>Loading...</div>
@@ -29,7 +29,7 @@ const Answerbook: FC = () => {
         questionNumber={questionNumber}
         question={selectedQuestion}
         lookupAnswer={lookupAnswer(questionNumber)}
-        onAnswerChange={updateAnswer(questionNumber)}
+        saveAnswer={saveAnswer}
       />
     )
   }

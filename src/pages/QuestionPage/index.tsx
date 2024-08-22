@@ -1,5 +1,5 @@
 import { Button, Flex, Grid, Separator } from '@radix-ui/themes'
-import { instanceToPlain } from 'class-transformer'
+import { instanceToPlain, plainToInstance } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC, useCallback } from 'react'
 
@@ -17,21 +17,23 @@ interface QuestionPageProps {
   questionNumber: number
   question: QuestionSpec
   lookupAnswer: (part: number, section: number, task: number) => Answer | undefined
-  onAnswerChange: (part: number, section: number, task: number, newAnswer: string) => void
+  saveAnswer: (answer: Answer) => void
 }
 
 const QuestionPage: FC<QuestionPageProps> = ({
   questionNumber,
   question,
   lookupAnswer,
-  onAnswerChange,
+  saveAnswer,
 }) => {
-  const handlerFactory = useCallback(
-    (part: number, section: number, task: number) => (newAnswer: string) => {
-      console.log(newAnswer)
-      // onAnswerChange(part, section, task, newAnswer)
+  const handleSave = useCallback(
+    (part: number, section: number, task: number) => (answer: string) => {
+      if (answer !== lookupAnswer(part, section, task)?.answer) {
+        const rawAnswer = { question: questionNumber, part, section, task, answer }
+        saveAnswer(plainToInstance(Answer, rawAnswer))
+      }
     },
-    []
+    [lookupAnswer, questionNumber, saveAnswer]
   )
 
   return (
@@ -65,7 +67,7 @@ const QuestionPage: FC<QuestionPageProps> = ({
                             <TaskFactory
                               {...({
                                 ...instanceToPlain(task),
-                                onAnswerUpdate: handlerFactory(partID, sectionID, taskID),
+                                onAnswerUpdate: handleSave(partID, sectionID, taskID),
                                 answer: parseAnswer(answer?.answer ?? '', task.type),
                               } as TaskProps)}
                             />

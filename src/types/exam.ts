@@ -1,4 +1,4 @@
-import { Transform, Type } from 'class-transformer'
+import { Exclude, Transform, Type } from 'class-transformer'
 import { addMinutes } from 'date-fns'
 import { reduce, size } from 'lodash'
 
@@ -67,6 +67,7 @@ export class Heading {
 }
 
 export class Answer {
+  @Exclude({ toPlainOnly: true })
   id: number
   question: number
   part: number
@@ -74,6 +75,7 @@ export class Answer {
   task: number
   answer: string
 
+  @Exclude({ toPlainOnly: true })
   @Type(() => Date)
   timestamp: Date
 }

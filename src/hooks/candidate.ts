@@ -1,4 +1,4 @@
-import { plainToInstance } from 'class-transformer'
+import { instanceToPlain, plainToInstance } from 'class-transformer'
 import { mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -50,17 +50,13 @@ export const useAnswers = (assessmentID: string) => {
     [answersLookup]
   )
 
-  const updateAnswer = useCallback(
-    (question: number) => (part: number, section: number, task: number, answer: string) => {
-      const newAnswers = answers.filter(
-        (a) =>
-          !(a.question === question && a.part === part && a.section === section && a.task === task)
-      )
-      newAnswers.push(plainToInstance(Answer, { question, part, section, task, answer }))
-      setAnswers(newAnswers)
-    },
-    [answers]
-  )
+  function saveAnswer(answer: Answer) {
+    axiosInstance
+      .post(routes.candidate.answers(assessmentID), instanceToPlain(answer))
+      .then(({ data }) => plainToInstance(Answer, data))
+      .then((response) => setAnswers((as) => as.map((a) => (a.id === response.id ? response : a))))
+      .catch(console.error)
+  }
 
-  return { lookupAnswer, answersAreLoaded, updateAnswer }
+  return { lookupAnswer, answersAreLoaded, saveAnswer }
 }
