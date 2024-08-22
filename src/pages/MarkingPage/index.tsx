@@ -73,7 +73,6 @@ const MarkingPage: FC = () => {
                         partId={partID}
                         description={part.instructions}
                         marksContribution={sum(map(part.sections, 'maximumMark'))}
-                        onSave={handler}
                       >
                         {Object.entries(part.sections).map(([sectionIDString, section], i) => {
                           const sectionID = Number(sectionIDString)

@@ -7,18 +7,12 @@ import Part from '../../../components/questionStructure/Part'
 describe('Part', () => {
   const description = 'This is a description'
   const marksContribution = 20
-  const onSaveMock = jest.fn()
 
   afterEach(jest.clearAllMocks)
 
   it('renders correctly with all props', () => {
     render(
-      <Part
-        partId={1}
-        description={description}
-        marksContribution={marksContribution}
-        onSave={onSaveMock}
-      >
+      <Part partId={1} description={description} marksContribution={marksContribution}>
         <div data-testid="children">Child Content</div>
       </Part>
     )
@@ -36,7 +30,7 @@ describe('Part', () => {
 
   it('renders without description and marksContribution', () => {
     render(
-      <Part partId={1} onSave={onSaveMock}>
+      <Part partId={1}>
         <div data-testid="children">Child Content</div>
       </Part>
     )

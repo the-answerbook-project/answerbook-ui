@@ -49,7 +49,6 @@ const QuestionPage: FC<QuestionPageProps> = ({
                 partId={partID}
                 description={part.instructions}
                 marksContribution={sum(map(part.sections, 'maximumMark'))}
-                onSave={() => console.log(`Part ${partID} saved!`)} // TODO: Implement
               >
                 {Object.entries(part.sections).map(([sectionIDString, section], i) => {
                   const sectionID = Number(sectionIDString)

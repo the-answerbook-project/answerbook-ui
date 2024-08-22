@@ -11,11 +11,10 @@ interface PartProps {
   partId: number
   description?: string
   marksContribution?: number
-  onSave: (partId: number) => void
   children: ReactNode
 }
 
-const Part: FC<PartProps> = ({ partId, description, children, marksContribution, onSave }) => {
+const Part: FC<PartProps> = ({ partId, description, children, marksContribution }) => {
   return (
     <Box width="100%">
       <Card>
