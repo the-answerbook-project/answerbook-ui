@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Separator } from '@radix-ui/themes'
+import { Flex, Grid, Separator } from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
 import React, { FC } from 'react'
@@ -80,9 +80,6 @@ const QuestionPage: FC<QuestionPageProps> = ({
             )
           })}
         </Question>
-        <Button size="4" color="green" type="submit" onClick={() => {}}>
-          Save Answers
-        </Button>
       </Body>
     </>
   )
