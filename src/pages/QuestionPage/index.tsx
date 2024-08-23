@@ -52,7 +52,7 @@ const QuestionPage: FC<QuestionPageProps> = ({
                         const answer = lookupAnswer(questionNumber, partID, sectionID, taskID)
                         return (
                           <Grid
-                            columns="6fr 2fr"
+                            columns="7fr 3fr"
                             key={`${questionNumber}-${partID}-${sectionID}-${taskID}`}
                           >
                             <TaskFactory
@@ -62,7 +62,7 @@ const QuestionPage: FC<QuestionPageProps> = ({
                                 answer: answer,
                               } as TaskProps)}
                             />
-                            {answer && (
+                            {answer.timestamp && (
                               <Flex direction="column" justify="end">
                                 <Flex justify="end" gap="1">
                                   <AnswerStatus timestamp={answer.timestamp} />
