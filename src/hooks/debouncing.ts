@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 // Default to 500ms debouncing delay
 const DEFAULT_DELAY = 500
 
-const useDebounce = (value: string | undefined, delay: number = DEFAULT_DELAY) => {
+const useDebounce = (value: string, delay: number = DEFAULT_DELAY) => {
   const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {

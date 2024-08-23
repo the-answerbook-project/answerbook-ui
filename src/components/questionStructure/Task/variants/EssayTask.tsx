@@ -1,11 +1,12 @@
 import { TextArea, TextField } from '@radix-ui/themes'
-import React, { FC, useEffect, useState } from 'react'
+import { isEqual } from 'lodash'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import useDebounce from '../../../../hooks/debouncing'
 import { TaskType } from '../constants'
 import { TaskBaseProps } from '../types'
 
-export interface EssayTaskProps extends TaskBaseProps<string> {
+export interface EssayTaskProps extends TaskBaseProps {
   type: TaskType.ESSAY
   lines?: number
 }
@@ -16,20 +17,17 @@ export const EssayTask: FC<EssayTaskProps> = ({
   lines = 5,
   disabled = false,
 }) => {
-  const [value, setValue] = useState(answer)
+  const initialValue = useMemo(() => answer?.answer ?? '', [answer])
+  const [value, setValue] = useState(initialValue)
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
     // Call save half a second after the last typed character
-    if (debouncedValue !== undefined) onAnswerUpdate(debouncedValue)
-  }, [debouncedValue, onAnswerUpdate])
-
-  useEffect(() => {
-    // Call save on unmounting in any case
-    return () => {
-      if (value !== undefined) onAnswerUpdate(value)
+    if (!isEqual(debouncedValue, initialValue)) {
+      answer.answer = debouncedValue
+      onAnswerUpdate(answer)
     }
-  }, [])
+  }, [debouncedValue, answer, onAnswerUpdate, initialValue])
 
   const handleOnChange = (e) => {
     const newValue = e.target.value

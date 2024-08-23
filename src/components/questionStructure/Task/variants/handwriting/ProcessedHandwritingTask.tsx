@@ -10,7 +10,7 @@ import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
 import { ProcessedHandwritingAnswer } from './types'
 
-export interface ProcessedHandwritingProps extends TaskBaseProps<ProcessedHandwritingAnswer> {
+export interface ProcessedHandwritingProps extends TaskBaseProps {
   type: TaskType.PROCESSED_HANDWRITING
 }
 
@@ -19,7 +19,10 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
   onAnswerUpdate,
   disabled = false,
 }) => {
-  const strokes = answer?.raw?.elements
+  const value: ProcessedHandwritingAnswer = answer?.answer
+    ? JSON.parse(answer.answer)
+    : { latex: '' }
+  const strokes = value?.raw?.elements
   return (
     <Dialog.Root>
       <Flex gap="3" align="center">
@@ -31,10 +34,10 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
             </Button>
           </Dialog.Trigger>
         )}
-        {answer?.latex && (
+        {value?.latex && (
           <Card className="latex-preview">
             <Flex p="3">
-              <MathJax>{`\\( ${answer.latex} \\)`}</MathJax>
+              <MathJax>{`\\( ${value.latex} \\)`}</MathJax>
             </Flex>
           </Card>
         )}
@@ -44,8 +47,9 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
           <ProcessedHandwritingEditor
-            answer={answer}
-            onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
+            answer={value}
+            // onAnswerChange={(v) => onAnswerUpdate(JSON.stringify(v))}
+            onAnswerChange={(v) => {}}
           />
           <Flex justify="end">
             <Dialog.Close>

@@ -12,7 +12,6 @@ import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
-import { parseAnswer } from '../../utils/answers'
 import MarkInputPanel from './MarkInputPanel'
 import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
@@ -98,7 +97,7 @@ const MarkingPage: FC = () => {
                                     key={`${sectionID}-${taskID}`}
                                     {...({
                                       disabled: true,
-                                      answer: parseAnswer(answer?.answer ?? '', task.type),
+                                      answer: answer,
                                       onAnswerUpdate: handler,
                                       ...instanceToPlain(task),
                                     } as TaskProps)}

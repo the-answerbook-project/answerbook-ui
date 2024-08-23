@@ -1,7 +1,7 @@
 import { Button, Flex, Grid, Separator } from '@radix-ui/themes'
-import { instanceToPlain, plainToInstance } from 'class-transformer'
+import { instanceToPlain } from 'class-transformer'
 import { map, sum } from 'lodash'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import Header from '../../components/pageStructure/Header'
@@ -10,13 +10,12 @@ import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
 import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import { Answer, Question as QuestionSpec } from '../../types/exam'
-import { parseAnswer } from '../../utils/answers'
 import AnswerStatus from './AnswerStatus'
 
 interface QuestionPageProps {
   questionNumber: number
   question: QuestionSpec
-  lookupAnswer: (part: number, section: number, task: number) => Answer | undefined
+  lookupAnswer: (question: number, part: number, section: number, task: number) => Answer
   saveAnswer: (answer: Answer) => void
 }
 
@@ -26,16 +25,6 @@ const QuestionPage: FC<QuestionPageProps> = ({
   lookupAnswer,
   saveAnswer,
 }) => {
-  const handleSave = useCallback(
-    (part: number, section: number, task: number) => (answer: string) => {
-      if (answer !== lookupAnswer(part, section, task)?.answer) {
-        const rawAnswer = { question: questionNumber, part, section, task, answer }
-        saveAnswer(plainToInstance(Answer, rawAnswer))
-      }
-    },
-    [lookupAnswer, questionNumber, saveAnswer]
-  )
-
   return (
     <>
       <Header primaryText={`Question ${questionNumber}`} secondaryText={question.title} />
@@ -60,14 +49,18 @@ const QuestionPage: FC<QuestionPageProps> = ({
                     >
                       {section.tasks.map((task, i) => {
                         const taskID = i + 1
-                        const answer = lookupAnswer(partID, sectionID, taskID)
+                        const answer = lookupAnswer(questionNumber, partID, sectionID, taskID)
                         return (
-                          <Grid columns="6fr 2fr" key={i}>
+                          <Grid
+                            columns="6fr 2fr"
+                            key={`${questionNumber}-${partID}-${sectionID}-${taskID}`}
+                          >
                             <TaskFactory
                               {...({
                                 ...instanceToPlain(task),
-                                onAnswerUpdate: handleSave(partID, sectionID, taskID),
-                                answer: parseAnswer(answer?.answer ?? '', task.type),
+                                onAnswerUpdate: saveAnswer,
+                                answer: answer,
+                                // answer: parseAnswer(answer?.answer ?? '', task.type),
                               } as TaskProps)}
                             />
                             {answer && (

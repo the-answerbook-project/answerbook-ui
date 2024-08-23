@@ -1,13 +1,14 @@
 import { Flex, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
-import React, { FC, useEffect, useState } from 'react'
+import { isEqual } from 'lodash'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import './index.css'
 
-export interface FlagTaskProps extends TaskBaseProps<string> {
+export interface FlagTaskProps extends TaskBaseProps {
   type: TaskType.FLAG
   showOrnament?: boolean
 }
@@ -19,21 +20,17 @@ export const FlagTask: FC<FlagTaskProps> = ({
   disabled = false,
 }) => {
   const FLAG_LENGTH = 32
-
-  const [value, setValue] = useState(answer)
+  const initialValue = useMemo(() => answer?.answer ?? '', [answer])
+  const [value, setValue] = useState(initialValue)
   const debouncedValue = useDebounce(value)
 
   useEffect(() => {
     // Call save half a second after the last typed character
-    if (debouncedValue !== undefined) onAnswerUpdate(debouncedValue)
-  }, [debouncedValue, onAnswerUpdate])
-
-  useEffect(() => {
-    // Call save on unmounting in any case
-    return () => {
-      if (value !== undefined) onAnswerUpdate(value)
+    if (!isEqual(debouncedValue, initialValue)) {
+      answer.answer = debouncedValue
+      onAnswerUpdate(answer)
     }
-  }, [])
+  }, [debouncedValue, answer, onAnswerUpdate, initialValue])
 
   const handleChange = (e) => {
     const newValue = e.target.value.replace(/\s+/g, '')

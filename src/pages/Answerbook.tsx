@@ -28,7 +28,7 @@ const Answerbook: FC = () => {
       <QuestionPage
         questionNumber={questionNumber}
         question={selectedQuestion}
-        lookupAnswer={lookupAnswer(questionNumber)}
+        lookupAnswer={lookupAnswer}
         saveAnswer={saveAnswer}
       />
     )

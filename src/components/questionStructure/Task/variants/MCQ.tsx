@@ -1,6 +1,6 @@
 import { CheckboxGroup, RadioGroup } from '@radix-ui/themes'
 import { isEqual, map } from 'lodash'
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../constants'
 import { TaskBaseProps } from '../types'
@@ -10,12 +10,12 @@ type MCQOption = {
   label: string
 }
 
-export interface MCQOneTaskProps extends TaskBaseProps<string> {
+export interface MCQOneTaskProps extends TaskBaseProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_ONE
   choices: MCQOption[]
 }
 
-export interface MCQMultiTaskProps extends TaskBaseProps<string[]> {
+export interface MCQMultiTaskProps extends TaskBaseProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL
   choices: MCQOption[]
 }
@@ -26,10 +26,14 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   choices,
   disabled = false,
 }) => {
-  const [value, setValue] = useState(answer)
+  const initialValue = useMemo(() => answer?.answer ?? '', [answer])
+  const [value, setValue] = useState(initialValue)
   useEffect(() => {
-    if (value !== undefined) onAnswerUpdate(value)
-  }, [value, onAnswerUpdate])
+    if (!isEqual(value, initialValue)) {
+      answer.answer = value
+      onAnswerUpdate(answer)
+    }
+  }, [answer, value, onAnswerUpdate, initialValue])
 
   const handleOnClick = (e) => {
     const newValue = e.target.value
@@ -52,10 +56,14 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   choices,
   disabled = false,
 }) => {
-  const [value, setValue] = useState<string[]>(answer ?? [])
+  const initialValue = useMemo(() => (answer?.answer ?? '').split(','), [answer])
+  const [value, setValue] = useState(initialValue)
   useEffect(() => {
-    if (!isEqual(value, answer)) onAnswerUpdate(value.join(','))
-  }, [value, onAnswerUpdate, answer])
+    if (!isEqual(value, initialValue)) {
+      answer.answer = value.join(',')
+      onAnswerUpdate(answer)
+    }
+  }, [value, onAnswerUpdate, answer, initialValue])
 
   const handleOnClick = (e) => {
     const newAnswer = e.target.value

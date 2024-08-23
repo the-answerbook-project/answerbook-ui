@@ -45,18 +45,31 @@ export const useAnswers = (assessmentID: string) => {
   const answersLookup: AnswerMap = useMemo(() => buildResourceLookupTable(answers), [answers])
 
   const lookupAnswer = useCallback(
-    (question: number) => (part: number, section: number, task: number) =>
-      answersLookup?.[question]?.[part]?.[section]?.[task],
+    (question: number, part: number, section: number, task: number) =>
+      answersLookup?.[question]?.[part]?.[section]?.[task] ??
+      plainToInstance(Answer, {
+        question,
+        part,
+        section,
+        task,
+      }),
     [answersLookup]
   )
 
-  function saveAnswer(answer: Answer) {
-    axiosInstance
-      .post(routes.candidate.answers(assessmentID), instanceToPlain(answer))
-      .then(({ data }) => plainToInstance(Answer, data))
-      .then((response) => setAnswers((as) => as.map((a) => (a.id === response.id ? response : a))))
-      .catch(console.error)
-  }
+  const saveAnswer = useCallback(
+    (answer: Answer) => {
+      axiosInstance
+        .post(routes.candidate.answers(assessmentID), instanceToPlain(answer))
+        .then(({ data }) => plainToInstance(Answer, data))
+        .then((response) =>
+          setAnswers((as) =>
+            answer.id ? as.map((a) => (a.id === response.id ? response : a)) : [...as, response]
+          )
+        )
+        .catch(console.error)
+    },
+    [assessmentID]
+  )
 
-  return { lookupAnswer, answersAreLoaded, saveAnswer }
+  return { answers, lookupAnswer, answersAreLoaded, saveAnswer }
 }

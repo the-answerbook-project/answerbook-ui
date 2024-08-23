@@ -1,6 +1,5 @@
 import { reduce, set } from 'lodash'
 
-import { TaskType } from '../components/questionStructure/Task/constants'
 import AnswerBookRootResource from '../types/common'
 
 export function buildResourceLookupTable<T extends AnswerBookRootResource>(
@@ -18,19 +17,4 @@ export function buildResourceLookupTable<T extends AnswerBookRootResource>(
     },
     {}
   )
-}
-
-export function parseAnswer(answer: string, targetTaskType: TaskType) {
-  switch (targetTaskType) {
-    case TaskType.INTEGER:
-      return answer === '' ? answer : Number(answer)
-    case TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL:
-      return answer === '' ? [] : answer.split(',')
-    case TaskType.PROCESSED_HANDWRITING:
-      return answer === '' ? { latex: '' } : JSON.parse(answer)
-    case TaskType.RAW_HANDWRITING:
-      return answer === '' ? {} : JSON.parse(answer)
-    default:
-      return answer
-  }
 }

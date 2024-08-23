@@ -9,7 +9,7 @@ import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import RawHandwritingEditor from './editors/RawHandwritingEditor/rawHandwritingEditor'
 import { RawHandwritingAnswer } from './types'
 
-export interface RawHandwritingProps extends TaskBaseProps<RawHandwritingAnswer> {
+export interface RawHandwritingProps extends TaskBaseProps {
   type: TaskType.RAW_HANDWRITING
 }
 
@@ -17,34 +17,38 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
   answer,
   onAnswerUpdate,
   disabled = false,
-}) => (
-  <Dialog.Root>
-    {!disabled && (
-      <Flex gap="3" align="center">
-        <Dialog.Trigger>
-          <Button disabled={disabled} size="4">
-            {answer?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
-            <Pencil2Icon width="1.5rem" height="1.5rem" />
-          </Button>
-        </Dialog.Trigger>
-      </Flex>
-    )}
-    {!isEmpty(answer?.raw?.elements) && (
-      <ViewOnlyCanvas initialData={answer?.raw?.elements ?? []} minHeight="500px" />
-    )}
-
-    <Dialog.Content className="excalidraw-dialog-content">
-      <Flex direction="column" height="100%" gap="3">
-        <RawHandwritingEditor
-          answer={answer}
-          onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
-        />
-        <Flex justify="end">
-          <Dialog.Close>
-            <Button>Save</Button>
-          </Dialog.Close>
+}) => {
+  const value: RawHandwritingAnswer = answer?.answer ? JSON.parse(answer.answer) : {}
+  return (
+    <Dialog.Root>
+      {!disabled && (
+        <Flex gap="3" align="center">
+          <Dialog.Trigger>
+            <Button disabled={disabled} size="4">
+              {value?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
+              <Pencil2Icon width="1.5rem" height="1.5rem" />
+            </Button>
+          </Dialog.Trigger>
         </Flex>
-      </Flex>
-    </Dialog.Content>
-  </Dialog.Root>
-)
+      )}
+      {!isEmpty(value?.raw?.elements) && (
+        <ViewOnlyCanvas initialData={value?.raw?.elements ?? []} minHeight="500px" />
+      )}
+
+      <Dialog.Content className="excalidraw-dialog-content">
+        <Flex direction="column" height="100%" gap="3">
+          <RawHandwritingEditor
+            answer={value}
+            // onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
+            onAnswerChange={(value) => {}}
+          />
+          <Flex justify="end">
+            <Dialog.Close>
+              <Button>Save</Button>
+            </Dialog.Close>
+          </Flex>
+        </Flex>
+      </Dialog.Content>
+    </Dialog.Root>
+  )
+}
