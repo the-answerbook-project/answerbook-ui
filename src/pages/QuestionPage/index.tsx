@@ -60,13 +60,12 @@ const QuestionPage: FC<QuestionPageProps> = ({
                                 ...instanceToPlain(task),
                                 onAnswerUpdate: saveAnswer,
                                 answer: answer,
-                                // answer: parseAnswer(answer?.answer ?? '', task.type),
                               } as TaskProps)}
                             />
                             {answer && (
                               <Flex direction="column" justify="end">
                                 <Flex justify="end" gap="1">
-                                  <AnswerStatus timestamp={answer.timestamp} />{' '}
+                                  <AnswerStatus timestamp={answer.timestamp} />
                                 </Flex>
                               </Flex>
                             )}
