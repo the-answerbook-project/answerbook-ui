@@ -85,7 +85,7 @@ export const useAnswers = () => {
   }, [assessmentID])
 
   const answersLookup: { [username: string]: AnswerMap } = useMemo(
-    () => mapValues(groupBy(answers, 'username'), (as) => buildResourceLookupTable(as, 'answer')),
+    () => mapValues(groupBy(answers, 'username'), (as) => buildResourceLookupTable(as)),
     [answers]
   )
 
