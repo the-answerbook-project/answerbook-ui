@@ -16,7 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useAuthentication } from '../hooks/authentication'
 
-const DEFAULT_REDIRECT = '../frontcover'
+const DEFAULT_REDIRECT = '..'
 const LoginPage: FC = () => {
   const { state } = useLocation()
   const navigate = useNavigate()
