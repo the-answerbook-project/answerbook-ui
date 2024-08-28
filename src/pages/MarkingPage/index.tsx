@@ -1,5 +1,14 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
-import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
+import {
+  Box,
+  Card,
+  Flex,
+  Grid,
+  Section as RadixUISection,
+  ScrollArea,
+  Separator,
+  Text,
+} from '@radix-ui/themes'
 import { instanceToPlain } from 'class-transformer'
 import { keyBy, map, mapValues, sum, sumBy, values } from 'lodash'
 import React, { FC, useMemo, useState } from 'react'
@@ -52,84 +61,101 @@ const MarkingPage: FC = () => {
   if (!questions) return <div>Failed to load questions</div>
 
   return (
-    <RadixUISection pt="9">
+    <>
       <MarkingToolbar candidateSelectorProps={{ students, student, markingStatus, onSelect }} />
-      {!student ? (
-        <Landing />
-      ) : (
-        Object.entries(questions).map(([questionIDString, question]) => {
-          const questionID = Number(questionIDString)
-          return (
-            <Box key={questionIDString}>
-              <QuestionHeader number={questionIDString} title={question.title} />
-              <Body>
-                <Question instructions={question.instructions}>
-                  {Object.entries(question.parts).map(([partIDString, part]) => {
-                    const partID = Number(partIDString)
-                    return (
-                      <Part
-                        key={partID}
-                        partId={partID}
-                        description={part.instructions}
-                        marksContribution={sum(map(part.sections, 'maximumMark'))}
-                      >
-                        {Object.entries(part.sections).map(([sectionIDString, section], i) => {
-                          const sectionID = Number(sectionIDString)
-                          const mark = lookupMark(student.username, questionID, partID, sectionID)
-                          return (
-                            <Section
-                              key={sectionID}
-                              sectionId={sectionID}
-                              description={section.instructions}
-                            >
-                              {section.tasks.map((task, t) => {
-                                const taskID = t + 1
-                                const answer = lookupAnswer(
-                                  student.username,
-                                  questionID,
-                                  partID,
-                                  sectionID,
-                                  taskID
-                                )
-                                if (!answer) return <NoAnswerBanner key={t} />
-                                return (
-                                  <TaskFactory
-                                    key={`${questionID}-${partID}-${sectionID}-${taskID}`}
-                                    {...({
-                                      disabled: true,
-                                      answer: answer,
-                                      onAnswerUpdate: handler,
-                                      ...instanceToPlain(task),
-                                    } as TaskProps)}
-                                  />
-                                )
-                              })}
+      <RadixUISection>
+        <Grid columns="2fr 6fr 2fr">
+          <Box p="2">Left</Box>
+          <Box py="2">
+            <ScrollArea type="always" scrollbars="vertical" style={{ height: '80vh' }}>
+              {!student ? (
+                <Landing />
+              ) : (
+                Object.entries(questions).map(([questionIDString, question]) => {
+                  const questionID = Number(questionIDString)
+                  return (
+                    <Box key={questionIDString}>
+                      <Flex direction="column" gap="4" px="6">
+                        <QuestionHeader number={questionIDString} title={question.title} />
+                        <Question instructions={question.instructions}>
+                          {Object.entries(question.parts).map(([partIDString, part]) => {
+                            const partID = Number(partIDString)
+                            return (
+                              <Part
+                                key={partID}
+                                partId={partID}
+                                description={part.instructions}
+                                marksContribution={sum(map(part.sections, 'maximumMark'))}
+                              >
+                                {Object.entries(part.sections).map(
+                                  ([sectionIDString, section], i) => {
+                                    const sectionID = Number(sectionIDString)
+                                    const mark = lookupMark(
+                                      student.username,
+                                      questionID,
+                                      partID,
+                                      sectionID
+                                    )
+                                    return (
+                                      <Section
+                                        key={sectionID}
+                                        sectionId={sectionID}
+                                        description={section.instructions}
+                                      >
+                                        {section.tasks.map((task, t) => {
+                                          const taskID = t + 1
+                                          const answer = lookupAnswer(
+                                            student.username,
+                                            questionID,
+                                            partID,
+                                            sectionID,
+                                            taskID
+                                          )
+                                          if (!answer) return <NoAnswerBanner key={t} />
+                                          return (
+                                            <TaskFactory
+                                              key={`${questionID}-${partID}-${sectionID}-${taskID}`}
+                                              {...({
+                                                disabled: true,
+                                                answer: answer,
+                                                onAnswerUpdate: handler,
+                                                ...instanceToPlain(task),
+                                              } as TaskProps)}
+                                            />
+                                          )
+                                        })}
 
-                              <MarkInputPanel
-                                username={student.username}
-                                question={questionID}
-                                part={partID}
-                                section={sectionID}
-                                currentMark={mark}
-                                maximumMark={section.maximumMark}
-                                onSave={saveMark}
-                              />
-                              {i + 1 !== Object.keys(part.sections).length && (
-                                <Separator size="4" />
-                              )}
-                            </Section>
-                          )
-                        })}
-                      </Part>
-                    )
-                  })}
-                </Question>
-              </Body>
-            </Box>
-          )
-        })
-      )}
-    </RadixUISection>
+                                        <MarkInputPanel
+                                          username={student.username}
+                                          question={questionID}
+                                          part={partID}
+                                          section={sectionID}
+                                          currentMark={mark}
+                                          maximumMark={section.maximumMark}
+                                          onSave={saveMark}
+                                        />
+                                        {i + 1 !== Object.keys(part.sections).length && (
+                                          <Separator size="4" />
+                                        )}
+                                      </Section>
+                                    )
+                                  }
+                                )}
+                              </Part>
+                            )
+                          })}
+                        </Question>
+                      </Flex>
+                    </Box>
+                  )
+                })
+              )}
+            </ScrollArea>
+          </Box>
+          <Box>Right</Box>
+        </Grid>
+      </RadixUISection>
+    </>
   )
 }
 
