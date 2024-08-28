@@ -56,7 +56,7 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   choices,
   disabled = false,
 }) => {
-  const initialValue = useMemo(() => (answer?.answer ?? '').split(','), [answer])
+  const initialValue = useMemo(() => answer?.answer?.split(',') ?? [], [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
     if (!isEqual(value, initialValue)) {
