@@ -1,13 +1,12 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button, Dialog, Flex } from '@radix-ui/themes'
-import { isEmpty } from 'lodash'
-import { FC } from 'react'
+import { isEmpty, isEqual } from 'lodash'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import RawHandwritingEditor from './editors/RawHandwritingEditor/rawHandwritingEditor'
-import { RawHandwritingAnswer } from './types'
 
 export interface RawHandwritingProps extends TaskBaseProps {
   type: TaskType.RAW_HANDWRITING
@@ -18,7 +17,16 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
   onAnswerUpdate,
   disabled = false,
 }) => {
-  const value: RawHandwritingAnswer = answer?.answer ? JSON.parse(answer.answer) : {}
+  const initialValue = useMemo(() => (answer?.answer ? JSON.parse(answer.answer) : {}), [answer])
+
+  const [value, setValue] = useState(initialValue)
+  useEffect(() => {
+    if (!isEqual(value.latex, initialValue.latex)) {
+      answer.answer = JSON.stringify(value)
+      onAnswerUpdate(answer)
+    }
+  }, [answer, value, onAnswerUpdate, initialValue])
+
   return (
     <Dialog.Root>
       {!disabled && (
@@ -37,11 +45,7 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
 
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
-          <RawHandwritingEditor
-            answer={value}
-            // onAnswerChange={(value) => onAnswerUpdate(JSON.stringify(value))}
-            onAnswerChange={(value) => {}}
-          />
+          <RawHandwritingEditor answer={value} onAnswerChange={setValue} />
           <Flex justify="end">
             <Dialog.Close>
               <Button>Save</Button>

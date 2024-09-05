@@ -1,14 +1,13 @@
 import { Pencil2Icon } from '@radix-ui/react-icons'
 import { Button, Card, Dialog, Flex } from '@radix-ui/themes'
 import { MathJax } from 'better-react-mathjax'
-import { isEmpty } from 'lodash'
-import { FC } from 'react'
+import { isEmpty, isEqual } from 'lodash'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../../constants'
 import { TaskBaseProps } from '../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
-import { ProcessedHandwritingAnswer } from './types'
 
 export interface ProcessedHandwritingProps extends TaskBaseProps {
   type: TaskType.PROCESSED_HANDWRITING
@@ -19,9 +18,19 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
   onAnswerUpdate,
   disabled = false,
 }) => {
-  const value: ProcessedHandwritingAnswer = answer?.answer
-    ? JSON.parse(answer.answer)
-    : { latex: '' }
+  const initialValue = useMemo(
+    () => (answer?.answer ? JSON.parse(answer.answer) : { latex: '' }),
+    [answer]
+  )
+
+  const [value, setValue] = useState(initialValue)
+  useEffect(() => {
+    if (!isEqual(value.latex, initialValue.latex)) {
+      answer.answer = JSON.stringify(value)
+      onAnswerUpdate(answer)
+    }
+  }, [answer, value, onAnswerUpdate, initialValue])
+
   const strokes = value?.raw?.elements
   return (
     <Dialog.Root>
@@ -46,11 +55,7 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
 
       <Dialog.Content className="excalidraw-dialog-content">
         <Flex direction="column" height="100%" gap="3">
-          <ProcessedHandwritingEditor
-            answer={value}
-            // onAnswerChange={(v) => onAnswerUpdate(JSON.stringify(v))}
-            onAnswerChange={(v) => {}}
-          />
+          <ProcessedHandwritingEditor answer={value} onAnswerChange={setValue} />
           <Flex justify="end">
             <Dialog.Close>
               <Button>Save</Button>
