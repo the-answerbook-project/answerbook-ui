@@ -1,4 +1,5 @@
 import { Section } from '@radix-ui/themes'
+import { size } from 'lodash'
 import React, { FC, useState } from 'react'
 
 import AssessmentNav from '../components/topBars/AssessmentNav'
@@ -42,7 +43,11 @@ const Answerbook: FC = () => {
 
   return (
     <>
-      <AssessmentNav currentPage={currentPage} onPageChange={setCurrentPage} questionCount={3} />
+      <AssessmentNav
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        questionCount={size(questions)}
+      />
       <Section pt="7">{renderPage()}</Section>
     </>
   )
