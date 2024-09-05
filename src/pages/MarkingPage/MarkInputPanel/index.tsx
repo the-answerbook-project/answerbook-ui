@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Card, Flex, Grid, Separator, Text, TextField } from '@radix-ui/themes'
 import { plainToInstance } from 'class-transformer'
 import { formatDistanceToNow } from 'date-fns'
-import { isEmpty, orderBy } from 'lodash'
+import { isEmpty, isNil, orderBy } from 'lodash'
 import React, { FC, useState } from 'react'
 
 import CardBody from '../../../components/Card/CardBody'
@@ -41,7 +41,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
     feedback: '',
   }
   const markHistory = orderBy(currentMark?.history, 'timestamp', 'desc') ?? []
-  const colour = currentMark?.mark ? 'green' : 'red'
+  const colour = !isNil(currentMark?.mark) ? 'green' : 'red'
   const [newMark, setNewMark] = useState(initMark)
 
   function handleChange(key: keyof MarkRoot, value: any) {
