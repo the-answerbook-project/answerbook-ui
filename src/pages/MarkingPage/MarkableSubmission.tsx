@@ -105,7 +105,6 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
           </Box>
         )
       })}
-      )
     </Box>
   )
 }
