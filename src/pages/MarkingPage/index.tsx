@@ -8,6 +8,7 @@ import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import MarkableSubmission from './MarkableSubmission'
+import { ScrollspyItem } from './ScrollspyItem'
 import './index.css'
 
 const MarkingPage: FC = () => {
@@ -65,9 +66,31 @@ const MarkingPage: FC = () => {
               />
             )}
           </Box>
-          <Box p="2" className="sticky-sidebar">
-            Right
-          </Box>
+          <Flex direction="column" gap="8" p="4" className="sticky-sidebar">
+            {Object.entries(questions).map(([qNumber, question]) => {
+              return (
+                <Flex direction="column" gap="2">
+                  <ScrollspyItem
+                    label={`Question ${qNumber}`}
+                    total={question.availableMarks}
+                    partial={10}
+                  />
+                  {Object.entries(question.parts).map(([pNumber, part]) => {
+                    return Object.entries(part.sections).map(([sNumber, section]) => {
+                      return (
+                        <ScrollspyItem
+                          label={`Part ${pNumber} ${sNumber}`}
+                          total={section.maximumMark}
+                          partial={undefined}
+                          indent={true}
+                        />
+                      )
+                    })
+                  })}
+                </Flex>
+              )
+            })}
+          </Flex>
         </Grid>
       </RadixUISection>
     </>
@@ -75,3 +98,4 @@ const MarkingPage: FC = () => {
 }
 
 export default MarkingPage
+export { NO_MARK } from './constants'

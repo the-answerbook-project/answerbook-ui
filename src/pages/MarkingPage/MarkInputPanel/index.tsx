@@ -8,6 +8,7 @@ import CardBody from '../../../components/Card/CardBody'
 import CardFooter from '../../../components/Card/CardFooter'
 import CardHeader from '../../../components/Card/CardHeader'
 import { MarkRoot } from '../../../types/marking'
+import { NO_MARK } from '../constants'
 import './index.css'
 
 interface MarkInputPanelProps {
@@ -20,7 +21,6 @@ interface MarkInputPanelProps {
   onSave: (_: MarkRoot) => void
 }
 
-const NO_MARK = 'No mark'
 const NO_FEEDBACK = 'No comment'
 
 const MarkInputPanel: FC<MarkInputPanelProps> = ({
