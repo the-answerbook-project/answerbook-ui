@@ -1,13 +1,5 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
-import {
-  Box,
-  Card,
-  Flex,
-  Grid,
-  Section as RadixUISection,
-  ScrollArea,
-  Text,
-} from '@radix-ui/themes'
+import { Box, Card, Flex, Grid, Section as RadixUISection, Text } from '@radix-ui/themes'
 import { keyBy, mapValues, sumBy, values } from 'lodash'
 import React, { FC, useMemo, useState } from 'react'
 
@@ -16,6 +8,7 @@ import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import MarkableSubmission from './MarkableSubmission'
+import './index.css'
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
@@ -54,25 +47,27 @@ const MarkingPage: FC = () => {
   return (
     <>
       <MarkingToolbar candidateSelectorProps={{ students, student, markingStatus, onSelect }} />
-      <RadixUISection>
-        <Grid columns="2fr 6fr 2fr">
-          <Box p="2">Left</Box>
-          <Box py="2">
-            <ScrollArea type="always" scrollbars="vertical" style={{ height: '80vh' }}>
-              {!student ? (
-                <Landing />
-              ) : (
-                <MarkableSubmission
-                  student={student}
-                  questions={questions}
-                  lookupAnswer={lookupAnswer}
-                  lookupMark={lookupMark}
-                  saveMark={saveMark}
-                />
-              )}
-            </ScrollArea>
+      <RadixUISection pb="0">
+        <Grid columns="2fr 6fr 2fr" height="calc(100vh - var(--space-9))">
+          <Box p="2" className="sticky-sidebar">
+            Left
           </Box>
-          <Box>Right</Box>
+          <Box py="2" className="scrollable-col">
+            {!student ? (
+              <Landing />
+            ) : (
+              <MarkableSubmission
+                student={student}
+                questions={questions}
+                lookupAnswer={lookupAnswer}
+                lookupMark={lookupMark}
+                saveMark={saveMark}
+              />
+            )}
+          </Box>
+          <Box p="2" className="sticky-sidebar">
+            Right
+          </Box>
         </Grid>
       </RadixUISection>
     </>
