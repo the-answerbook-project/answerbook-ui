@@ -2,7 +2,7 @@ import { Badge, Flex, Separator, Text } from '@radix-ui/themes'
 import { isNil } from 'lodash'
 import React, { FC } from 'react'
 
-import { NO_MARK } from '../constants'
+import { NO_MARK } from '../../constants'
 import './index.css'
 
 export interface ScrollspyItemProps {
