@@ -1,6 +1,8 @@
 import { Badge, Flex, Link, Separator } from '@radix-ui/themes'
+import classNames from 'classnames'
 import { isNil } from 'lodash'
 import React, { FC } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { NO_MARK } from '../../constants'
 import './index.css'
@@ -20,11 +22,18 @@ export const ScrollspyItem: FC<ScrollspyItemProps> = ({
   total,
   indent = false,
 }) => {
+  const { hash } = useLocation()
   const colour = isNil(partial) ? 'red' : partial === 0 ? 'gray' : 'green'
-
+  const currentHash = `#${id}`
   return (
     <Flex justify="between">
-      <Link href={`#${id}`} className={indent ? 'indented-text' : ''}>
+      <Link
+        href={currentHash}
+        className={classNames(
+          indent && 'indented-text',
+          (hash === currentHash || hash.startsWith(currentHash)) && 'active-scrollspy-item'
+        )}
+      >
         {label}
       </Link>
       <Badge radius="full" variant="solid" color={colour}>
