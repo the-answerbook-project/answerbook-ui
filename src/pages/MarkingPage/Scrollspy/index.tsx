@@ -24,7 +24,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
   }
 
   return (
-    <Flex direction="column" gap="8" p="4">
+    <Flex direction="column" gap="6" m="4" p="4">
       {Object.entries(questions).map(([q_, question]) => {
         const q = Number(q_)
         const qId = `q${q}`
@@ -37,23 +37,25 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
               total={question.availableMarks}
               partial={questionPartial(q)}
             />
-            {Object.entries(question.parts).map(([p_, part]) => {
-              const p = Number(p_)
-              return Object.entries(part.sections).map(([s_, section]) => {
-                const s = Number(s_)
-                const sID = `q${q}-${p}-${s}`
-                return (
-                  <ScrollspyItem
-                    id={sID}
-                    active={activeId === sID}
-                    label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
-                    total={section.maximumMark}
-                    partial={sectionPartial(q, p, s)}
-                    indent={true}
-                  />
-                )
-              })
-            })}
+            <Flex direction="column" gap="0.5">
+              {Object.entries(question.parts).map(([p_, part]) => {
+                const p = Number(p_)
+                return Object.entries(part.sections).map(([s_, section]) => {
+                  const s = Number(s_)
+                  const sID = `q${q}-${p}-${s}`
+                  return (
+                    <ScrollspyItem
+                      id={sID}
+                      active={activeId === sID}
+                      label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
+                      total={section.maximumMark}
+                      partial={sectionPartial(q, p, s)}
+                      indent={true}
+                    />
+                  )
+                })
+              })}
+            </Flex>
           </Flex>
         )
       })}

@@ -27,6 +27,7 @@ export const ScrollspyItem: FC<ScrollspyItemProps> = ({
   return (
     <Flex justify="between">
       <Link
+        color="gray"
         href={`#${id}`}
         className={classNames(indent && 'indented-text', active && 'active-scrollspy-item')}
       >
