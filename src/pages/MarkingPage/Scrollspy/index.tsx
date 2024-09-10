@@ -10,9 +10,10 @@ import { ScrollspyItem } from './ScrollspyItem'
 interface ScrollspyProps {
   questions: Record<number, QuestionType>
   marks: MarkRoot[]
+  activeId: string | undefined
 }
 
-const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
+const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
   function questionPartial(q: number): number | undefined {
     let relevantMarks = marks.filter((m) => m.question === q && !isNil(m.mark))
     return isEmpty(relevantMarks) ? undefined : sumBy(relevantMarks, 'mark')
@@ -26,10 +27,12 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
     <Flex direction="column" gap="8" p="4">
       {Object.entries(questions).map(([q_, question]) => {
         const q = Number(q_)
+        const qId = `q${q}`
         return (
           <Flex direction="column" gap="2">
             <ScrollspyItem
-              id={`q${q}`}
+              id={qId}
+              active={!!activeId?.startsWith(qId)}
               label={`Question ${q}`}
               total={question.availableMarks}
               partial={questionPartial(q)}
@@ -38,9 +41,11 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
               const p = Number(p_)
               return Object.entries(part.sections).map(([s_, section]) => {
                 const s = Number(s_)
+                const sID = `q${q}-${p}-${s}`
                 return (
                   <ScrollspyItem
-                    id={`q${q}-${p}-${s}`}
+                    id={sID}
+                    active={activeId === sID}
                     label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
                     total={section.maximumMark}
                     partial={sectionPartial(q, p, s)}

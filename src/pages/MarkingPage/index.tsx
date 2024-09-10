@@ -5,6 +5,7 @@ import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import MarkingToolbar from '../../components/topBars/MarkingToolbar'
+import useActiveIdOnScroll from '../../hooks/interactiveScrollspy'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import MarkableSubmission from './MarkableSubmission'
@@ -17,6 +18,7 @@ const MarkingPage: FC = () => {
   const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
+  const activeId = useActiveIdOnScroll(['q1-1-1', 'q1-1-2', 'q1-2-1', 'q2-1-1', 'q2-1-2'])
 
   const markingStatus = useMemo(() => {
     const sectionsToMark = sumBy(values(questions), 'totalSections')
@@ -53,7 +55,7 @@ const MarkingPage: FC = () => {
           <Box p="2" className="sticky-sidebar">
             Left
           </Box>
-          <Box py="2" className="scrollable-col">
+          <Box pt="2" pb="60vh" className="scrollable-col">
             {!student ? (
               <Landing />
             ) : (
@@ -69,7 +71,11 @@ const MarkingPage: FC = () => {
 
           {student && (
             <Box className="sticky-sidebar">
-              <Scrollspy questions={questions} marks={rawMarksTable[student.username]} />
+              <Scrollspy
+                questions={questions}
+                marks={rawMarksTable[student.username]}
+                activeId={activeId}
+              />
             </Box>
           )}
         </Grid>
