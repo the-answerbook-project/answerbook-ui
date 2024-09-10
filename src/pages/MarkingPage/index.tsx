@@ -68,29 +68,33 @@ const MarkingPage: FC = () => {
             )}
           </Box>
           <Flex direction="column" gap="8" p="4" className="sticky-sidebar">
-            {Object.entries(questions).map(([q, question]) => {
-              return (
-                <Flex direction="column" gap="2">
-                  <ScrollspyItem
-                    label={`Question ${q}`}
-                    total={question.availableMarks}
-                    partial={10}
-                  />
-                  {Object.entries(question.parts).map(([p, part]) => {
-                    return Object.entries(part.sections).map(([s, section]) => {
-                      return (
-                        <ScrollspyItem
-                          label={`Part ${numberToLetter(Number(p))} ${numberToRoman(Number(s))}`}
-                          total={section.maximumMark}
-                          partial={undefined}
-                          indent={true}
-                        />
-                      )
-                    })
-                  })}
-                </Flex>
-              )
-            })}
+            {student &&
+              Object.entries(questions).map(([q_, question]) => {
+                const q = Number(q_)
+                return (
+                  <Flex direction="column" gap="2">
+                    <ScrollspyItem
+                      label={`Question ${q}`}
+                      total={question.availableMarks}
+                      partial={10}
+                    />
+                    {Object.entries(question.parts).map(([p_, part]) => {
+                      const p = Number(p_)
+                      return Object.entries(part.sections).map(([s_, section]) => {
+                        const s = Number(s_)
+                        return (
+                          <ScrollspyItem
+                            label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
+                            total={section.maximumMark}
+                            partial={lookupMark(student.username, q, p, s)?.mark}
+                            indent={true}
+                          />
+                        )
+                      })
+                    })}
+                  </Flex>
+                )
+              })}
           </Flex>
         </Grid>
       </RadixUISection>
