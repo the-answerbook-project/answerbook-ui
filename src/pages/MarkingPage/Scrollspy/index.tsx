@@ -19,7 +19,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
   }
 
   function sectionPartial(q: number, p: number, s: number): number | undefined {
-    return marks.find((m) => m.question === q && m.part === p && m.mark === s)?.mark
+    return marks.find((m) => m.question === q && m.part === p && m.section === s)?.mark
   }
 
   return (
