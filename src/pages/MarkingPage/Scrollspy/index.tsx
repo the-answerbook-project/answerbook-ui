@@ -29,6 +29,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
         return (
           <Flex direction="column" gap="2">
             <ScrollspyItem
+              id={`q${q}`}
               label={`Question ${q}`}
               total={question.availableMarks}
               partial={questionPartial(q)}
@@ -39,6 +40,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks }) => {
                 const s = Number(s_)
                 return (
                   <ScrollspyItem
+                    id={`q${q}-${p}-${s}`}
                     label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
                     total={section.maximumMark}
                     partial={sectionPartial(q, p, s)}

@@ -1,4 +1,4 @@
-import { Badge, Flex, Separator, Text } from '@radix-ui/themes'
+import { Badge, Flex, Link, Separator } from '@radix-ui/themes'
 import { isNil } from 'lodash'
 import React, { FC } from 'react'
 
@@ -6,6 +6,7 @@ import { NO_MARK } from '../../constants'
 import './index.css'
 
 export interface ScrollspyItemProps {
+  id: string
   label: string
   partial?: number
   total: number
@@ -13,6 +14,7 @@ export interface ScrollspyItemProps {
 }
 
 export const ScrollspyItem: FC<ScrollspyItemProps> = ({
+  id,
   label,
   partial,
   total,
@@ -22,7 +24,9 @@ export const ScrollspyItem: FC<ScrollspyItemProps> = ({
 
   return (
     <Flex justify="between">
-      <Text className={indent ? 'indented-text' : ''}>{label}</Text>
+      <Link href={`#${id}`} className={indent ? 'indented-text' : ''}>
+        {label}
+      </Link>
       <Badge radius="full" variant="solid" color={colour}>
         {partial ?? NO_MARK} <Separator orientation="vertical" color="gray" />
         {total}
