@@ -1,6 +1,6 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
 import { Box, Card, Flex, Grid, Section as RadixUISection, Text } from '@radix-ui/themes'
-import { keyBy, mapValues, sumBy, values } from 'lodash'
+import { isNil, keyBy, mapValues, sumBy, values } from 'lodash'
 import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
@@ -71,12 +71,17 @@ const MarkingPage: FC = () => {
             {student &&
               Object.entries(questions).map(([q_, question]) => {
                 const q = Number(q_)
+                const partial = sumBy(
+                  rawMarksTable[student.username].filter((m) => m.question === q && !isNil(m.mark)),
+                  'mark'
+                )
+
                 return (
                   <Flex direction="column" gap="2">
                     <ScrollspyItem
                       label={`Question ${q}`}
                       total={question.availableMarks}
-                      partial={10}
+                      partial={partial}
                     />
                     {Object.entries(question.parts).map(([p_, part]) => {
                       const p = Number(p_)
