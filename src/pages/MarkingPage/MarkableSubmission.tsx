@@ -36,44 +36,35 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
 }) => {
   return (
     <Box>
-      {Object.entries(questions).map(([questionIDString, question]) => {
-        const questionID = Number(questionIDString)
+      {Object.entries(questions).map(([q_, question]) => {
+        const q = Number(q_)
         return (
-          <Box key={questionIDString}>
+          <Box key={q_}>
             <Flex direction="column" gap="4" px="6">
-              <QuestionHeader number={questionIDString} title={question.title} />
+              <QuestionHeader number={q_} title={question.title} />
               <Question instructions={question.instructions}>
-                {Object.entries(question.parts).map(([partIDString, part]) => {
-                  const partID = Number(partIDString)
+                {Object.entries(question.parts).map(([p_, part]) => {
+                  const p = Number(p_)
                   return (
                     <Part
-                      key={partID}
-                      partId={partID}
+                      key={p}
+                      partId={p}
                       description={part.instructions}
                       marksContribution={sum(map(part.sections, 'maximumMark'))}
                     >
-                      {Object.entries(part.sections).map(([sectionIDString, section], i) => {
-                        const sectionID = Number(sectionIDString)
-                        const mark = lookupMark(student.username, questionID, partID, sectionID)
+                      {Object.entries(part.sections).map(([s_, section], i) => {
+                        const s = Number(s_)
+                        const sectionId = `${q}-${p}-${s}`
+                        const mark = lookupMark(student.username, q, p, s)
                         return (
-                          <Section
-                            key={sectionID}
-                            sectionId={sectionID}
-                            description={section.instructions}
-                          >
-                            {section.tasks.map((task, t) => {
-                              const taskID = t + 1
-                              const answer = lookupAnswer(
-                                student.username,
-                                questionID,
-                                partID,
-                                sectionID,
-                                taskID
-                              )
-                              if (!answer) return <NoAnswerBanner key={t} />
+                          <Section key={s} sectionId={sectionId} description={section.instructions}>
+                            {section.tasks.map((task, t_) => {
+                              const t = t_ + 1
+                              const answer = lookupAnswer(student.username, q, p, s, t)
+                              if (!answer) return <NoAnswerBanner key={t_} />
                               return (
                                 <TaskFactory
-                                  key={`${questionID}-${partID}-${sectionID}-${taskID}`}
+                                  key={`${sectionId}-${t}`}
                                   {...({
                                     disabled: true,
                                     answer: answer,
@@ -86,9 +77,9 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
 
                             <MarkInputPanel
                               username={student.username}
-                              question={questionID}
-                              part={partID}
-                              section={sectionID}
+                              question={q}
+                              part={p}
+                              section={s}
                               currentMark={mark}
                               maximumMark={section.maximumMark}
                               onSave={saveMark}

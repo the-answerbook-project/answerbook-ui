@@ -30,31 +30,25 @@ const QuestionPage: FC<QuestionPageProps> = ({
       <Header primaryText={`Question ${questionNumber}`} secondaryText={question.title} />
       <Body>
         <Question instructions={question.instructions}>
-          {Object.entries(question.parts).map(([partIDString, part]) => {
-            const partID = Number(partIDString)
+          {Object.entries(question.parts).map(([p_, part]) => {
+            const p = Number(p_)
             return (
               <Part
-                key={partID}
-                partId={partID}
+                key={p}
+                partId={p}
                 description={part.instructions}
                 marksContribution={sum(map(part.sections, 'maximumMark'))}
               >
-                {Object.entries(part.sections).map(([sectionIDString, section], i) => {
-                  const sectionID = Number(sectionIDString)
+                {Object.entries(part.sections).map(([s_, section], i) => {
+                  const s = Number(s_)
+                  const sectionId = `${questionNumber}-${p}-${s}`
                   return (
-                    <Section
-                      key={sectionID}
-                      sectionId={sectionID}
-                      description={section.instructions}
-                    >
-                      {section.tasks.map((task, i) => {
-                        const taskID = i + 1
-                        const answer = lookupAnswer(questionNumber, partID, sectionID, taskID)
+                    <Section key={s} sectionId={sectionId} description={section.instructions}>
+                      {section.tasks.map((task, t_) => {
+                        const t = t_ + 1
+                        const answer = lookupAnswer(questionNumber, p, s, t)
                         return (
-                          <Grid
-                            columns="7fr 3fr"
-                            key={`${questionNumber}-${partID}-${sectionID}-${taskID}`}
-                          >
+                          <Grid columns="7fr 3fr" key={`${sectionId}-${t}`}>
                             <TaskFactory
                               {...({
                                 ...instanceToPlain(task),

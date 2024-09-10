@@ -1,11 +1,12 @@
-import { Flex, Grid, Strong, Text } from '@radix-ui/themes'
+import { Flex, Grid, Text } from '@radix-ui/themes'
+import { last } from 'lodash'
 import React, { FC, ReactNode } from 'react'
 
 import { numberToRoman } from '../../utils/common'
 import Markdown from '../Markdown'
 
 interface SectionProps {
-  sectionId: number
+  sectionId: string
   description?: string
   children: ReactNode
 }
@@ -13,8 +14,8 @@ interface SectionProps {
 const Section: FC<SectionProps> = ({ sectionId, description, children }) => {
   return (
     <Grid columns="1fr 8fr">
-      <Text>
-        <Strong>{numberToRoman(sectionId)})</Strong>
+      <Text weight="bold" id={`q${sectionId}`}>
+        {numberToRoman(Number(last(sectionId.split('-'))))})
       </Text>
       <Flex gap="3" direction="column">
         {description && <Markdown>{description}</Markdown>}
