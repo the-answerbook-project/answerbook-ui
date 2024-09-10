@@ -7,6 +7,7 @@ import Body from '../../components/pageStructure/Body'
 import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
+import { numberToLetter, numberToRoman } from '../../utils/common'
 import MarkableSubmission from './MarkableSubmission'
 import { ScrollspyItem } from './ScrollspyItem'
 import './index.css'
@@ -67,19 +68,19 @@ const MarkingPage: FC = () => {
             )}
           </Box>
           <Flex direction="column" gap="8" p="4" className="sticky-sidebar">
-            {Object.entries(questions).map(([qNumber, question]) => {
+            {Object.entries(questions).map(([q, question]) => {
               return (
                 <Flex direction="column" gap="2">
                   <ScrollspyItem
-                    label={`Question ${qNumber}`}
+                    label={`Question ${q}`}
                     total={question.availableMarks}
                     partial={10}
                   />
-                  {Object.entries(question.parts).map(([pNumber, part]) => {
-                    return Object.entries(part.sections).map(([sNumber, section]) => {
+                  {Object.entries(question.parts).map(([p, part]) => {
+                    return Object.entries(part.sections).map(([s, section]) => {
                       return (
                         <ScrollspyItem
-                          label={`Part ${pNumber} ${sNumber}`}
+                          label={`Part ${numberToLetter(Number(p))} ${numberToRoman(Number(s))}`}
                           total={section.maximumMark}
                           partial={undefined}
                           indent={true}
