@@ -47,7 +47,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
                     <ScrollspyItem
                       id={sID}
                       active={activeId === sID}
-                      label={`Part ${numberToLetter(p)} ${numberToRoman(s)}`}
+                      label={`Part (${numberToLetter(p)}) ${numberToRoman(s)}`}
                       total={section.maximumMark}
                       partial={sectionPartial(q, p, s)}
                       indent={true}
