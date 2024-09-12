@@ -14,12 +14,12 @@ interface ScrollspyProps {
 }
 
 const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
-  function questionPartial(q: number): number | undefined {
+  function currentQuestionMark(q: number): number | undefined {
     let relevantMarks = marks.filter((m) => m.question === q && !isNil(m.mark))
     return isEmpty(relevantMarks) ? undefined : sumBy(relevantMarks, 'mark')
   }
 
-  function sectionPartial(q: number, p: number, s: number): number | undefined {
+  function currentSectionMark(q: number, p: number, s: number): number | undefined {
     return marks.find((m) => m.question === q && m.part === p && m.section === s)?.mark
   }
 
@@ -35,7 +35,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
               active={!!activeId?.startsWith(qId)}
               label={`Question ${q}`}
               total={question.availableMarks}
-              partial={questionPartial(q)}
+              partial={currentQuestionMark(q)}
             />
             <Flex direction="column" gap="0.5">
               {Object.entries(question.parts).map(([p_, part]) => {
@@ -49,7 +49,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
                       active={activeId === sID}
                       label={`Part (${numberToLetter(p)}) ${numberToRoman(s)}`}
                       total={section.maximumMark}
-                      partial={sectionPartial(q, p, s)}
+                      partial={currentSectionMark(q, p, s)}
                       indent={true}
                     />
                   )
