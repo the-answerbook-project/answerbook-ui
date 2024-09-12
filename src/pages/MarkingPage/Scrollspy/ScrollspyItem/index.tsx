@@ -1,29 +1,25 @@
-import { Badge, Flex, Link, Separator } from '@radix-ui/themes'
+import { Flex, Link } from '@radix-ui/themes'
 import classNames from 'classnames'
-import { isNil } from 'lodash'
 import React, { FC } from 'react'
 
-import { NO_MARK } from '../../constants'
+import MarkBadge, { MarkBadgeProps } from '../../MarkBadge'
 import './index.css'
 
 export interface ScrollspyItemProps {
   id: string
   active: boolean
   label: string
-  partial?: number
-  total: number
   indent?: boolean
+  badgeProps: MarkBadgeProps
 }
 
 export const ScrollspyItem: FC<ScrollspyItemProps> = ({
   id,
   active,
   label,
-  partial,
-  total,
+  badgeProps,
   indent = false,
 }) => {
-  const colour = isNil(partial) ? 'red' : partial === 0 ? 'gray' : 'green'
   return (
     <Flex justify="between">
       <Link
@@ -33,10 +29,7 @@ export const ScrollspyItem: FC<ScrollspyItemProps> = ({
       >
         {label}
       </Link>
-      <Badge radius="full" variant="solid" color={colour}>
-        {partial ?? NO_MARK} <Separator orientation="vertical" color="gray" />
-        {total}
-      </Badge>
+      <MarkBadge {...badgeProps} />
     </Flex>
   )
 }
