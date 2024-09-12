@@ -1,20 +1,16 @@
 import { ChevronUpIcon } from '@radix-ui/react-icons'
-import { Box, Card, Flex, Section as RadixUISection, Separator, Text } from '@radix-ui/themes'
-import { instanceToPlain } from 'class-transformer'
-import { keyBy, map, mapValues, sum, sumBy, values } from 'lodash'
+import { Box, Card, Flex, Grid, Section as RadixUISection, Text } from '@radix-ui/themes'
+import { keyBy, mapValues, sumBy, values } from 'lodash'
 import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
-import Part from '../../components/questionStructure/Part'
-import Question from '../../components/questionStructure/Question'
-import Section from '../../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
 import MarkingToolbar from '../../components/topBars/MarkingToolbar'
+import useActiveIdOnScroll from '../../hooks/interactiveScrollspy'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
-import MarkInputPanel from './MarkInputPanel'
-import NoAnswerBanner from './NoAnswerBanner'
-import QuestionHeader from './QuestionHeader'
+import MarkableSubmission from './MarkableSubmission'
+import Scrollspy from './Scrollspy'
+import './index.css'
 
 const MarkingPage: FC = () => {
   const { questions, questionsAreLoaded } = useQuestions()
@@ -22,6 +18,7 @@ const MarkingPage: FC = () => {
   const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
+  const activeId = useActiveIdOnScroll(['q1-1-1', 'q1-1-2', 'q1-2-1', 'q2-1-1', 'q2-1-2'])
 
   const markingStatus = useMemo(() => {
     const sectionsToMark = sumBy(values(questions), 'totalSections')
@@ -32,7 +29,6 @@ const MarkingPage: FC = () => {
   }, [questions, rawMarksTable, students])
 
   const onSelect = (s: Student | undefined) => setStudent(s)
-  const handler = (v) => {}
 
   const Landing = () => (
     <Body>
@@ -52,85 +48,41 @@ const MarkingPage: FC = () => {
   if (!questions) return <div>Failed to load questions</div>
 
   return (
-    <RadixUISection pt="9">
+    <>
       <MarkingToolbar candidateSelectorProps={{ students, student, markingStatus, onSelect }} />
-      {!student ? (
-        <Landing />
-      ) : (
-        Object.entries(questions).map(([questionIDString, question]) => {
-          const questionID = Number(questionIDString)
-          return (
-            <Box key={questionIDString}>
-              <QuestionHeader number={questionIDString} title={question.title} />
-              <Body>
-                <Question instructions={question.instructions}>
-                  {Object.entries(question.parts).map(([partIDString, part]) => {
-                    const partID = Number(partIDString)
-                    return (
-                      <Part
-                        key={partID}
-                        partId={partID}
-                        description={part.instructions}
-                        marksContribution={sum(map(part.sections, 'maximumMark'))}
-                      >
-                        {Object.entries(part.sections).map(([sectionIDString, section], i) => {
-                          const sectionID = Number(sectionIDString)
-                          const mark = lookupMark(student.username, questionID, partID, sectionID)
-                          return (
-                            <Section
-                              key={sectionID}
-                              sectionId={sectionID}
-                              description={section.instructions}
-                            >
-                              {section.tasks.map((task, t) => {
-                                const taskID = t + 1
-                                const answer = lookupAnswer(
-                                  student.username,
-                                  questionID,
-                                  partID,
-                                  sectionID,
-                                  taskID
-                                )
-                                if (!answer) return <NoAnswerBanner key={t} />
-                                return (
-                                  <TaskFactory
-                                    key={`${questionID}-${partID}-${sectionID}-${taskID}`}
-                                    {...({
-                                      disabled: true,
-                                      answer: answer,
-                                      onAnswerUpdate: handler,
-                                      ...instanceToPlain(task),
-                                    } as TaskProps)}
-                                  />
-                                )
-                              })}
+      <RadixUISection pb="0">
+        <Grid columns="2fr 6fr 2fr" height="calc(100vh - var(--space-9))">
+          <Box p="2" className="sticky-sidebar">
+            Left
+          </Box>
+          <Box pt="2" pb="60vh" className="scrollable-col">
+            {!student ? (
+              <Landing />
+            ) : (
+              <MarkableSubmission
+                student={student}
+                questions={questions}
+                lookupAnswer={lookupAnswer}
+                lookupMark={lookupMark}
+                saveMark={saveMark}
+              />
+            )}
+          </Box>
 
-                              <MarkInputPanel
-                                username={student.username}
-                                question={questionID}
-                                part={partID}
-                                section={sectionID}
-                                currentMark={mark}
-                                maximumMark={section.maximumMark}
-                                onSave={saveMark}
-                              />
-                              {i + 1 !== Object.keys(part.sections).length && (
-                                <Separator size="4" />
-                              )}
-                            </Section>
-                          )
-                        })}
-                      </Part>
-                    )
-                  })}
-                </Question>
-              </Body>
+          {student && (
+            <Box className="sticky-sidebar">
+              <Scrollspy
+                questions={questions}
+                marks={rawMarksTable[student.username]}
+                activeId={activeId}
+              />
             </Box>
-          )
-        })
-      )}
-    </RadixUISection>
+          )}
+        </Grid>
+      </RadixUISection>
+    </>
   )
 }
 
 export default MarkingPage
+export { NO_MARK } from './constants'

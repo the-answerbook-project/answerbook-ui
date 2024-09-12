@@ -1,0 +1,7 @@
+.indented-text {
+  text-indent: 1em;
+}
+
+.active-scrollspy-item {
+  font-weight: bold;
+}

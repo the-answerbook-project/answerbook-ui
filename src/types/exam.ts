@@ -43,6 +43,12 @@ export class Question {
   get totalSections() {
     return reduce(this.parts, (sum, p, _) => sum + size(p.sections), 0)
   }
+
+  get availableMarks() {
+    const reduceParts = (psum, p) =>
+      psum + reduce(p.sections, (sSum, s) => sSum + (s.maximumMark || 0), 0)
+    return reduce(this.parts, reduceParts, 0)
+  }
 }
 
 export class Rubric {
