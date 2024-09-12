@@ -50,13 +50,14 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
     </RadioGroup.Root>
   )
 }
+
 export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   answer,
   onAnswerUpdate,
   choices,
   disabled = false,
 }) => {
-  const initialValue = useMemo(() => answer?.answer?.split(',') ?? [], [answer])
+  const initialValue = useMemo(() => (answer?.answer ? answer.answer.split(',') : []), [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
     if (!isEqual(value, initialValue)) {

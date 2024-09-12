@@ -14,14 +14,12 @@ const options = [
   { value: '2', label: 'Option 2' },
 ]
 
-const answer = { answer: '' } as Answer
-
 describe('FlagTask', () => {
   it('renders with ornaments', () => {
     render(
       <FlagTask
         type={TaskType.FLAG}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         showOrnament={true}
       />
@@ -34,7 +32,7 @@ describe('FlagTask', () => {
     render(
       <FlagTask
         type={TaskType.FLAG}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         showOrnament={false}
       />
@@ -43,24 +41,23 @@ describe('FlagTask', () => {
     expect(screen.queryByText('}')).not.toBeInTheDocument()
   })
 
-  it.skip('handles input changes and removes spaces', () => {
-    const handleChange = jest.fn()
+  it('handles input changes removing spaces', () => {
     render(
-      <FlagTask
-        type={TaskType.FLAG}
-        answer={answer}
-        onAnswerUpdate={handleChange}
-        showOrnament={true}
-      />
+      <FlagTask type={TaskType.FLAG} answer={{ answer: '' } as Answer} onAnswerUpdate={() => {}} />
     )
-    const input = screen.getByRole('textbox')
+    const input = screen.getByRole('textbox') // or use getByPlaceholderText if needed
     fireEvent.change(input, { target: { value: ' FLAG 123 ' } })
-    expect(input.innerHTML).toBe('FLAG123')
+    expect(input).toHaveValue('FLAG123')
   })
 
   it('renders as disabled', () => {
     render(
-      <FlagTask type={TaskType.FLAG} answer={answer} onAnswerUpdate={() => {}} disabled={true} />
+      <FlagTask
+        type={TaskType.FLAG}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={() => {}}
+        disabled={true}
+      />
     )
     expect(screen.getByRole('textbox')).toBeDisabled()
   })
@@ -68,23 +65,21 @@ describe('FlagTask', () => {
 
 describe('NumberTask', () => {
   it('renders correctly', () => {
-    render(<NumberTask type={TaskType.INTEGER} answer={answer} onAnswerUpdate={() => {}} />)
+    render(
+      <NumberTask
+        type={TaskType.INTEGER}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={() => {}}
+      />
+    )
     expect(screen.getByRole('spinbutton')).toBeInTheDocument()
-  })
-
-  it.skip('handles input changes', () => {
-    const handleChange = jest.fn()
-    render(<NumberTask type={TaskType.INTEGER} answer={answer} onAnswerUpdate={handleChange} />)
-    const input = screen.getByRole('spinbutton')
-    fireEvent.change(input, { target: { value: 5 } })
-    expect(handleChange).toHaveBeenCalledWith('5')
   })
 
   it('renders as disabled', () => {
     render(
       <NumberTask
         type={TaskType.INTEGER}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         disabled={true}
       />
@@ -95,21 +90,24 @@ describe('NumberTask', () => {
 
 describe('EssayTask', () => {
   it('renders correctly', () => {
-    render(<EssayTask type={TaskType.ESSAY} answer={answer} onAnswerUpdate={() => {}} />)
+    render(
+      <EssayTask
+        type={TaskType.ESSAY}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={() => {}}
+      />
+    )
     expect(screen.getByRole('textbox')).toBeInTheDocument()
-  })
-
-  it.skip('handles input changes', () => {
-    const handleChange = jest.fn()
-    render(<EssayTask type={TaskType.ESSAY} answer={answer} onAnswerUpdate={handleChange} />)
-    const textarea = screen.getByRole('textbox')
-    fireEvent.change(textarea, { target: { value: 'New text' } })
-    expect(handleChange).toHaveBeenCalledWith('New text')
   })
 
   it('renders as disabled', () => {
     render(
-      <EssayTask type={TaskType.ESSAY} answer={answer} onAnswerUpdate={() => {}} disabled={true} />
+      <EssayTask
+        type={TaskType.ESSAY}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={() => {}}
+        disabled={true}
+      />
     )
     expect(screen.getByRole('textbox')).toBeDisabled()
   })
@@ -117,32 +115,33 @@ describe('EssayTask', () => {
 
 describe('CodeTask', () => {
   it('renders correctly', () => {
-    render(<CodeTask type={TaskType.CODE} answer={answer} onAnswerUpdate={() => {}} />)
+    render(
+      <CodeTask type={TaskType.CODE} answer={{ answer: '' } as Answer} onAnswerUpdate={() => {}} />
+    )
     expect(screen.getByRole('textbox')).toBeInTheDocument()
-  })
-
-  it.skip('handles input changes', () => {
-    const handleChange = jest.fn()
-    render(<CodeTask type={TaskType.CODE} answer={answer} onAnswerUpdate={handleChange} />)
-    const textarea = screen.getByRole('textbox')
-    fireEvent.change(textarea, { target: { value: 'New code' } })
-    expect(handleChange).toHaveBeenCalledWith('New code')
   })
 
   it('renders as disabled', () => {
     render(
-      <CodeTask type={TaskType.CODE} answer={answer} onAnswerUpdate={() => {}} disabled={true} />
+      <CodeTask
+        type={TaskType.CODE}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={() => {}}
+        disabled={true}
+      />
     )
     expect(screen.getByRole('textbox')).toBeDisabled()
   })
 })
 
 describe('MCQOneTask', () => {
+  const mockOnAnswerUpdate = jest.fn()
+
   it('renders options correctly', () => {
     render(
       <MCQOneTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         choices={options}
       />
@@ -151,26 +150,42 @@ describe('MCQOneTask', () => {
     expect(screen.getByLabelText('Option 2')).toBeInTheDocument()
   })
 
-  it.skip('handles option selection', () => {
-    const handleChange = jest.fn()
+  it('updates value correctly when a radio button is clicked', () => {
     render(
       <MCQOneTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
-        answer={answer}
-        onAnswerUpdate={handleChange}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={mockOnAnswerUpdate}
         choices={options}
       />
     )
-    const option1 = screen.getByLabelText('Option 1')
-    fireEvent.click(option1)
-    expect(handleChange).toHaveBeenCalledWith('1')
+
+    const secondOption = screen.getByLabelText('Option 2')
+    fireEvent.click(secondOption)
+    expect(secondOption).toBeChecked()
+    expect(mockOnAnswerUpdate).toHaveBeenCalledWith({ answer: '2' })
+  })
+
+  it('does not call () => {} if the same value is selected again', () => {
+    render(
+      <MCQOneTask
+        type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
+        answer={{ answer: '2' } as Answer}
+        onAnswerUpdate={mockOnAnswerUpdate}
+        choices={options}
+      />
+    )
+
+    const secondOption = screen.getByLabelText('Option 2')
+    fireEvent.click(secondOption)
+    expect(mockOnAnswerUpdate).not.toHaveBeenCalled()
   })
 
   it('renders as disabled', () => {
     render(
       <MCQOneTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         choices={options}
         disabled={true}
@@ -182,11 +197,13 @@ describe('MCQOneTask', () => {
 })
 
 describe('MCQMultiTask', () => {
+  const mockOnAnswerUpdate = jest.fn()
+
   it('renders options correctly', () => {
     render(
       <MCQMultiTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         choices={options}
       />
@@ -195,11 +212,62 @@ describe('MCQMultiTask', () => {
     expect(screen.getByLabelText('Option 2')).toBeInTheDocument()
   })
 
+  it('adds value to the selected values when a checkbox is clicked', () => {
+    render(
+      <MCQMultiTask
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={mockOnAnswerUpdate}
+        choices={options}
+      />
+    )
+
+    const firstCheckbox = screen.getByLabelText('Option 1')
+    fireEvent.click(firstCheckbox)
+    expect(firstCheckbox).toBeChecked()
+    expect(mockOnAnswerUpdate).toHaveBeenCalledWith({ answer: '1' })
+  })
+
+  it('removes value from selected values when a checkbox is clicked again', () => {
+    render(
+      <MCQMultiTask
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
+        answer={{ answer: '1' } as Answer}
+        onAnswerUpdate={mockOnAnswerUpdate}
+        choices={options}
+      />
+    )
+
+    const firstCheckbox = screen.getByLabelText('Option 1')
+    fireEvent.click(firstCheckbox)
+    expect(firstCheckbox).not.toBeChecked()
+    expect(mockOnAnswerUpdate).toHaveBeenCalledWith({ answer: '' })
+  })
+
+  it('handles multiple selections correctly', () => {
+    render(
+      <MCQMultiTask
+        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
+        answer={{ answer: '' } as Answer}
+        onAnswerUpdate={mockOnAnswerUpdate}
+        choices={options}
+      />
+    )
+
+    const firstCheckbox = screen.getByLabelText('Option 1')
+    const secondCheckbox = screen.getByLabelText('Option 2')
+    fireEvent.click(firstCheckbox)
+    fireEvent.click(secondCheckbox)
+    expect(firstCheckbox).toBeChecked()
+    expect(secondCheckbox).toBeChecked()
+    expect(mockOnAnswerUpdate).toHaveBeenCalledWith({ answer: '1,2' })
+  })
+
   it('renders as disabled', () => {
     render(
       <MCQMultiTask
         type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
-        answer={answer}
+        answer={{ answer: '' } as Answer}
         onAnswerUpdate={() => {}}
         choices={options}
         disabled={true}
