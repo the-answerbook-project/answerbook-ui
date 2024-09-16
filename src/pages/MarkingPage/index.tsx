@@ -8,6 +8,7 @@ import MarkingToolbar from '../../components/topBars/MarkingToolbar'
 import useActiveIdOnScroll from '../../hooks/interactiveScrollspy'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
+import HorizontalMarkingPane from './HorizontalMarkingPane'
 import MarkableSubmission from './MarkableSubmission'
 import Scrollspy from './Scrollspy'
 import './index.css'
@@ -53,7 +54,7 @@ const MarkingPage: FC = () => {
       <RadixUISection pb="0">
         <Grid columns="2fr 6fr 2fr" height="calc(100vh - var(--space-9))">
           <Box p="2" className="sticky-sidebar">
-            Left
+            <HorizontalMarkingPane questions={questions} />
           </Box>
           <Box pt="2" pb="60vh" className="scrollable-col">
             {!student ? (
