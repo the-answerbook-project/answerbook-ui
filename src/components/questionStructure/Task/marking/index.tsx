@@ -8,6 +8,7 @@ import { CodeTask, CodeTaskProps } from './variants/CodeTask'
 import { EssayTask, EssayTaskProps } from './variants/EssayTask'
 import { FlagTask, FlagTaskProps } from './variants/FlagTask'
 import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
+import NoAnswerBanner from './variants/NoAnswerBanner'
 import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 import {
   ProcessedHandwritingProps,
@@ -43,7 +44,7 @@ export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   return (
     <Flex gap="3" direction="column">
       {instructions && <Markdown>{instructions}</Markdown>}
-      <Component {...taskProps} />
+      {taskProps.answer ? <Component {...taskProps} /> : <NoAnswerBanner />}
     </Flex>
   )
 }

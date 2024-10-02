@@ -10,7 +10,6 @@ import { TaskFactory, TaskProps } from '../../components/questionStructure/Task/
 import { Answer, Question as QuestionType } from '../../types/exam'
 import { MarkRoot, Student } from '../../types/marking'
 import MarkInputPanel from './MarkInputPanel'
-import NoAnswerBanner from './NoAnswerBanner'
 import QuestionHeader from './QuestionHeader'
 
 interface MarkableSubmissionProps {
@@ -61,7 +60,6 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
                             {section.tasks.map((task, t_) => {
                               const t = t_ + 1
                               const answer = lookupAnswer(student.username, q, p, s, t)
-                              if (!answer) return <NoAnswerBanner key={`${sectionId}-${t}`} />
                               return (
                                 <TaskFactory
                                   key={`${sectionId}-${t}`}
