@@ -1,15 +1,15 @@
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { CodeTask } from '../../../components/questionStructure/Task/assessment/variants/CodeTask'
-import { EssayTask } from '../../../components/questionStructure/Task/assessment/variants/EssayTask'
-import { FlagTask } from '../../../components/questionStructure/Task/assessment/variants/FlagTask'
+import { TaskType } from '../../../components/questionStructure/Task/constants'
+import { CodeTask } from '../../../components/questionStructure/Task/editable/variants/CodeTask'
+import { EssayTask } from '../../../components/questionStructure/Task/editable/variants/EssayTask'
+import { FlagTask } from '../../../components/questionStructure/Task/editable/variants/FlagTask'
 import {
   MCQMultiTask,
   MCQOneTask,
-} from '../../../components/questionStructure/Task/assessment/variants/MCQ'
-import { NumberTask } from '../../../components/questionStructure/Task/assessment/variants/NumberTask'
-import { TaskType } from '../../../components/questionStructure/Task/constants'
+} from '../../../components/questionStructure/Task/editable/variants/MCQ'
+import { NumberTask } from '../../../components/questionStructure/Task/editable/variants/NumberTask'
 import { Answer } from '../../../types/exam'
 
 const options = [
@@ -52,18 +52,6 @@ describe('FlagTask', () => {
     fireEvent.change(input, { target: { value: ' FLAG 123 ' } })
     expect(input).toHaveValue('FLAG123')
   })
-
-  it('renders as disabled', () => {
-    render(
-      <FlagTask
-        type={TaskType.FLAG}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        disabled={true}
-      />
-    )
-    expect(screen.getByRole('textbox')).toBeDisabled()
-  })
 })
 
 describe('NumberTask', () => {
@@ -76,18 +64,6 @@ describe('NumberTask', () => {
       />
     )
     expect(screen.getByRole('spinbutton')).toBeInTheDocument()
-  })
-
-  it('renders as disabled', () => {
-    render(
-      <NumberTask
-        type={TaskType.INTEGER}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        disabled={true}
-      />
-    )
-    expect(screen.getByRole('spinbutton')).toBeDisabled()
   })
 })
 
@@ -102,18 +78,6 @@ describe('EssayTask', () => {
     )
     expect(screen.getByRole('textbox')).toBeInTheDocument()
   })
-
-  it('renders as disabled', () => {
-    render(
-      <EssayTask
-        type={TaskType.ESSAY}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        disabled={true}
-      />
-    )
-    expect(screen.getByRole('textbox')).toBeDisabled()
-  })
 })
 
 describe('CodeTask', () => {
@@ -122,18 +86,6 @@ describe('CodeTask', () => {
       <CodeTask type={TaskType.CODE} answer={{ answer: '' } as Answer} onAnswerUpdate={() => {}} />
     )
     expect(screen.getByRole('textbox')).toBeInTheDocument()
-  })
-
-  it('renders as disabled', () => {
-    render(
-      <CodeTask
-        type={TaskType.CODE}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        disabled={true}
-      />
-    )
-    expect(screen.getByRole('textbox')).toBeDisabled()
   })
 })
 
@@ -182,20 +134,6 @@ describe('MCQOneTask', () => {
     const secondOption = screen.getByLabelText('Option 2')
     fireEvent.click(secondOption)
     expect(mockOnAnswerUpdate).not.toHaveBeenCalled()
-  })
-
-  it('renders as disabled', () => {
-    render(
-      <MCQOneTask
-        type={TaskType.MULTIPLE_CHOICE_SELECT_ONE}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        choices={options}
-        disabled={true}
-      />
-    )
-    expect(screen.getByLabelText('Option 1')).toBeDisabled()
-    expect(screen.getByLabelText('Option 2')).toBeDisabled()
   })
 })
 
@@ -264,19 +202,5 @@ describe('MCQMultiTask', () => {
     expect(firstCheckbox).toBeChecked()
     expect(secondCheckbox).toBeChecked()
     expect(mockOnAnswerUpdate).toHaveBeenCalledWith({ answer: '1,2' })
-  })
-
-  it('renders as disabled', () => {
-    render(
-      <MCQMultiTask
-        type={TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL}
-        answer={{ answer: '' } as Answer}
-        onAnswerUpdate={() => {}}
-        choices={options}
-        disabled={true}
-      />
-    )
-    expect(screen.getByLabelText('Option 1')).toBeDisabled()
-    expect(screen.getByLabelText('Option 2')).toBeDisabled()
   })
 })

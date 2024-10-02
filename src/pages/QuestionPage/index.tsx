@@ -8,7 +8,7 @@ import Header from '../../components/pageStructure/Header'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../../components/questionStructure/Task/assessment'
+import { EditableTaskFactory, TaskProps } from '../../components/questionStructure/Task/editable'
 import { Answer, Question as QuestionSpec } from '../../types/exam'
 import AnswerStatus from './AnswerStatus'
 
@@ -49,7 +49,7 @@ const QuestionPage: FC<QuestionPageProps> = ({
                         const answer = lookupAnswer(questionNumber, p, s, t)
                         return (
                           <Grid columns="7fr 3fr" key={`${sectionId}-${t}`}>
-                            <TaskFactory
+                            <EditableTaskFactory
                               {...({
                                 ...instanceToPlain(task),
                                 onAnswerUpdate: saveAnswer,

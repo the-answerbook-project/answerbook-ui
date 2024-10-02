@@ -6,7 +6,7 @@ import React, { FC } from 'react'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../../components/questionStructure/Task/marking'
+import { ReadOnlyTaskFactory, TaskProps } from '../../components/questionStructure/Task/readonly'
 import { Answer, Question as QuestionType } from '../../types/exam'
 import { MarkRoot, Student } from '../../types/marking'
 import MarkInputPanel from './MarkInputPanel'
@@ -61,7 +61,7 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
                               const t = t_ + 1
                               const answer = lookupAnswer(student.username, q, p, s, t)
                               return (
-                                <TaskFactory
+                                <ReadOnlyTaskFactory
                                   key={`${sectionId}-${t}`}
                                   {...({
                                     answer: answer,

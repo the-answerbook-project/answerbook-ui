@@ -5,7 +5,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
-import '../../flagTask.css'
+import '../../styles/flag.css'
 import { AssessmentTaskProps } from '../../types'
 
 export interface FlagTaskProps extends AssessmentTaskProps {
@@ -13,12 +13,7 @@ export interface FlagTaskProps extends AssessmentTaskProps {
   showOrnament?: boolean
 }
 
-export const FlagTask: FC<FlagTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  showOrnament = true,
-  disabled = false,
-}) => {
+export const FlagTask: FC<FlagTaskProps> = ({ answer, onAnswerUpdate, showOrnament = true }) => {
   const FLAG_LENGTH = 32
   const initialValue = useMemo(() => answer?.answer ?? '', [answer])
   const [value, setValue] = useState(initialValue)
@@ -45,7 +40,6 @@ export const FlagTask: FC<FlagTaskProps> = ({
         </Flex>
       )}
       <TextField.Root
-        disabled={disabled}
         value={value}
         onChange={handleChange}
         radius="none"

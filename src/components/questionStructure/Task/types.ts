@@ -8,5 +8,4 @@ export interface TaskBaseProps {
 
 export interface AssessmentTaskProps extends TaskBaseProps {
   onAnswerUpdate: (answer: Answer) => void
-  disabled?: boolean
 }

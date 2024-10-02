@@ -1,4 +1,4 @@
-import { TextField } from '@radix-ui/themes'
+import { TextArea, TextField } from '@radix-ui/themes'
 import { isEqual } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
@@ -6,11 +6,12 @@ import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
 import { AssessmentTaskProps } from '../../types'
 
-export interface NumberTaskProps extends AssessmentTaskProps {
-  type: TaskType.INTEGER
+export interface EssayTaskProps extends AssessmentTaskProps {
+  type: TaskType.ESSAY
+  lines?: number
 }
 
-export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
+export const EssayTask: FC<EssayTaskProps> = ({ answer, onAnswerUpdate, lines = 5 }) => {
   const initialValue = useMemo(() => answer?.answer ?? '', [answer])
   const [value, setValue] = useState(initialValue)
   const debouncedValue = useDebounce(value)
@@ -23,19 +24,17 @@ export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabl
     }
   }, [debouncedValue, answer, onAnswerUpdate, initialValue])
 
-  const handleChange = (e) => {
+  const handleOnChange = (e) => {
     const newValue = e.target.value
     setValue(newValue)
   }
 
-  return (
-    <TextField.Root
-      value={value}
-      onChange={handleChange}
-      type="number"
-      variant="soft"
-      disabled={disabled}
-      placeholder="Your number here..."
-    />
-  )
+  const commonProps = {
+    value: value,
+    onChange: handleOnChange,
+    placeholder: 'Your answer here…',
+    variant: 'soft' as 'soft',
+  }
+  if (lines === 1) return <TextField.Root {...commonProps} />
+  return <TextArea {...commonProps} resize="vertical" rows={lines} />
 }

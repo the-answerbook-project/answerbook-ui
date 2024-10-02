@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import Markdown from '../../../Markdown'
 import { TaskType } from '../constants'
-import '../index.css'
+import '../styles/common.css'
 import { CodeTask, CodeTaskProps } from './variants/CodeTask'
 import { EssayTask, EssayTaskProps } from './variants/EssayTask'
 import { FlagTask, FlagTaskProps } from './variants/FlagTask'
@@ -39,7 +39,7 @@ const taskComponentMap = {
 
 type TaskComponent = FC<TaskProps & { instructions?: string }>
 
-export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
+export const ReadOnlyTaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
   return (
     <Flex gap="3" direction="column">

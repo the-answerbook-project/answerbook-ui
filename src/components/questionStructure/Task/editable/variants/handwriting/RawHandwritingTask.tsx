@@ -12,11 +12,7 @@ export interface RawHandwritingProps extends AssessmentTaskProps {
   type: TaskType.RAW_HANDWRITING
 }
 
-export const RawHandwritingTask: FC<RawHandwritingProps> = ({
-  answer,
-  onAnswerUpdate,
-  disabled = false,
-}) => {
+export const RawHandwritingTask: FC<RawHandwritingProps> = ({ answer, onAnswerUpdate }) => {
   const initialValue = useMemo(() => (answer?.answer ? JSON.parse(answer.answer) : {}), [answer])
 
   const [value, setValue] = useState(initialValue)
@@ -29,16 +25,14 @@ export const RawHandwritingTask: FC<RawHandwritingProps> = ({
 
   return (
     <Dialog.Root>
-      {!disabled && (
-        <Flex gap="3" align="center">
-          <Dialog.Trigger>
-            <Button disabled={disabled} size="4">
-              {value?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
-              <Pencil2Icon width="1.5rem" height="1.5rem" />
-            </Button>
-          </Dialog.Trigger>
-        </Flex>
-      )}
+      <Flex gap="3" align="center">
+        <Dialog.Trigger>
+          <Button size="4">
+            {value?.raw?.elements.length ? 'Edit answer' : 'Enter answer'}{' '}
+            <Pencil2Icon width="1.5rem" height="1.5rem" />
+          </Button>
+        </Dialog.Trigger>
+      </Flex>
       {!isEmpty(value?.raw?.elements) && (
         <ViewOnlyCanvas initialData={value?.raw?.elements ?? []} minHeight="500px" />
       )}

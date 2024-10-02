@@ -20,12 +20,7 @@ export interface MCQMultiTaskProps extends AssessmentTaskProps {
   choices: MCQOption[]
 }
 
-export const MCQOneTask: FC<MCQOneTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  choices,
-  disabled = false,
-}) => {
+export const MCQOneTask: FC<MCQOneTaskProps> = ({ answer, onAnswerUpdate, choices }) => {
   const initialValue = useMemo(() => answer?.answer ?? '', [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
@@ -41,7 +36,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   }
 
   return (
-    <RadioGroup.Root variant="soft" disabled={disabled} value={value} onClick={handleOnClick}>
+    <RadioGroup.Root variant="soft" value={value} onClick={handleOnClick}>
       {map(choices, (o) => (
         <RadioGroup.Item key={o.value} value={o.value}>
           {o.label}
@@ -51,12 +46,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   )
 }
 
-export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  choices,
-  disabled = false,
-}) => {
+export const MCQMultiTask: FC<MCQMultiTaskProps> = ({ answer, onAnswerUpdate, choices }) => {
   const initialValue = useMemo(() => (answer?.answer ? answer.answer.split(',') : []), [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
@@ -74,7 +64,7 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   }
 
   return (
-    <CheckboxGroup.Root disabled={disabled} variant="soft" value={value}>
+    <CheckboxGroup.Root variant="soft" value={value}>
       {map(choices, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value} onClick={handleOnClick}>
           {o.label}

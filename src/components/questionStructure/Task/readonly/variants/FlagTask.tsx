@@ -3,8 +3,8 @@ import classnames from 'classnames'
 import React, { FC } from 'react'
 
 import { TaskType } from '../../constants'
-import '../../flagTask.css'
-import '../../index.css'
+import '../../styles/common.css'
+import '../../styles/flag.css'
 import { TaskBaseProps } from '../../types'
 
 export interface FlagTaskProps extends TaskBaseProps {
