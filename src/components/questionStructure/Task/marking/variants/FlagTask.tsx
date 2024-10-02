@@ -1,33 +1,34 @@
-import { Code, Flex } from '@radix-ui/themes'
+import { Flex, TextField } from '@radix-ui/themes'
 import classnames from 'classnames'
 import React, { FC } from 'react'
 
 import { TaskType } from '../../constants'
 import '../../flagTask.css'
 import '../../index.css'
-import { AssessmentTaskProps } from '../../types'
+import { TaskBaseProps } from '../../types'
 
-export interface FlagTaskProps extends AssessmentTaskProps {
+export interface FlagTaskProps extends TaskBaseProps {
   type: TaskType.FLAG
-  showOrnament?: boolean
 }
 
-export const FlagTask: FC<FlagTaskProps> = ({ answer, showOrnament = true }) => {
+export const FlagTask: FC<FlagTaskProps> = ({ answer }) => {
   return (
     <Flex align="stretch">
-      {showOrnament && (
-        <Flex pl="2" align="center" className={classnames('ornament', 'left-flag-ornament')}>
-          <span className="monospaced">{'FLAG {'}</span>
-        </Flex>
-      )}
-      <Code variant="ghost" className="flag">
-        {answer.answer}
-      </Code>
-      {showOrnament && (
-        <Flex pr="2" align="center" className={classnames('ornament', 'right-flag-ornament')}>
-          <span className="monospaced">{'}'}</span>
-        </Flex>
-      )}
+      <Flex pl="2" align="center" className={classnames('ornament', 'left-flag-ornament')}>
+        <span className="monospaced">{'FLAG {'}</span>
+      </Flex>
+      <TextField.Root
+        disabled
+        value={answer.answer}
+        radius="none"
+        type="text"
+        maxLength={32}
+        variant="soft"
+        className={classnames('flag', 'monospaced')}
+      />
+      <Flex pr="2" align="center" className={classnames('ornament', 'right-flag-ornament')}>
+        <span className="monospaced">{'}'}</span>
+      </Flex>
     </Flex>
   )
 }
