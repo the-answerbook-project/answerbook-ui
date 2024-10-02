@@ -3,12 +3,12 @@ import { Button, Dialog, Flex } from '@radix-ui/themes'
 import { isEmpty, isEqual } from 'lodash'
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { TaskType } from '../../constants'
-import { TaskBaseProps } from '../../types'
+import { TaskType } from '../../../constants'
+import { AssessmentTaskProps } from '../../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import RawHandwritingEditor from './editors/RawHandwritingEditor/rawHandwritingEditor'
 
-export interface RawHandwritingProps extends TaskBaseProps {
+export interface RawHandwritingProps extends AssessmentTaskProps {
   type: TaskType.RAW_HANDWRITING
 }
 

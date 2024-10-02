@@ -1,9 +1,9 @@
 import { Flex } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
-import Markdown from '../../Markdown'
-import { TaskType } from './constants'
-import './index.css'
+import Markdown from '../../../Markdown'
+import { TaskType } from '../constants'
+import '../index.css'
 import { CodeTask, CodeTaskProps } from './variants/CodeTask'
 import { EssayTask, EssayTaskProps } from './variants/EssayTask'
 import { FlagTask, FlagTaskProps } from './variants/FlagTask'

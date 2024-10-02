@@ -2,11 +2,11 @@ import { TextField } from '@radix-ui/themes'
 import { isEqual } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import useDebounce from '../../../../hooks/debouncing'
-import { TaskType } from '../constants'
-import { TaskBaseProps } from '../types'
+import useDebounce from '../../../../../hooks/debouncing'
+import { TaskType } from '../../constants'
+import { AssessmentTaskProps } from '../../types'
 
-export interface NumberTaskProps extends TaskBaseProps {
+export interface NumberTaskProps extends AssessmentTaskProps {
   type: TaskType.INTEGER
 }
 

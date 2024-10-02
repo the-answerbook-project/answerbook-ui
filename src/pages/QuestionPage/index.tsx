@@ -8,7 +8,7 @@ import Header from '../../components/pageStructure/Header'
 import Part from '../../components/questionStructure/Part'
 import Question from '../../components/questionStructure/Question'
 import Section from '../../components/questionStructure/Section'
-import { TaskFactory, TaskProps } from '../../components/questionStructure/Task'
+import { TaskFactory, TaskProps } from '../../components/questionStructure/Task/assessment'
 import { Answer, Question as QuestionSpec } from '../../types/exam'
 import AnswerStatus from './AnswerStatus'
 

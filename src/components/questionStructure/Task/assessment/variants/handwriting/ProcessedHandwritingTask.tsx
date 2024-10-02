@@ -4,12 +4,12 @@ import { MathJax } from 'better-react-mathjax'
 import { isEmpty, isEqual } from 'lodash'
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { TaskType } from '../../constants'
-import { TaskBaseProps } from '../../types'
+import { TaskType } from '../../../constants'
+import { AssessmentTaskProps } from '../../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
 
-export interface ProcessedHandwritingProps extends TaskBaseProps {
+export interface ProcessedHandwritingProps extends AssessmentTaskProps {
   type: TaskType.PROCESSED_HANDWRITING
 }
 

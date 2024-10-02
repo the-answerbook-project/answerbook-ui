@@ -5,10 +5,10 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
-import { TaskBaseProps } from '../../types'
-import './index.css'
+import '../../flagTask.css'
+import { AssessmentTaskProps } from '../../types'
 
-export interface FlagTaskProps extends TaskBaseProps {
+export interface FlagTaskProps extends AssessmentTaskProps {
   type: TaskType.FLAG
   showOrnament?: boolean
 }

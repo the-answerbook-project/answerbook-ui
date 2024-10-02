@@ -2,17 +2,16 @@ import { TextArea, TextField } from '@radix-ui/themes'
 import { isEqual } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import useDebounce from '../../../../hooks/debouncing'
-import { TaskType } from '../constants'
-import '../index.css'
-import { TaskBaseProps } from '../types'
+import useDebounce from '../../../../../hooks/debouncing'
+import { TaskType } from '../../constants'
+import { AssessmentTaskProps } from '../../types'
 
-export interface CodeTaskProps extends TaskBaseProps {
-  type: TaskType.CODE
+export interface EssayTaskProps extends AssessmentTaskProps {
+  type: TaskType.ESSAY
   lines?: number
 }
 
-export const CodeTask: FC<CodeTaskProps> = ({
+export const EssayTask: FC<EssayTaskProps> = ({
   answer,
   onAnswerUpdate,
   lines = 5,
@@ -34,13 +33,13 @@ export const CodeTask: FC<CodeTaskProps> = ({
     const newValue = e.target.value
     setValue(newValue)
   }
+
   const commonProps = {
     value: value,
     onChange: handleOnChange,
     placeholder: 'Your answer here…',
     disabled: disabled,
     variant: 'soft' as 'soft',
-    className: 'monospaced',
   }
   if (lines === 1) return <TextField.Root {...commonProps} />
   return <TextArea {...commonProps} resize="vertical" rows={lines} />

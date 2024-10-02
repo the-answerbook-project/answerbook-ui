@@ -1,7 +1,7 @@
 .flag {
   /* the very anonymous value of 18 was obtained via trial and error
-       * TODO identify a more programmatic way to derive it
-       */
+   * TODO identify a more programmatic way to derive it
+   */
   width: calc(var(--default-font-size) * 18);
 }
 

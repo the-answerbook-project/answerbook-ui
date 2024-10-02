@@ -1,12 +1,15 @@
 import '@testing-library/jest-dom/extend-expect'
 import { fireEvent, render, screen } from '@testing-library/react'
 
+import { CodeTask } from '../../../components/questionStructure/Task/assessment/variants/CodeTask'
+import { EssayTask } from '../../../components/questionStructure/Task/assessment/variants/EssayTask'
+import { FlagTask } from '../../../components/questionStructure/Task/assessment/variants/FlagTask'
+import {
+  MCQMultiTask,
+  MCQOneTask,
+} from '../../../components/questionStructure/Task/assessment/variants/MCQ'
+import { NumberTask } from '../../../components/questionStructure/Task/assessment/variants/NumberTask'
 import { TaskType } from '../../../components/questionStructure/Task/constants'
-import { CodeTask } from '../../../components/questionStructure/Task/variants/CodeTask'
-import { EssayTask } from '../../../components/questionStructure/Task/variants/EssayTask'
-import { FlagTask } from '../../../components/questionStructure/Task/variants/FlagTask'
-import { MCQMultiTask, MCQOneTask } from '../../../components/questionStructure/Task/variants/MCQ'
-import { NumberTask } from '../../../components/questionStructure/Task/variants/NumberTask'
 import { Answer } from '../../../types/exam'
 
 const options = [

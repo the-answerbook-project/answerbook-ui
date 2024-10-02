@@ -2,20 +2,20 @@ import { CheckboxGroup, RadioGroup } from '@radix-ui/themes'
 import { isEqual, map } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import { TaskType } from '../constants'
-import { TaskBaseProps } from '../types'
+import { TaskType } from '../../constants'
+import { AssessmentTaskProps } from '../../types'
 
 type MCQOption = {
   value: string
   label: string
 }
 
-export interface MCQOneTaskProps extends TaskBaseProps {
+export interface MCQOneTaskProps extends AssessmentTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_ONE
   choices: MCQOption[]
 }
 
-export interface MCQMultiTaskProps extends TaskBaseProps {
+export interface MCQMultiTaskProps extends AssessmentTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL
   choices: MCQOption[]
 }

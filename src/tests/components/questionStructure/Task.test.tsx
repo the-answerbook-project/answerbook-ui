@@ -1,12 +1,12 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 
-import { TaskFactory } from '../../../components/questionStructure/Task'
+import { TaskFactory } from '../../../components/questionStructure/Task/assessment'
+import { EssayTask } from '../../../components/questionStructure/Task/assessment/variants/EssayTask'
 import { TaskType } from '../../../components/questionStructure/Task/constants'
-import { EssayTask } from '../../../components/questionStructure/Task/variants/EssayTask'
 import { Answer } from '../../../types/exam'
 
-jest.mock('../../../components/questionStructure/Task/variants/EssayTask', () => ({
+jest.mock('../../../components/questionStructure/Task/assessment/variants/EssayTask', () => ({
   EssayTask: jest.fn(),
 }))
 
