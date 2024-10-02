@@ -2,15 +2,15 @@ import { TextField } from '@radix-ui/themes'
 import { isEqual } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import useDebounce from '../../../../hooks/debouncing'
-import { TaskType } from '../constants'
-import { TaskBaseProps } from '../types'
+import useDebounce from '../../../../../hooks/debouncing'
+import { TaskType } from '../../constants'
+import { EditableTaskProps } from '../../types'
 
-export interface NumberTaskProps extends TaskBaseProps {
+export interface NumberTaskProps extends EditableTaskProps {
   type: TaskType.INTEGER
 }
 
-export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabled = false }) => {
+export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate }) => {
   const initialValue = useMemo(() => answer?.answer ?? '', [answer])
   const [value, setValue] = useState(initialValue)
   const debouncedValue = useDebounce(value)
@@ -34,7 +34,6 @@ export const NumberTask: FC<NumberTaskProps> = ({ answer, onAnswerUpdate, disabl
       onChange={handleChange}
       type="number"
       variant="soft"
-      disabled={disabled}
       placeholder="Your number here..."
     />
   )

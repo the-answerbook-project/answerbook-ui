@@ -4,19 +4,18 @@ import { MathJax } from 'better-react-mathjax'
 import { isEmpty, isEqual } from 'lodash'
 import { FC, useEffect, useMemo, useState } from 'react'
 
-import { TaskType } from '../../constants'
-import { TaskBaseProps } from '../../types'
+import { TaskType } from '../../../constants'
+import { EditableTaskProps } from '../../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
 
-export interface ProcessedHandwritingProps extends TaskBaseProps {
+export interface ProcessedHandwritingProps extends EditableTaskProps {
   type: TaskType.PROCESSED_HANDWRITING
 }
 
 export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
   answer,
   onAnswerUpdate,
-  disabled = false,
 }) => {
   const initialValue = useMemo(
     () => (answer?.answer ? JSON.parse(answer.answer) : { latex: '' }),
@@ -35,14 +34,12 @@ export const ProcessedHandwritingTask: FC<ProcessedHandwritingProps> = ({
   return (
     <Dialog.Root>
       <Flex gap="3" align="center">
-        {!disabled && (
-          <Dialog.Trigger>
-            <Button disabled={disabled} size="4">
-              {strokes?.length ? 'Edit answer' : 'Enter answer'}{' '}
-              <Pencil2Icon width="1.5rem" height="1.5rem" />
-            </Button>
-          </Dialog.Trigger>
-        )}
+        <Dialog.Trigger>
+          <Button size="4">
+            {strokes?.length ? 'Edit answer' : 'Enter answer'}{' '}
+            <Pencil2Icon width="1.5rem" height="1.5rem" />
+          </Button>
+        </Dialog.Trigger>
         {value?.latex && (
           <Card className="latex-preview">
             <Flex p="3">

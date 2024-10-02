@@ -1,13 +1,14 @@
 import { Flex } from '@radix-ui/themes'
 import React, { FC } from 'react'
 
-import Markdown from '../../Markdown'
-import { TaskType } from './constants'
-import './index.css'
+import Markdown from '../../../Markdown'
+import { TaskType } from '../constants'
+import '../styles/common.css'
 import { CodeTask, CodeTaskProps } from './variants/CodeTask'
 import { EssayTask, EssayTaskProps } from './variants/EssayTask'
 import { FlagTask, FlagTaskProps } from './variants/FlagTask'
 import { MCQMultiTask, MCQMultiTaskProps, MCQOneTask, MCQOneTaskProps } from './variants/MCQ'
+import NoAnswerBanner from './variants/NoAnswerBanner'
 import { NumberTask, NumberTaskProps } from './variants/NumberTask'
 import {
   ProcessedHandwritingProps,
@@ -38,12 +39,12 @@ const taskComponentMap = {
 
 type TaskComponent = FC<TaskProps & { instructions?: string }>
 
-export const TaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
+export const ReadOnlyTaskFactory: TaskComponent = ({ instructions, ...taskProps }) => {
   const Component = taskComponentMap[taskProps.type] as TaskComponent
   return (
     <Flex gap="3" direction="column">
       {instructions && <Markdown>{instructions}</Markdown>}
-      <Component {...taskProps} />
+      {taskProps.answer ? <Component {...taskProps} /> : <NoAnswerBanner />}
     </Flex>
   )
 }

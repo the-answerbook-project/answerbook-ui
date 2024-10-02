@@ -13,7 +13,7 @@ import React, {
   useState,
 } from 'react'
 
-import { ConfirmDialog } from '../../../../../../ConfirmDialog'
+import { ConfirmDialog } from '../../../../../../../ConfirmDialog'
 import { RawHandwritingAnswer } from '../../types'
 import './index.scss'
 

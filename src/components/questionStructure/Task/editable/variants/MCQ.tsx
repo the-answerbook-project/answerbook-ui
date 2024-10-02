@@ -2,30 +2,25 @@ import { CheckboxGroup, RadioGroup } from '@radix-ui/themes'
 import { isEqual, map } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import { TaskType } from '../constants'
-import { TaskBaseProps } from '../types'
+import { TaskType } from '../../constants'
+import { EditableTaskProps } from '../../types'
 
 type MCQOption = {
   value: string
   label: string
 }
 
-export interface MCQOneTaskProps extends TaskBaseProps {
+export interface MCQOneTaskProps extends EditableTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_ONE
   choices: MCQOption[]
 }
 
-export interface MCQMultiTaskProps extends TaskBaseProps {
+export interface MCQMultiTaskProps extends EditableTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL
   choices: MCQOption[]
 }
 
-export const MCQOneTask: FC<MCQOneTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  choices,
-  disabled = false,
-}) => {
+export const MCQOneTask: FC<MCQOneTaskProps> = ({ answer, onAnswerUpdate, choices }) => {
   const initialValue = useMemo(() => answer?.answer ?? '', [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
@@ -41,7 +36,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   }
 
   return (
-    <RadioGroup.Root variant="soft" disabled={disabled} value={value} onClick={handleOnClick}>
+    <RadioGroup.Root variant="soft" value={value} onClick={handleOnClick}>
       {map(choices, (o) => (
         <RadioGroup.Item key={o.value} value={o.value}>
           {o.label}
@@ -51,12 +46,7 @@ export const MCQOneTask: FC<MCQOneTaskProps> = ({
   )
 }
 
-export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
-  answer,
-  onAnswerUpdate,
-  choices,
-  disabled = false,
-}) => {
+export const MCQMultiTask: FC<MCQMultiTaskProps> = ({ answer, onAnswerUpdate, choices }) => {
   const initialValue = useMemo(() => (answer?.answer ? answer.answer.split(',') : []), [answer])
   const [value, setValue] = useState(initialValue)
   useEffect(() => {
@@ -74,7 +64,7 @@ export const MCQMultiTask: FC<MCQMultiTaskProps> = ({
   }
 
   return (
-    <CheckboxGroup.Root disabled={disabled} variant="soft" value={value}>
+    <CheckboxGroup.Root variant="soft" value={value}>
       {map(choices, (o) => (
         <CheckboxGroup.Item key={o.value} value={o.value} onClick={handleOnClick}>
           {o.label}
