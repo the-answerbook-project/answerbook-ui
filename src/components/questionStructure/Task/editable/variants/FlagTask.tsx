@@ -6,9 +6,9 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
 import '../../styles/flag.css'
-import { AssessmentTaskProps } from '../../types'
+import { EditableTaskProps } from '../../types'
 
-export interface FlagTaskProps extends AssessmentTaskProps {
+export interface FlagTaskProps extends EditableTaskProps {
   type: TaskType.FLAG
   showOrnament?: boolean
 }

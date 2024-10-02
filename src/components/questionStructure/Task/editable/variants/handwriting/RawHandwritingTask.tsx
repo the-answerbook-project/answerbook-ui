@@ -4,11 +4,11 @@ import { isEmpty, isEqual } from 'lodash'
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../../../constants'
-import { AssessmentTaskProps } from '../../../types'
+import { EditableTaskProps } from '../../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import RawHandwritingEditor from './editors/RawHandwritingEditor/rawHandwritingEditor'
 
-export interface RawHandwritingProps extends AssessmentTaskProps {
+export interface RawHandwritingProps extends EditableTaskProps {
   type: TaskType.RAW_HANDWRITING
 }
 

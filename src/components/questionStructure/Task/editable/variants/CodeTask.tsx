@@ -5,9 +5,9 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 import useDebounce from '../../../../../hooks/debouncing'
 import { TaskType } from '../../constants'
 import '../../styles/common.css'
-import { AssessmentTaskProps } from '../../types'
+import { EditableTaskProps } from '../../types'
 
-export interface CodeTaskProps extends AssessmentTaskProps {
+export interface CodeTaskProps extends EditableTaskProps {
   type: TaskType.CODE
   lines?: number
 }

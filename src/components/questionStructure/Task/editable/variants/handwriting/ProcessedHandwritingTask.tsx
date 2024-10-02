@@ -5,11 +5,11 @@ import { isEmpty, isEqual } from 'lodash'
 import { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../../../constants'
-import { AssessmentTaskProps } from '../../../types'
+import { EditableTaskProps } from '../../../types'
 import { ViewOnlyCanvas } from './components/ViewOnlyCanvas'
 import { ProcessedHandwritingEditor } from './editors/ProcessedHandwritingEditor'
 
-export interface ProcessedHandwritingProps extends AssessmentTaskProps {
+export interface ProcessedHandwritingProps extends EditableTaskProps {
   type: TaskType.PROCESSED_HANDWRITING
 }
 

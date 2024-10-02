@@ -3,19 +3,19 @@ import { isEqual, map } from 'lodash'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import { TaskType } from '../../constants'
-import { AssessmentTaskProps } from '../../types'
+import { EditableTaskProps } from '../../types'
 
 type MCQOption = {
   value: string
   label: string
 }
 
-export interface MCQOneTaskProps extends AssessmentTaskProps {
+export interface MCQOneTaskProps extends EditableTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_ONE
   choices: MCQOption[]
 }
 
-export interface MCQMultiTaskProps extends AssessmentTaskProps {
+export interface MCQMultiTaskProps extends EditableTaskProps {
   type: TaskType.MULTIPLE_CHOICE_SELECT_SEVERAL
   choices: MCQOption[]
 }

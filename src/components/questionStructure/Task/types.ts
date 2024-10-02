@@ -6,6 +6,6 @@ export interface TaskBaseProps {
   answer: Answer
 }
 
-export interface AssessmentTaskProps extends TaskBaseProps {
+export interface EditableTaskProps extends TaskBaseProps {
   onAnswerUpdate: (answer: Answer) => void
 }
