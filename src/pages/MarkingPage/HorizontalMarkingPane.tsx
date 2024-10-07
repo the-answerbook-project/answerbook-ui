@@ -1,8 +1,18 @@
 import { MixerHorizontalIcon } from '@radix-ui/react-icons'
-import { Box, Button, CheckboxGroup, Grid, Heading, Popover, Separator } from '@radix-ui/themes'
+import {
+  Box,
+  Button,
+  CheckboxGroup,
+  Flex,
+  Grid,
+  Heading,
+  Popover,
+  Separator,
+} from '@radix-ui/themes'
 import { entries, every, flatMap, fromPairs, keys, map, mapValues, pickBy, size } from 'lodash'
 import { FC, useState } from 'react'
 
+import '../../index.css'
 import { Question } from '../../types/exam'
 import { numberToLetter, numberToRoman } from '../../utils/common'
 
@@ -15,11 +25,15 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
     fromPairs(
       flatMap(entries(questions), ([qn, q]) =>
         flatMap(entries(q.parts), ([pn, p]) =>
-          map(entries(p.sections), ([sn]) => [`${qn}-${pn}-${sn}`, false])
+          map(entries(p.sections), ([sn]) => [`${qn}-${pn}-${sn}`, true])
         )
       )
     )
   )
+
+  function handleUpdateAll(value: boolean) {
+    setSectionSelectionTable((current) => mapValues(current, () => value))
+  }
 
   function noneCheckedWithPrefix(collection: Record<string, boolean>, prefix: string) {
     return !every(
@@ -56,7 +70,7 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
           Horizontal Marking
         </Button>
       </Popover.Trigger>
-      <Popover.Content minWidth="40vw">
+      <Popover.Content minWidth="20vw">
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
             <Box p="2">
@@ -90,6 +104,14 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
             </Box>
           ))}
         </Grid>
+        <Flex justify="center" align="center" className="button-group">
+          <Button color="gray" onClick={() => handleUpdateAll(true)}>
+            All
+          </Button>
+          <Button color="gray" onClick={() => handleUpdateAll(false)}>
+            None
+          </Button>
+        </Flex>
       </Popover.Content>
     </Popover.Root>
   )
