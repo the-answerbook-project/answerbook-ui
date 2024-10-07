@@ -1,6 +1,6 @@
 import { MixerHorizontalIcon } from '@radix-ui/react-icons'
 import { Box, Button, CheckboxGroup, Grid, Heading, Popover, Separator } from '@radix-ui/themes'
-import { size } from 'lodash'
+import { entries, every, flatMap, fromPairs, keys, map, mapValues, pickBy, size } from 'lodash'
 import { FC, useState } from 'react'
 
 import { Question } from '../../types/exam'
@@ -11,7 +11,42 @@ interface HorizontalMarkingPaneProps {
 }
 
 const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) => {
-  const [selectedSections, updateSelectedSections] = useState([])
+  const [sectionSelectionTable, setSectionSelectionTable] = useState<Record<string, boolean>>(
+    fromPairs(
+      flatMap(entries(questions), ([qn, q]) =>
+        flatMap(entries(q.parts), ([pn, p]) =>
+          map(entries(p.sections), ([sn]) => [`${qn}-${pn}-${sn}`, false])
+        )
+      )
+    )
+  )
+
+  function noneCheckedWithPrefix(collection: Record<string, boolean>, prefix: string) {
+    return !every(
+      pickBy(collection, (v, k) => k.startsWith(`${prefix}-`)),
+      Boolean
+    )
+  }
+
+  function handleUpdateByQuestion(questionID: string) {
+    setSectionSelectionTable((current) => {
+      let newValue = noneCheckedWithPrefix(current, questionID)
+      return mapValues(current, (v, k) => (k.startsWith(`${questionID}-`) ? newValue : v))
+    })
+  }
+
+  function handleUpdateByPart(partID: string) {
+    setSectionSelectionTable((current) => {
+      let newValue = noneCheckedWithPrefix(current, partID)
+      return mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? newValue : v))
+    })
+  }
+
+  function handleSectionSelectionUpdate(partID: string, sectionIDs: string[]) {
+    setSectionSelectionTable((current) =>
+      mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? sectionIDs.includes(k) : v))
+    )
+  }
 
   return (
     <Popover.Root>
@@ -25,27 +60,33 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
             <Box p="2">
-              <Heading>Question {q}</Heading>
+              <Heading onClick={() => handleUpdateByQuestion(q)}>Question {q}</Heading>
               <Separator size="4" />
-              {Object.entries(question.parts).map(([p, part]) => (
-                <Box p="1">
-                  <Heading size="5" as="h2">
-                    Part {numberToLetter(Number(p))}
-                  </Heading>
-                  <Box p="1">
-                    <CheckboxGroup.Root>
-                      {Object.keys(part.sections).map((s) => {
-                        const sectionId = `${q}-${p}-${s}`
-                        return (
-                          <CheckboxGroup.Item value={sectionId}>
-                            Section {numberToRoman(Number(s))}
-                          </CheckboxGroup.Item>
-                        )
-                      })}
-                    </CheckboxGroup.Root>
+              {Object.entries(question.parts).map(([p, part]) => {
+                const partID = `${q}-${p}`
+                return (
+                  <Box key={partID} p="1">
+                    <Heading size="5" as="h2" onClick={() => handleUpdateByPart(partID)}>
+                      Part {numberToLetter(Number(p))}
+                    </Heading>
+                    <Box p="1">
+                      <CheckboxGroup.Root
+                        value={keys(pickBy(sectionSelectionTable, Boolean))}
+                        onValueChange={(vs) => handleSectionSelectionUpdate(partID, vs)}
+                      >
+                        {Object.keys(part.sections).map((s) => {
+                          const sectionID = `${q}-${p}-${s}`
+                          return (
+                            <CheckboxGroup.Item key={sectionID} value={sectionID}>
+                              Section {numberToRoman(Number(s))}
+                            </CheckboxGroup.Item>
+                          )
+                        })}
+                      </CheckboxGroup.Root>
+                    </Box>
                   </Box>
-                </Box>
-              ))}
+                )
+              })}
             </Box>
           ))}
         </Grid>
