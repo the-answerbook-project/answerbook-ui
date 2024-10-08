@@ -16,6 +16,21 @@ ul.list {
   }
 }
 
+.clickable {
+  cursor: pointer;
+}
+
+/* Button group */
+.button-group .rt-Button:first-child {
+  box-shadow: none;
+  border-radius: var(--radius-2) 0 0 var(--radius-2);
+}
+
+.button-group .rt-Button:last-child {
+  box-shadow: none;
+  border-radius: 0 var(--radius-2) var(--radius-2) 0;
+}
+
 /* Global RadixUI Themes override */
 .rt-Card {
   --card-padding: 0;

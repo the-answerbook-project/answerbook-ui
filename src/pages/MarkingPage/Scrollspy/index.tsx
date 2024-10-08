@@ -4,16 +4,17 @@ import React, { FC } from 'react'
 
 import { Question as QuestionType } from '../../../types/exam'
 import { MarkRoot } from '../../../types/marking'
-import { numberToLetter, numberToRoman } from '../../../utils/common'
+import { hasPrefix, numberToLetter, numberToRoman } from '../../../utils/common'
 import { ScrollspyItem } from './ScrollspyItem'
 
 interface ScrollspyProps {
   questions: Record<number, QuestionType>
   marks: MarkRoot[]
   activeId: string | undefined
+  visibleSectionIDs: string[]
 }
 
-const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
+const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSectionIDs }) => {
   function currentQuestionMark(q: number): number | undefined {
     let relevantMarks = marks.filter((m) => m.question === q && !isNil(m.mark))
     return isEmpty(relevantMarks) ? undefined : sumBy(relevantMarks, 'mark')
@@ -30,42 +31,47 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId }) => {
 
   return (
     <Flex direction="column" gap="6" m="4" p="4">
-      {Object.entries(questions).map(([q_, question]) => {
-        const q = Number(q_)
-        const partial = currentQuestionMark(q)
-        const total = question.availableMarks
-        const color = pendingMarking(question, q) ? 'gray' : isNil(partial) ? 'red' : 'green'
-        return (
-          <Flex direction="column" gap="2">
-            <ScrollspyItem
-              id={`q${q}`}
-              active={!!activeId?.startsWith(`q${q}`)}
-              label={`Question ${q}`}
-              badgeProps={{ partial, total, color }}
-            />
-            <Flex direction="column" gap="0.5">
-              {Object.entries(question.parts).map(([p_, part]) => {
-                const p = Number(p_)
-                return Object.entries(part.sections).map(([s_, section]) => {
-                  const s = Number(s_)
-                  const partial = currentSectionMark(q, p, s)
-                  const total = section.maximumMark
-                  const color = isNil(partial) ? 'red' : 'green'
-                  return (
-                    <ScrollspyItem
-                      id={`q${q}-${p}-${s}`}
-                      active={activeId === `q${q}-${p}-${s}`}
-                      label={`Part (${numberToLetter(p)}) ${numberToRoman(s)}`}
-                      indent={true}
-                      badgeProps={{ partial, total, color }}
-                    />
-                  )
-                })
-              })}
+      {Object.entries(questions)
+        .filter(([q, _]) => hasPrefix(visibleSectionIDs, `${q}-`))
+        .map(([q_, question]) => {
+          const q = Number(q_)
+          const partial = currentQuestionMark(q)
+          const total = question.availableMarks
+          const color = pendingMarking(question, q) ? 'gray' : isNil(partial) ? 'red' : 'green'
+          return (
+            <Flex key={q} direction="column" gap="2">
+              <ScrollspyItem
+                id={`q${q}`}
+                active={!!activeId?.startsWith(`q${q}`)}
+                label={`Question ${q}`}
+                badgeProps={{ partial, total, color }}
+              />
+              <Flex direction="column" gap="0.5">
+                {Object.entries(question.parts).map(([p_, part]) => {
+                  const p = Number(p_)
+                  return Object.entries(part.sections)
+                    .filter(([s, _]) => hasPrefix(visibleSectionIDs, `${q}-${p}-${s}`))
+                    .map(([s_, section]) => {
+                      const s = Number(s_)
+                      const partial = currentSectionMark(q, p, s)
+                      const total = section.maximumMark
+                      const color = isNil(partial) ? 'red' : 'green'
+                      return (
+                        <ScrollspyItem
+                          id={`q${q}-${p}-${s}`}
+                          key={`q${q}-${p}-${s}`}
+                          active={activeId === `q${q}-${p}-${s}`}
+                          label={`Part (${numberToLetter(p)}) ${numberToRoman(s)}`}
+                          indent={true}
+                          badgeProps={{ partial, total, color }}
+                        />
+                      )
+                    })
+                })}
+              </Flex>
             </Flex>
-          </Flex>
-        )
-      })}
+          )
+        })}
     </Flex>
   )
 }

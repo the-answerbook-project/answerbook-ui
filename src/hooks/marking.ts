@@ -1,5 +1,5 @@
 import { instanceToPlain, plainToInstance } from 'class-transformer'
-import { groupBy, mapValues } from 'lodash'
+import { entries, flatMap, groupBy, keys, map, mapValues } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import axiosInstance from '../api/axiosInstance'
@@ -33,7 +33,16 @@ export const useQuestions = () => {
       .then(({ data }) => setQuestions(mapValues(data, (q) => plainToInstance(Question, q))))
       .finally(() => setQuestionsAreLoaded(true))
   }, [assessmentID])
-  return { questions, questionsAreLoaded }
+
+  const allSectionIDs: string[] = useMemo(
+    () =>
+      flatMap(entries(questions), ([qn, q]) =>
+        flatMap(entries(q.parts), ([pn, p]) => map(keys(p.sections), (sn) => `${qn}-${pn}-${sn}`))
+      ),
+    [questions]
+  )
+
+  return { questions, allSectionIDs, questionsAreLoaded }
 }
 
 export const useMarks = () => {
