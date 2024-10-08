@@ -9,20 +9,8 @@ import {
   Popover,
   Separator,
 } from '@radix-ui/themes'
-import {
-  entries,
-  every,
-  flatMap,
-  fromPairs,
-  keys,
-  map,
-  mapValues,
-  pickBy,
-  size,
-  some,
-  values,
-} from 'lodash'
-import { FC, useState } from 'react'
+import { every, fromPairs, keys, mapValues, pickBy, size, some, values } from 'lodash'
+import { FC, useEffect, useState } from 'react'
 
 import '../../index.css'
 import { Question } from '../../types/exam'
@@ -30,46 +18,49 @@ import { numberToLetter, numberToRoman } from '../../utils/common'
 
 interface HorizontalMarkingPaneProps {
   questions: Record<number, Question>
+  sectionIDs: string[]
+  onActiveSectionsUpdate: (sectionIDs: string[]) => void
 }
 
-const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) => {
-  const [sectionSelectionTable, setSectionSelectionTable] = useState<Record<string, boolean>>(
-    fromPairs(
-      flatMap(entries(questions), ([qn, q]) =>
-        flatMap(entries(q.parts), ([pn, p]) =>
-          map(entries(p.sections), ([sn]) => [`${qn}-${pn}-${sn}`, true])
-        )
-      )
-    )
+const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
+  questions,
+  sectionIDs,
+  onActiveSectionsUpdate,
+}) => {
+  const [horizontalMarkingState, setHorizontalMarkingState] = useState<Record<string, boolean>>(
+    fromPairs(sectionIDs.map((id) => [id, true]))
   )
+  useEffect(() => {
+    onActiveSectionsUpdate(keys(pickBy(horizontalMarkingState, (v, k) => v)))
+  }, [horizontalMarkingState, onActiveSectionsUpdate])
 
   function handleUpdateAll(value: boolean) {
-    setSectionSelectionTable((current) => mapValues(current, () => value))
+    setHorizontalMarkingState((current) => mapValues(current, () => value))
   }
 
-  function noneCheckedWithPrefix(collection: Record<string, boolean>, prefix: string) {
-    return !every(
+  function visibleByPrefix(collection: Record<string, boolean>, prefix: string) {
+    return some(
       pickBy(collection, (v, k) => k.startsWith(`${prefix}-`)),
       Boolean
     )
   }
 
   function handleUpdateByQuestion(questionID: string) {
-    setSectionSelectionTable((current) => {
-      let newValue = noneCheckedWithPrefix(current, questionID)
+    setHorizontalMarkingState((current) => {
+      let newValue = !visibleByPrefix(current, questionID)
       return mapValues(current, (v, k) => (k.startsWith(`${questionID}-`) ? newValue : v))
     })
   }
 
   function handleUpdateByPart(partID: string) {
-    setSectionSelectionTable((current) => {
-      let newValue = noneCheckedWithPrefix(current, partID)
+    setHorizontalMarkingState((current) => {
+      let newValue = !visibleByPrefix(current, partID)
       return mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? newValue : v))
     })
   }
 
   function handleSectionSelectionUpdate(partID: string, sectionIDs: string[]) {
-    setSectionSelectionTable((current) =>
+    setHorizontalMarkingState((current) =>
       mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? sectionIDs.includes(k) : v))
     )
   }
@@ -97,7 +88,7 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
                     </Heading>
                     <Box p="1">
                       <CheckboxGroup.Root
-                        value={keys(pickBy(sectionSelectionTable, Boolean))}
+                        value={keys(pickBy(horizontalMarkingState, Boolean))}
                         onValueChange={(vs) => handleSectionSelectionUpdate(partID, vs)}
                       >
                         {Object.keys(part.sections).map((s) => {
@@ -120,14 +111,14 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
           <Button
             color="gray"
             onClick={() => handleUpdateAll(true)}
-            disabled={every(values(sectionSelectionTable))}
+            disabled={every(values(horizontalMarkingState))}
           >
             All
           </Button>
           <Button
             color="gray"
             onClick={() => handleUpdateAll(false)}
-            disabled={!some(values(sectionSelectionTable))}
+            disabled={!some(values(horizontalMarkingState))}
           >
             None
           </Button>

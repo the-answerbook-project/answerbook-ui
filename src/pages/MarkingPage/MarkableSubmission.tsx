@@ -13,8 +13,9 @@ import MarkInputPanel from './MarkInputPanel'
 import QuestionHeader from './QuestionHeader'
 
 interface MarkableSubmissionProps {
-  student: Student
   questions: Record<number, QuestionType>
+  visibleSectionIDs: string[]
+  student: Student
   lookupMark: (student: string, question: number, part: number, section: number) => MarkRoot
   lookupAnswer: (
     student: string,
@@ -27,71 +28,86 @@ interface MarkableSubmissionProps {
 }
 
 const MarkableSubmission: FC<MarkableSubmissionProps> = ({
-  student,
   questions,
+  visibleSectionIDs,
+  student,
   lookupMark,
   lookupAnswer,
   saveMark,
 }) => {
+  const visibleByPrefix = (p: string) => visibleSectionIDs.some((id) => id.startsWith(p))
+
   return (
     <Box>
-      {Object.entries(questions).map(([q_, question]) => {
-        const q = Number(q_)
-        return (
-          <Box key={q_}>
-            <Flex direction="column" gap="4" px="6">
-              <QuestionHeader number={q_} title={question.title} />
-              <Question instructions={question.instructions}>
-                {Object.entries(question.parts).map(([p_, part]) => {
-                  const p = Number(p_)
-                  return (
-                    <Part
-                      key={p}
-                      partId={p}
-                      description={part.instructions}
-                      marksContribution={sum(map(part.sections, 'maximumMark'))}
-                    >
-                      {Object.entries(part.sections).map(([s_, section], i) => {
-                        const s = Number(s_)
-                        const sectionId = `${q}-${p}-${s}`
-                        const mark = lookupMark(student.username, q, p, s)
-                        return (
-                          <Section key={s} sectionId={sectionId} description={section.instructions}>
-                            {section.tasks.map((task, t_) => {
-                              const t = t_ + 1
-                              const answer = lookupAnswer(student.username, q, p, s, t)
+      {Object.entries(questions)
+        .filter(([q, _]) => visibleByPrefix(`${q}-`))
+        .map(([q_, question]) => {
+          const q = Number(q_)
+          return (
+            <Box key={q_}>
+              <Flex direction="column" gap="4" px="6">
+                <QuestionHeader number={q_} title={question.title} />
+                <Question instructions={question.instructions}>
+                  {Object.entries(question.parts)
+                    .filter(([p, _]) => visibleByPrefix(`${q}-${p}-`))
+                    .map(([p_, part]) => {
+                      const p = Number(p_)
+                      return (
+                        <Part
+                          key={p}
+                          partId={p}
+                          description={part.instructions}
+                          marksContribution={sum(map(part.sections, 'maximumMark'))}
+                        >
+                          {Object.entries(part.sections)
+                            .filter(([s, _]) => visibleByPrefix(`${q}-${p}-${s}`))
+                            .map(([s_, section], i) => {
+                              const s = Number(s_)
+                              const sectionId = `${q}-${p}-${s}`
+                              const mark = lookupMark(student.username, q, p, s)
                               return (
-                                <ReadOnlyTaskFactory
-                                  key={`${sectionId}-${t}`}
-                                  {...({
-                                    answer: answer,
-                                    ...instanceToPlain(task),
-                                  } as TaskProps)}
-                                />
+                                <Section
+                                  key={s}
+                                  sectionId={sectionId}
+                                  description={section.instructions}
+                                >
+                                  {section.tasks.map((task, t_) => {
+                                    const t = t_ + 1
+                                    const answer = lookupAnswer(student.username, q, p, s, t)
+                                    return (
+                                      <ReadOnlyTaskFactory
+                                        key={`${sectionId}-${t}`}
+                                        {...({
+                                          answer: answer,
+                                          ...instanceToPlain(task),
+                                        } as TaskProps)}
+                                      />
+                                    )
+                                  })}
+
+                                  <MarkInputPanel
+                                    username={student.username}
+                                    question={q}
+                                    part={p}
+                                    section={s}
+                                    currentMark={mark}
+                                    maximumMark={section.maximumMark}
+                                    onSave={saveMark}
+                                  />
+                                  {i + 1 !== Object.keys(part.sections).length && (
+                                    <Separator size="4" />
+                                  )}
+                                </Section>
                               )
                             })}
-
-                            <MarkInputPanel
-                              username={student.username}
-                              question={q}
-                              part={p}
-                              section={s}
-                              currentMark={mark}
-                              maximumMark={section.maximumMark}
-                              onSave={saveMark}
-                            />
-                            {i + 1 !== Object.keys(part.sections).length && <Separator size="4" />}
-                          </Section>
-                        )
-                      })}
-                    </Part>
-                  )
-                })}
-              </Question>
-            </Flex>
-          </Box>
-        )
-      })}
+                        </Part>
+                      )
+                    })}
+                </Question>
+              </Flex>
+            </Box>
+          )
+        })}
     </Box>
   )
 }

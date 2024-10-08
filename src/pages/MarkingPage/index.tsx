@@ -14,12 +14,13 @@ import Scrollspy from './Scrollspy'
 import './index.css'
 
 const MarkingPage: FC = () => {
-  const { questions, questionsAreLoaded } = useQuestions()
+  const { questions, allSectionIDs, questionsAreLoaded } = useQuestions()
   const { students, studentsAreLoaded } = useStudents()
   const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
-  const activeId = useActiveIdOnScroll(['q1-1-1', 'q1-1-2', 'q1-2-1', 'q2-1-1', 'q2-1-2'])
+  const activeId = useActiveIdOnScroll(allSectionIDs)
+  const [visibleSectionIDs, setVisibleSectionIDs] = useState<string[]>(allSectionIDs)
 
   const markingStatus = useMemo(() => {
     const sectionsToMark = sumBy(values(questions), 'totalSections')
@@ -54,15 +55,20 @@ const MarkingPage: FC = () => {
       <RadixUISection pb="0">
         <Grid columns="2fr 6fr 2fr" height="calc(100vh - var(--space-9))">
           <Box p="2" className="sticky-sidebar">
-            <HorizontalMarkingPane questions={questions} />
+            <HorizontalMarkingPane
+              questions={questions}
+              sectionIDs={allSectionIDs}
+              onActiveSectionsUpdate={setVisibleSectionIDs}
+            />
           </Box>
           <Box pt="2" pb="60vh" className="scrollable-col">
             {!student ? (
               <Landing />
             ) : (
               <MarkableSubmission
-                student={student}
                 questions={questions}
+                visibleSectionIDs={visibleSectionIDs}
+                student={student}
                 lookupAnswer={lookupAnswer}
                 lookupMark={lookupMark}
                 saveMark={saveMark}
