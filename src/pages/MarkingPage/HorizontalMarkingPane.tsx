@@ -45,17 +45,10 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
     )
   }
 
-  function handleUpdateByQuestion(questionID: string) {
+  function handleBulkUpdateByPrefix(prefix: string) {
     setHorizontalMarkingState((current) => {
-      let newValue = !visibleByPrefix(current, questionID)
-      return mapValues(current, (v, k) => (k.startsWith(`${questionID}-`) ? newValue : v))
-    })
-  }
-
-  function handleUpdateByPart(partID: string) {
-    setHorizontalMarkingState((current) => {
-      let newValue = !visibleByPrefix(current, partID)
-      return mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? newValue : v))
+      let newValue = !visibleByPrefix(current, prefix)
+      return mapValues(current, (v, k) => (k.startsWith(`${prefix}-`) ? newValue : v))
     })
   }
 
@@ -77,13 +70,13 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
             <Box p="2">
-              <Heading onClick={() => handleUpdateByQuestion(q)}>Question {q}</Heading>
+              <Heading onClick={() => handleBulkUpdateByPrefix(q)}>Question {q}</Heading>
               <Separator size="4" />
               {Object.entries(question.parts).map(([p, part]) => {
                 const partID = `${q}-${p}`
                 return (
                   <Box key={partID} p="1">
-                    <Heading size="5" as="h2" onClick={() => handleUpdateByPart(partID)}>
+                    <Heading size="5" as="h2" onClick={() => handleBulkUpdateByPrefix(partID)}>
                       Part {numberToLetter(Number(p))}
                     </Heading>
                     <Box p="1">
