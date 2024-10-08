@@ -9,7 +9,19 @@ import {
   Popover,
   Separator,
 } from '@radix-ui/themes'
-import { entries, every, flatMap, fromPairs, keys, map, mapValues, pickBy, size } from 'lodash'
+import {
+  entries,
+  every,
+  flatMap,
+  fromPairs,
+  keys,
+  map,
+  mapValues,
+  pickBy,
+  size,
+  some,
+  values,
+} from 'lodash'
 import { FC, useState } from 'react'
 
 import '../../index.css'
@@ -105,10 +117,18 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({ questions }) =>
           ))}
         </Grid>
         <Flex justify="center" align="center" className="button-group">
-          <Button color="gray" onClick={() => handleUpdateAll(true)}>
+          <Button
+            color="gray"
+            onClick={() => handleUpdateAll(true)}
+            disabled={every(values(sectionSelectionTable))}
+          >
             All
           </Button>
-          <Button color="gray" onClick={() => handleUpdateAll(false)}>
+          <Button
+            color="gray"
+            onClick={() => handleUpdateAll(false)}
+            disabled={!some(values(sectionSelectionTable))}
+          >
             None
           </Button>
         </Flex>
