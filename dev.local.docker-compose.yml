@@ -9,6 +9,7 @@ services:
     command: poetry run uvicorn main:app --reload --host 0.0.0.0 --port 5004
     environment:
       - DB_URL=postgresql://user:pass@host.docker.internal/answerbook
+      - SECRET_KEY=dev_secret_key
       - MATHPIX_APP_ID
       - MATHPIX_APP_KEY
     volumes:

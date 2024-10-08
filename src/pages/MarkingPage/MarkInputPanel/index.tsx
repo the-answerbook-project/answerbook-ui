@@ -1,16 +1,19 @@
-import { Badge, Box, Button, Card, Flex, Grid, Separator, Text, TextField } from '@radix-ui/themes'
+import { Badge, Box, Button, Card, Flex, Grid, Text, TextField } from '@radix-ui/themes'
 import { plainToInstance } from 'class-transformer'
 import { formatDistanceToNow } from 'date-fns'
-import { isEmpty, orderBy } from 'lodash'
+import { isEmpty, isNil, orderBy } from 'lodash'
 import React, { FC, useState } from 'react'
 
 import CardBody from '../../../components/Card/CardBody'
 import CardFooter from '../../../components/Card/CardFooter'
 import CardHeader from '../../../components/Card/CardHeader'
 import { MarkRoot } from '../../../types/marking'
+import MarkBadge from '../MarkBadge'
+import { NO_MARK } from '../constants'
 import './index.css'
 
 interface MarkInputPanelProps {
+  username: string
   question: number
   part: number
   section: number
@@ -19,10 +22,10 @@ interface MarkInputPanelProps {
   onSave: (_: MarkRoot) => void
 }
 
-const NO_MARK = 'No mark'
 const NO_FEEDBACK = 'No comment'
 
 const MarkInputPanel: FC<MarkInputPanelProps> = ({
+  username,
   question,
   part,
   section,
@@ -31,6 +34,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
   onSave,
 }) => {
   const initMark = {
+    username,
     question,
     part,
     section,
@@ -38,7 +42,7 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
     feedback: '',
   }
   const markHistory = orderBy(currentMark?.history, 'timestamp', 'desc') ?? []
-  const colour = currentMark?.mark ? 'green' : 'red'
+  const color = !isNil(currentMark?.mark) ? 'green' : 'red'
   const [newMark, setNewMark] = useState(initMark)
 
   function handleChange(key: keyof MarkRoot, value: any) {
@@ -87,14 +91,11 @@ const MarkInputPanel: FC<MarkInputPanelProps> = ({
   )
 
   return (
-    <Card className={`card-${colour}`}>
-      <CardHeader colour={colour}>
+    <Card className={`card-${color}`}>
+      <CardHeader colour={color}>
         <Flex justify="between">
           <Text>Mark awarded for this section</Text>
-          <Badge radius="full" variant="solid" color={colour}>
-            {currentMark?.mark ?? NO_MARK} <Separator orientation="vertical" color="gray" />{' '}
-            {maximumMark}
-          </Badge>
+          <MarkBadge partial={currentMark?.mark} total={maximumMark} color={color} />
         </Flex>
       </CardHeader>
       {isEmpty(markHistory) ? <NoMarksBody /> : <MarkHistory />}

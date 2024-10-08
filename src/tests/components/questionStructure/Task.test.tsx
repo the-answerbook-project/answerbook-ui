@@ -1,26 +1,30 @@
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
-import React from 'react'
 
-import { TaskFactory } from '../../../components/questionStructure/Task'
 import { TaskType } from '../../../components/questionStructure/Task/constants'
-import { EssayTask } from '../../../components/questionStructure/Task/variants/EssayTask'
+import { EditableTaskFactory } from '../../../components/questionStructure/Task/editable'
+import { EssayTask } from '../../../components/questionStructure/Task/editable/variants/EssayTask'
+import { Answer } from '../../../types/exam'
 
-jest.mock('../../../components/questionStructure/Task/variants/EssayTask', () => ({
+jest.mock('../../../components/questionStructure/Task/editable/variants/EssayTask', () => ({
   EssayTask: jest.fn(),
 }))
+
+const answer = {
+  answer: 'Test answer',
+} as Answer
 
 describe('Task Component', () => {
   afterEach(jest.clearAllMocks)
   const updateHandler = jest.fn()
   it('should render correctly according to requested task type', () => {
     render(
-      <TaskFactory type={TaskType.ESSAY} answer="Test answer" onAnswerUpdate={updateHandler} />
+      <EditableTaskFactory type={TaskType.ESSAY} answer={answer} onAnswerUpdate={updateHandler} />
     )
     expect(EssayTask).toHaveBeenCalledWith(
       expect.objectContaining({
         type: TaskType.ESSAY,
-        answer: 'Test answer',
+        answer: answer,
         onAnswerUpdate: updateHandler,
       }),
       {}
@@ -29,10 +33,10 @@ describe('Task Component', () => {
 
   it('renders the description if provided', () => {
     render(
-      <TaskFactory
+      <EditableTaskFactory
         instructions="Test description"
         type={TaskType.ESSAY}
-        answer="Test answer"
+        answer={answer}
         onAnswerUpdate={updateHandler}
       />
     )

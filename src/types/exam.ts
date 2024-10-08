@@ -1,5 +1,6 @@
-import { Transform, Type } from 'class-transformer'
+import { Exclude, Transform, Type } from 'class-transformer'
 import { addMinutes } from 'date-fns'
+import { reduce, size } from 'lodash'
 
 import { TaskType } from '../components/questionStructure/Task/constants'
 import { stringToEnumValue } from '../utils/types'
@@ -38,6 +39,16 @@ export class Question {
   title: string
   showPartWeights: boolean
   parts: Record<number, Part>
+
+  get totalSections() {
+    return reduce(this.parts, (sum, p, _) => sum + size(p.sections), 0)
+  }
+
+  get availableMarks() {
+    const reduceParts = (psum, p) =>
+      psum + reduce(p.sections, (sSum, s) => sSum + (s.maximumMark || 0), 0)
+    return reduce(this.parts, reduceParts, 0)
+  }
 }
 
 export class Rubric {
@@ -45,7 +56,7 @@ export class Rubric {
   questionsToAnswer: number
 }
 
-export class Summary {
+export class Heading {
   courseCode: string
   courseName: string
   duration: number
@@ -62,11 +73,17 @@ export class Summary {
 }
 
 export class Answer {
+  @Exclude({ toPlainOnly: true })
+  id: number
   question: number
   part: number
   section: number
   task: number
   answer: string
+
+  @Exclude({ toPlainOnly: true })
+  @Type(() => Date)
+  timestamp: Date
 }
 
-export type AnswerMap = Record<number, Record<number, Record<number, Record<number, string>>>>
+export type AnswerMap = Record<number, Record<number, Record<number, Record<number, Answer>>>>

@@ -34,3 +34,7 @@ export function numberToRoman(num: number): string {
     return result + numeral.repeat(repeatCount)
   }, '')
 }
+
+export function hasPrefix(collection: string[], prefix: string): boolean {
+  return collection.some((s) => s.startsWith(prefix))
+}

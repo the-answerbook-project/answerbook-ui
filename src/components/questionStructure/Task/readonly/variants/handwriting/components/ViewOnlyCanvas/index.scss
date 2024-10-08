@@ -1,0 +1,16 @@
+.excalidraw-view-container {
+  .App-bottom-bar {
+    display: none;
+  }
+  .App-menu_top {
+    display: none !important;
+  }
+  .layer-ui__wrapper__footer-right {
+    display: none !important;
+  }
+}
+
+.excalidraw-box {
+  margin: 2px;
+  height: calc(100% - 4px);
+}
