@@ -31,23 +31,23 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
     fromPairs(sectionIDs.map((id) => [id, true]))
   )
   useEffect(() => {
-    onActiveSectionsUpdate(keys(pickBy(horizontalMarkingState, (v, k) => v)))
+    onActiveSectionsUpdate(keys(pickBy(horizontalMarkingState, Boolean)))
   }, [horizontalMarkingState, onActiveSectionsUpdate])
 
   function handleUpdateAll(value: boolean) {
     setHorizontalMarkingState((current) => mapValues(current, () => value))
   }
 
-  function handleBulkUpdateByPrefix(prefix: string) {
+  function handleBulkToggleByPrefix(prefix: string) {
     setHorizontalMarkingState((current) => {
-      let newValue = !hasPrefix(keys(pickBy(current, (v, _) => v)), prefix)
-      return mapValues(current, (v, k) => (k.startsWith(`${prefix}-`) ? newValue : v))
+      let flippedState = !hasPrefix(keys(pickBy(current, (v, _) => v)), prefix)
+      return mapValues(current, (v, k) => (k.startsWith(`${prefix}-`) ? flippedState : v))
     })
   }
 
-  function handleSectionSelectionUpdate(partID: string, sectionIDs: string[]) {
+  function handleSectionSelectionToggle(partID: string, selectedIDs: string[]) {
     setHorizontalMarkingState((current) =>
-      mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? sectionIDs.includes(k) : v))
+      mapValues(current, (v, k) => (k.startsWith(`${partID}-`) ? selectedIDs.includes(k) : v))
     )
   }
 
@@ -63,19 +63,19 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
             <Box key={q} p="2">
-              <Heading onClick={() => handleBulkUpdateByPrefix(q)}>Question {q}</Heading>
+              <Heading onClick={() => handleBulkToggleByPrefix(q)}>Question {q}</Heading>
               <Separator size="4" />
               {Object.entries(question.parts).map(([p, part]) => {
                 const partID = `${q}-${p}`
                 return (
                   <Box key={partID} p="1">
-                    <Heading size="5" as="h2" onClick={() => handleBulkUpdateByPrefix(partID)}>
+                    <Heading size="5" as="h2" onClick={() => handleBulkToggleByPrefix(partID)}>
                       Part {numberToLetter(Number(p))}
                     </Heading>
                     <Box p="1">
                       <CheckboxGroup.Root
                         value={keys(pickBy(horizontalMarkingState, Boolean))}
-                        onValueChange={(vs) => handleSectionSelectionUpdate(partID, vs)}
+                        onValueChange={(vs) => handleSectionSelectionToggle(partID, vs)}
                       >
                         {Object.keys(part.sections).map((s) => {
                           const sectionID = `${q}-${p}-${s}`
