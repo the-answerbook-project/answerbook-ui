@@ -9,7 +9,7 @@ import {
   Popover,
   Separator,
 } from '@radix-ui/themes'
-import { every, fromPairs, keys, mapValues, pickBy, size, some, values } from 'lodash'
+import { fromPairs, keys, mapValues, pickBy, size } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 
 import '../../index.css'
@@ -40,7 +40,7 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
 
   function handleBulkToggleByPrefix(prefix: string) {
     setHorizontalMarkingState((current) => {
-      let flippedState = !hasPrefix(keys(pickBy(current, (v, _) => v)), prefix)
+      let flippedState = !hasPrefix(keys(pickBy(current, Boolean)), prefix)
       return mapValues(current, (v, k) => (k.startsWith(`${prefix}-`) ? flippedState : v))
     })
   }
@@ -63,13 +63,20 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
             <Box key={q} p="2">
-              <Heading onClick={() => handleBulkToggleByPrefix(q)}>Question {q}</Heading>
+              <Heading className="clickable" onClick={() => handleBulkToggleByPrefix(q)}>
+                Question {q}
+              </Heading>
               <Separator size="4" />
               {Object.entries(question.parts).map(([p, part]) => {
                 const partID = `${q}-${p}`
                 return (
                   <Box key={partID} p="1">
-                    <Heading size="5" as="h2" onClick={() => handleBulkToggleByPrefix(partID)}>
+                    <Heading
+                      className="clickable"
+                      size="5"
+                      as="h2"
+                      onClick={() => handleBulkToggleByPrefix(partID)}
+                    >
                       Part {numberToLetter(Number(p))}
                     </Heading>
                     <Box p="1">
@@ -94,18 +101,8 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
           ))}
         </Grid>
         <Flex justify="center" align="center" className="button-group">
-          <Button
-            color="gray"
-            onClick={() => handleUpdateAll(true)}
-            disabled={every(values(horizontalMarkingState))}
-          >
-            All
-          </Button>
-          <Button
-            color="gray"
-            onClick={() => handleUpdateAll(false)}
-            disabled={!some(values(horizontalMarkingState))}
-          >
+          <Button onClick={() => handleUpdateAll(true)}>All</Button>
+          <Button color="gray" onClick={() => handleUpdateAll(false)}>
             None
           </Button>
         </Flex>

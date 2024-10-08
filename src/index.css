@@ -16,6 +16,10 @@ ul.list {
   }
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 /* Button group */
 .button-group .rt-Button:first-child {
   box-shadow: none;
