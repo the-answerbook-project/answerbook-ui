@@ -5,28 +5,17 @@ import React, { FC } from 'react'
 import MarkBadge, { MarkBadgeProps } from '../../MarkBadge'
 import './index.css'
 
-export interface ScrollspyItemProps {
+export interface QuickNavProps {
   id: string
-  active: boolean
   label: string
   indent?: boolean
   badgeProps: MarkBadgeProps
 }
 
-export const ScrollspyItem: FC<ScrollspyItemProps> = ({
-  id,
-  active,
-  label,
-  badgeProps,
-  indent = false,
-}) => {
+export const QuickNavItem: FC<QuickNavProps> = ({ id, label, badgeProps, indent = false }) => {
   return (
     <Flex justify="between">
-      <Link
-        color="gray"
-        href={`#${id}`}
-        className={classNames(indent && 'indented-text', active && 'active-scrollspy-item')}
-      >
+      <Link color="gray" href={`#${id}`} className={classNames(indent && 'indented-text')}>
         {label}
       </Link>
       <MarkBadge {...badgeProps} />

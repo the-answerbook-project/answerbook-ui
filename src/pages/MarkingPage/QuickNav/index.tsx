@@ -5,16 +5,15 @@ import React, { FC } from 'react'
 import { Question as QuestionType } from '../../../types/exam'
 import { MarkRoot } from '../../../types/marking'
 import { hasPrefix, numberToLetter, numberToRoman } from '../../../utils/common'
-import { ScrollspyItem } from './ScrollspyItem'
+import { QuickNavItem } from './QuickNavItem'
 
-interface ScrollspyProps {
+interface QuickNavProps {
   questions: Record<number, QuestionType>
   marks: MarkRoot[]
-  activeId: string | undefined
   visibleSectionIDs: string[]
 }
 
-const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSectionIDs }) => {
+const QuickNav: FC<QuickNavProps> = ({ questions, marks, visibleSectionIDs }) => {
   function currentQuestionMark(q: number): number | undefined {
     let relevantMarks = marks.filter((m) => m.question === q && !isNil(m.mark))
     return isEmpty(relevantMarks) ? undefined : sumBy(relevantMarks, 'mark')
@@ -40,9 +39,8 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSect
           const color = pendingMarking(question, q) ? 'gray' : isNil(partial) ? 'red' : 'green'
           return (
             <Flex key={q} direction="column" gap="2">
-              <ScrollspyItem
+              <QuickNavItem
                 id={`q${q}`}
-                active={!!activeId?.startsWith(`q${q}`)}
                 label={`Question ${q}`}
                 badgeProps={{ partial, total, color }}
               />
@@ -57,10 +55,9 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSect
                       const total = section.maximumMark
                       const color = isNil(partial) ? 'red' : 'green'
                       return (
-                        <ScrollspyItem
+                        <QuickNavItem
                           id={`q${q}-${p}-${s}`}
                           key={`q${q}-${p}-${s}`}
-                          active={activeId === `q${q}-${p}-${s}`}
                           label={`Part (${numberToLetter(p)}) ${numberToRoman(s)}`}
                           indent={true}
                           badgeProps={{ partial, total, color }}
@@ -76,4 +73,4 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSect
   )
 }
 
-export default Scrollspy
+export default QuickNav

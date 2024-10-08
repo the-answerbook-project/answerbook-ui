@@ -5,12 +5,11 @@ import React, { FC, useMemo, useState } from 'react'
 
 import Body from '../../components/pageStructure/Body'
 import MarkingToolbar from '../../components/topBars/MarkingToolbar'
-import useActiveIdOnScroll from '../../hooks/interactiveScrollspy'
 import { useAnswers, useMarks, useQuestions, useStudents } from '../../hooks/marking'
 import { Student } from '../../types/marking'
 import HorizontalMarkingPane from './HorizontalMarkingPane'
 import MarkableSubmission from './MarkableSubmission'
-import Scrollspy from './Scrollspy'
+import QuickNav from './QuickNav'
 import './index.css'
 
 const MarkingPage: FC = () => {
@@ -19,7 +18,6 @@ const MarkingPage: FC = () => {
   const { lookupMark, rawMarksTable, saveMark, marksAreLoaded } = useMarks()
   const { lookupAnswer, answersAreLoaded } = useAnswers()
   const [student, setStudent] = useState<Student>()
-  const activeId = useActiveIdOnScroll(allSectionIDs)
   const [visibleSectionIDs, setVisibleSectionIDs] = useState<string[]>(allSectionIDs)
 
   const markingStatus = useMemo(() => {
@@ -78,11 +76,10 @@ const MarkingPage: FC = () => {
 
           {student && (
             <Box className="sticky-sidebar">
-              <Scrollspy
+              <QuickNav
                 questions={questions}
                 visibleSectionIDs={visibleSectionIDs}
                 marks={rawMarksTable[student.username]}
-                activeId={activeId}
               />
             </Box>
           )}
@@ -93,4 +90,3 @@ const MarkingPage: FC = () => {
 }
 
 export default MarkingPage
-export { NO_MARK } from './constants'
