@@ -14,7 +14,7 @@ import { FC, useEffect, useState } from 'react'
 
 import '../../index.css'
 import { Question } from '../../types/exam'
-import { numberToLetter, numberToRoman } from '../../utils/common'
+import { hasPrefix, numberToLetter, numberToRoman } from '../../utils/common'
 
 interface HorizontalMarkingPaneProps {
   questions: Record<number, Question>
@@ -38,16 +38,9 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
     setHorizontalMarkingState((current) => mapValues(current, () => value))
   }
 
-  function visibleByPrefix(collection: Record<string, boolean>, prefix: string) {
-    return some(
-      pickBy(collection, (v, k) => k.startsWith(`${prefix}-`)),
-      Boolean
-    )
-  }
-
   function handleBulkUpdateByPrefix(prefix: string) {
     setHorizontalMarkingState((current) => {
-      let newValue = !visibleByPrefix(current, prefix)
+      let newValue = !hasPrefix(keys(pickBy(current, (v, _) => v)), prefix)
       return mapValues(current, (v, k) => (k.startsWith(`${prefix}-`) ? newValue : v))
     })
   }

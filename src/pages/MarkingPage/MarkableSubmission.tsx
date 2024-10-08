@@ -9,6 +9,7 @@ import Section from '../../components/questionStructure/Section'
 import { ReadOnlyTaskFactory, TaskProps } from '../../components/questionStructure/Task/readonly'
 import { Answer, Question as QuestionType } from '../../types/exam'
 import { MarkRoot, Student } from '../../types/marking'
+import { hasPrefix } from '../../utils/common'
 import MarkInputPanel from './MarkInputPanel'
 import QuestionHeader from './QuestionHeader'
 
@@ -35,12 +36,10 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
   lookupAnswer,
   saveMark,
 }) => {
-  const visibleByPrefix = (p: string) => visibleSectionIDs.some((id) => id.startsWith(p))
-
   return (
     <Box>
       {Object.entries(questions)
-        .filter(([q, _]) => visibleByPrefix(`${q}-`))
+        .filter(([q, _]) => hasPrefix(visibleSectionIDs, `${q}-`))
         .map(([q_, question]) => {
           const q = Number(q_)
           return (
@@ -49,7 +48,7 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
                 <QuestionHeader number={q_} title={question.title} />
                 <Question instructions={question.instructions}>
                   {Object.entries(question.parts)
-                    .filter(([p, _]) => visibleByPrefix(`${q}-${p}-`))
+                    .filter(([p, _]) => hasPrefix(visibleSectionIDs, `${q}-${p}-`))
                     .map(([p_, part]) => {
                       const p = Number(p_)
                       return (
@@ -60,7 +59,7 @@ const MarkableSubmission: FC<MarkableSubmissionProps> = ({
                           marksContribution={sum(map(part.sections, 'maximumMark'))}
                         >
                           {Object.entries(part.sections)
-                            .filter(([s, _]) => visibleByPrefix(`${q}-${p}-${s}`))
+                            .filter(([s, _]) => hasPrefix(visibleSectionIDs, `${q}-${p}-${s}`))
                             .map(([s_, section], i) => {
                               const s = Number(s_)
                               const sectionId = `${q}-${p}-${s}`

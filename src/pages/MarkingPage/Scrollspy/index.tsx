@@ -4,7 +4,7 @@ import React, { FC } from 'react'
 
 import { Question as QuestionType } from '../../../types/exam'
 import { MarkRoot } from '../../../types/marking'
-import { numberToLetter, numberToRoman } from '../../../utils/common'
+import { hasPrefix, numberToLetter, numberToRoman } from '../../../utils/common'
 import { ScrollspyItem } from './ScrollspyItem'
 
 interface ScrollspyProps {
@@ -15,8 +15,6 @@ interface ScrollspyProps {
 }
 
 const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSectionIDs }) => {
-  const visibleByPrefix = (p: string) => visibleSectionIDs.some((id) => id.startsWith(p))
-
   function currentQuestionMark(q: number): number | undefined {
     let relevantMarks = marks.filter((m) => m.question === q && !isNil(m.mark))
     return isEmpty(relevantMarks) ? undefined : sumBy(relevantMarks, 'mark')
@@ -34,7 +32,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSect
   return (
     <Flex direction="column" gap="6" m="4" p="4">
       {Object.entries(questions)
-        .filter(([q, _]) => visibleByPrefix(`${q}-`))
+        .filter(([q, _]) => hasPrefix(visibleSectionIDs, `${q}-`))
         .map(([q_, question]) => {
           const q = Number(q_)
           const partial = currentQuestionMark(q)
@@ -52,7 +50,7 @@ const Scrollspy: FC<ScrollspyProps> = ({ questions, marks, activeId, visibleSect
                 {Object.entries(question.parts).map(([p_, part]) => {
                   const p = Number(p_)
                   return Object.entries(part.sections)
-                    .filter(([s, _]) => visibleByPrefix(`${q}-${p}-${s}`))
+                    .filter(([s, _]) => hasPrefix(visibleSectionIDs, `${q}-${p}-${s}`))
                     .map(([s_, section]) => {
                       const s = Number(s_)
                       const partial = currentSectionMark(q, p, s)
