@@ -69,7 +69,7 @@ const HorizontalMarkingPane: FC<HorizontalMarkingPaneProps> = ({
       <Popover.Content minWidth="20vw">
         <Grid gap="5" columns={size(questions).toString()}>
           {Object.entries(questions).map(([q, question]) => (
-            <Box p="2">
+            <Box key={q} p="2">
               <Heading onClick={() => handleBulkUpdateByPrefix(q)}>Question {q}</Heading>
               <Separator size="4" />
               {Object.entries(question.parts).map(([p, part]) => {
