@@ -1,31 +1,37 @@
 import React from 'react'
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
-import ExamRoot from './pages/ExamRoot'
-import FrontCover from './pages/FrontCover'
+import Answerbook from './pages/Answerbook'
+import AuthWrapper from './pages/AuthWrapper'
+import LoginPage from './pages/LoginPage'
 import MarkingPage from './pages/MarkingPage'
-import QuestionPage from './pages/QuestionPage'
+
+const AuthRoot = () => (
+  <AuthWrapper>
+    <Outlet />
+  </AuthWrapper>
+)
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <ExamRoot />,
+    path: ':year/:moduleCode/:qualifier/',
     children: [
       {
-        index: true,
-        element: <Navigate to="frontcover" replace />,
+        element: <AuthRoot />,
+        children: [
+          {
+            path: 'marking',
+            element: <MarkingPage />,
+          },
+          {
+            index: true,
+            element: <Answerbook />,
+          },
+        ],
       },
       {
-        path: 'frontcover',
-        element: <FrontCover />,
-      },
-      {
-        path: 'questions/:questionId',
-        element: <QuestionPage />,
-      },
-      {
-        path: 'marking',
-        element: <MarkingPage />,
+        path: 'login',
+        element: <LoginPage />,
       },
     ],
   },

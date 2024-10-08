@@ -1,8 +1,11 @@
+import { Answer } from '../../../types/exam'
 import { TaskType } from './constants'
 
-export interface TaskBaseProps<V> {
+export interface TaskBaseProps {
   type: TaskType
-  answer?: V
-  onAnswerUpdate: (value: V) => void
-  disabled?: boolean
+  answer: Answer
+}
+
+export interface EditableTaskProps extends TaskBaseProps {
+  onAnswerUpdate: (answer: Answer) => void
 }

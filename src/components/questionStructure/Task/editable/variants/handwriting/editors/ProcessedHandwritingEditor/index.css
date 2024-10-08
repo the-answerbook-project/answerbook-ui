@@ -1,0 +1,8 @@
+.mathjax-card {
+  min-height: 3.5em;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+}

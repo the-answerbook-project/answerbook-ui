@@ -1,49 +1,41 @@
-import { Box, Button, Card, Em, Flex, Heading, Separator, Text } from '@radix-ui/themes'
+import { Box, Card, Em, Flex, Heading, Text } from '@radix-ui/themes'
 import React, { FC, ReactNode } from 'react'
 
 import { numberToLetter } from '../../utils/common'
+import CardBody from '../Card/CardBody'
+import CardFooter from '../Card/CardFooter'
+import CardHeader from '../Card/CardHeader'
 import Markdown from '../Markdown'
 
 interface PartProps {
   partId: number
   description?: string
   marksContribution?: number
-  onSave: (partId: number) => void
   children: ReactNode
 }
 
-const Part: FC<PartProps> = ({ partId, description, children, marksContribution, onSave }) => {
-  const Header = () => {
-    return (
-      <Flex justify="between">
-        <Heading>Part {numberToLetter(partId)}</Heading>
-        <Button onClick={() => onSave(partId)}>Save</Button>
-      </Flex>
-    )
-  }
-
-  const Footer = () => {
-    return (
-      <>
-        <Separator size="4" />
-        <Text as="p">
-          <Em>This part carries {marksContribution}% of the marks.</Em>
-        </Text>
-      </>
-    )
-  }
-
+const Part: FC<PartProps> = ({ partId, description, children, marksContribution }) => {
   return (
     <Box width="100%">
-      <Card size="3">
-        <Flex gap="4" direction="column">
-          <Header />
-          {description && <Markdown>{description}</Markdown>}
+      <Card>
+        <CardHeader>
+          <Heading>Part {numberToLetter(partId)}</Heading>
+        </CardHeader>
+        <CardBody>
           <Flex gap="4" direction="column">
-            {children}
+            {description && <Markdown>{description}</Markdown>}
+            <Flex gap="4" direction="column">
+              {children}
+            </Flex>
           </Flex>
-          {marksContribution && <Footer />}
-        </Flex>
+        </CardBody>
+        {marksContribution && (
+          <CardFooter>
+            <Text as="p">
+              <Em>This part carries {marksContribution}% of the marks.</Em>
+            </Text>
+          </CardFooter>
+        )}
       </Card>
     </Box>
   )

@@ -1,13 +1,18 @@
-import { Blockquote, Code, Em, Link, Strong, Text } from '@radix-ui/themes'
-import React, { FC } from 'react'
-import { default as MarkdownRoot } from 'react-markdown'
+import { Blockquote, Code, Em, Flex, Link, Strong, Text } from '@radix-ui/themes'
+import 'katex/dist/katex.min.css'
+import React, { FC, memo } from 'react'
+import MarkdownRoot from 'react-markdown'
+import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
+import remarkMath from 'remark-math'
 
 interface MarkdownProps {
   children: string
 }
 
-const Markdown: FC<MarkdownProps> = ({ children }) => {
+// NOTE: Markdown has been memoized to prevent unnecessary re-renders when
+// sibling components change, as rending markdown that includes e.g. images is expensive.
+const Markdown: FC<MarkdownProps> = memo(({ children }) => {
   const componentMapping = {
     p(props) {
       return <Text as="p">{props.children}</Text>
@@ -35,14 +40,17 @@ const Markdown: FC<MarkdownProps> = ({ children }) => {
     },
   }
   return (
-    <MarkdownRoot
-      components={componentMapping}
-      urlTransform={(value: string) => value}
-      remarkPlugins={[remarkGfm]}
-    >
-      {children}
-    </MarkdownRoot>
+    <Flex direction="column" gap="4">
+      <MarkdownRoot
+        components={componentMapping}
+        urlTransform={(value: string) => value}
+        remarkPlugins={[remarkGfm, remarkMath]}
+        rehypePlugins={[rehypeKatex]}
+      >
+        {children}
+      </MarkdownRoot>
+    </Flex>
   )
-}
+})
 
 export default Markdown

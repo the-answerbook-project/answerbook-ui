@@ -1,4 +1,27 @@
-# Getting Started with Create React App
+# Answerbook UI (Frontend)
+This repo contains the frontend code for the Answerbook project. The frontend is a React app that uses the Radix UI library for styling & component primitives.
+
+## Setup
+1. Run `nvm use` to ensure you're using the correct Node version.
+2. Run `npm install` to install dependencies (this will also setup commit hooks).
+3. Make a copy of `.env.template` as `.env` and fill it in. This file is used to store environment variables, specifically the API keys needed to use mathpix for handwriting recognition.
+
+## Running the application
+### In Docker
+#### With Docker-based postgres (recommended)
+1. For first run, do: `docker compose -f dev.docker-compose.yml up --build`
+2. After, use: `docker compose -f dev.docker-compose.yml up`
+
+#### With a local copy of Postgres
+1. For first run, do: `docker compose -f dev.local.docker-compose.yml up --build`
+2. After, use: `docker compose -f dev.local.docker-compose.yml up`
+
+For either, you might also want to pass in `-d` to run in detached mode.
+
+#### After startup
+1. Setup the database: `docker exec $(docker ps -qf "name=answerbook-ui-backend" | head -n1) poetry run alembic upgrade head` 
+
+# Old README: Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

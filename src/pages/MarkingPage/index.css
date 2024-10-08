@@ -1,0 +1,7 @@
+.sticky-sidebar {
+  position: sticky;
+}
+
+.scrollable-col {
+  overflow-y: scroll;
+}

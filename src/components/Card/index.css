@@ -1,0 +1,28 @@
+.card-header-green {
+  color: var(--green-11);
+  background-color: var(--green-4);
+}
+
+.card-header-red {
+  color: var(--red-11);
+  background-color: var(--red-4);
+}
+
+.card-header-default {
+  background-color: var(--gray-4);
+}
+
+.card-green {
+  border: solid 1px var(--green-10);
+  --base-card-surface-box-shadow: none;
+}
+
+.card-red {
+  border: solid 1px var(--red-10);
+  --base-card-surface-box-shadow: none;
+}
+
+.card-footer {
+  border-top: solid 1px var(--gray-7);
+  background-color: var(--gray-3);
+}

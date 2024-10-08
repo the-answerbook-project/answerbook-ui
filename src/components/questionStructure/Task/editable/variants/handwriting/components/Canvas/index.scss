@@ -1,0 +1,73 @@
+// Helper mixins
+@mixin hide-elements-by-param($titles, $parameter: title) {
+  @each $title in $titles {
+    &[#{$parameter}^='#{$title}'] {
+      display: none;
+    }
+  }
+}
+
+@mixin hide($element) {
+  #{$element} {
+    display: none;
+  }
+}
+
+// Hide parts of excalidraw we don't want users to use
+.excalidraw-editor-container {
+  &.excalidraw-restricted {
+    // Disable toolbar items we don't want users to use
+    $titles: 'Rectangle', 'Diamond', 'Ellipse', 'Arrow', 'Line', 'Text', 'Keep selected';
+    div.App-toolbar .Stack {
+      label.ToolIcon {
+        @include hide-elements-by-param($titles);
+      }
+
+      @include hide('.App-toolbar__divider');
+    }
+    // Hide text element input boxes
+    .excalidraw-textEditorContainer {
+      opacity: 0;
+    }
+  }
+
+  // Hide extra tools trigger
+  div.App-toolbar .Stack {
+    @include hide('.App-toolbar__extra-tools-trigger');
+  }
+
+  // Remove items from mobile toolbar sidebar we don't want users using
+  $mobileItems: 'Library', 'Keep selected';
+  div.mobile-misc-tools-container {
+    label {
+      @include hide-elements-by-param($mobileItems);
+    }
+  }
+
+  // Remove items from bottom toolbar we don't want users using
+  $toolbarItems: 'Edit', 'Duplicate', 'Redo', 'Undo';
+  div.App-toolbar-content {
+    button {
+      @include hide-elements-by-param($toolbarItems, 'aria-label');
+    }
+  }
+
+  // Hide text element input boxes
+  .excalidraw-textEditorContainer {
+    opacity: 0;
+  }
+}
+
+.excalidraw-dialog-content {
+  min-width: 90vw;
+  height: 80vh;
+}
+
+.excalidraw-box {
+  margin: 2px;
+  height: calc(100% - 4px);
+}
+
+.latex-preview {
+  flex-grow: 1;
+}

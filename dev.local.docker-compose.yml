@@ -1,0 +1,31 @@
+# Run answerbook in docker but use a host-based postgres database
+
+services:
+  backend:
+    image: api
+    build:
+      context: ../answerbook-api
+      dockerfile: dev.Dockerfile
+    command: poetry run uvicorn main:app --reload --host 0.0.0.0 --port 5004
+    environment:
+      - DB_URL=postgresql://user:pass@host.docker.internal/answerbook
+      - SECRET_KEY=dev_secret_key
+      - MATHPIX_APP_ID
+      - MATHPIX_APP_KEY
+    volumes:
+      - ../answerbook-api:/api
+    ports:
+      - 127.0.0.1:5004:5004
+
+  frontend:
+    image: node:20.13
+    ports:
+      - 127.0.0.1:3000:3000
+    working_dir: /ui
+    volumes:
+      - ./:/ui
+    command: npm start
+    environment:
+      - REACT_APP_API_ENTRYPOINT=http://localhost:5004
+    depends_on:
+      - backend
