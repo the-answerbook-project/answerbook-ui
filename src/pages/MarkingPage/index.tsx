@@ -80,6 +80,7 @@ const MarkingPage: FC = () => {
             <Box className="sticky-sidebar">
               <Scrollspy
                 questions={questions}
+                visibleSectionIDs={visibleSectionIDs}
                 marks={rawMarksTable[student.username]}
                 activeId={activeId}
               />
