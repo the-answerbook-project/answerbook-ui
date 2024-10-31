@@ -79,7 +79,7 @@ const MarkingPage: FC = () => {
               <QuickNav
                 questions={questions}
                 visibleSectionIDs={visibleSectionIDs}
-                marks={rawMarksTable[student.username]}
+                marks={rawMarksTable[student.username] ?? []}
               />
             </Box>
           )}
